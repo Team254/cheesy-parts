@@ -1,0 +1,15 @@
+<html>
+  <head>
+    <title>Login</title>
+  </head>
+  <body>
+    <% if @failed %>
+      Invalid e-mail address or password.
+    <% end %>
+    <form action="" method="POST">
+      <input type="text" name="email"/>
+      <input type="password" name="password"/>
+      <input type="submit" value="Go"/>
+    </form>
+  </body>
+</html>

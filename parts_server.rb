@@ -10,8 +10,35 @@ require "models"
 
 module CheesyParts
   class Server < Sinatra::Base
+    set :sessions => true
+
+    before do
+      @user = User[session[:user_id]]
+    end
+
+    def authenticate!
+      redirect "/login" if @user.nil?
+    end
+
+    get "/login" do
+      @failed = params[:failed] == "1"
+      erb :login
+    end
+
+    post "/login" do
+      user = User.authenticate(params[:email], params[:password])
+      redirect "/login?failed=1" if user.nil?
+      session[:user_id] = user.id
+    end
+
+    get "/logout" do
+      session[:user_id] = nil
+      redirect "/"
+    end
+  
     get "/" do
-      "This page intentionally left blank."
+      authenticate!
+      "This page intentionally left blank, #{@user.email}."
     end
 
     post "/projects" do
@@ -45,6 +72,14 @@ module CheesyParts
       end
 
       Part.generate_number_and_create(project, params[:type], params[:name], parent_part, params[:notes])
+    end
+
+    post "/users" do
+      halt(400, "Missing email.") if params[:email].nil?
+      halt(400, "Missing password.") if params[:password].nil?
+      halt(400, "Missing permission.") if params[:permission].nil?
+      halt(400, "Invalid permission.") unless ["readonly", "editor", "admin"].include?(params[:permission])
+      User.secure_create(params[:email], params[:password], params[:permission])
     end
   end
 end
