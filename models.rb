@@ -5,8 +5,7 @@
 
 require "sequel"
 
-DB = Sequel.mysql2({ :host => "localhost", :user => "root", :database => "cheesy_parts" })
-
+require "db"
 require "models/part"
 require "models/project"
 require "models/user"
