@@ -1,0 +1,22 @@
+<table>
+  <tr>
+    <th>Part Number</th>
+    <th>Type</th>
+    <th>Name</th>
+    <th>Parent</th>
+    <th>Actions</th>
+  </tr>
+  <% parts.each do |part| %>
+  <tr>
+    <td><a href="/parts/<%= part.id %>"><%= part.full_part_number %></a></td>
+    <td><%= part.type.capitalize %></td>
+    <td><a href="/parts/<%= part.id %>"><%= part.name %></a></td>
+    <td>
+      <% if part.parent_part %>
+      <a href="/parts/<%= part.parent_part.id %>"><%= part.parent_part.name if part.parent_part%></a>
+      <% end %>
+    </td>
+    <td>&nbsp;</td>
+  </tr>
+  <% end %>
+</table>

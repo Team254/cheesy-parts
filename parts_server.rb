@@ -10,10 +10,14 @@ require "models"
 
 module CheesyParts
   class Server < Sinatra::Base
+    PART_TYPES = ["part", "assembly"]
+    USER_TYPES = ["readonly", "editor", "admin"]
+
     set :sessions => true
 
     before do
       @user = User[session[:user_id]]
+      authenticate! unless request.path == "/login"
     end
 
     def authenticate!
@@ -51,22 +55,37 @@ module CheesyParts
       Project.create(:name => params[:name], :part_number_prefix => params[:part_number_prefix])
     end
 
+    get "/projects/:id" do
+      @project = Project[params[:id]]
+      halt(400, "Invalid project.") if @project.nil?
+      erb :project
+    end
+
+    get "/projects/:id/new_part" do
+      @project = Project[params[:id]]
+      halt(400, "Invalid project.") if @project.nil?
+      @parent_part_id = params[:parent_part_id]
+      @type = params[:type] || "part"
+      halt(400, "Invalid part type.") unless PART_TYPES.include?(@type)
+      erb :new_part
+    end
+
     post "/parts" do
       # Check parameter existence and format.
       halt(400, "Missing project ID.") if params[:project_id].nil? || params[:project_id] !~ /^\d+$/
       halt(400, "Missing part type.") if params[:type].nil?
-      halt(400, "Invalid part type.") unless ["part", "assembly"].include?(params[:type])
+      halt(400, "Invalid part type.") unless PART_TYPES.include?(params[:type])
       halt(400, "Missing part name.") if params[:name].nil?
-      if params[:parent_part_number] && params[:parent_part_number] !~ /^\d+$/
-        halt(400, "Invalid parent part number.")
+      if params[:parent_part_id] && params[:parent_part_id] !~ /^\d+$/
+        halt(400, "Invalid parent part ID.")
       end
 
       project = Project[params[:project_id].to_i]
       halt(400, "Invalid project.") if project.nil?
 
       parent_part = nil
-      if params[:parent_part_number]
-        parent_part = Part[:part_number => params[:parent_part_number].to_i, :project_id => project.id,
+      if params[:parent_part_id]
+        parent_part = Part[:id => params[:parent_part_id].to_i, :project_id => project.id,
                            :type => "assembly"]
         halt(400, "Invalid parent part.") if parent_part.nil?
       end
@@ -74,11 +93,17 @@ module CheesyParts
       Part.generate_number_and_create(project, params[:type], params[:name], parent_part, params[:notes])
     end
 
+    get "/parts/:id" do
+      @part = Part[params[:id]]
+      halt(400, "Invalid part.") if @part.nil?
+      erb :part
+    end
+
     post "/users" do
       halt(400, "Missing email.") if params[:email].nil?
       halt(400, "Missing password.") if params[:password].nil?
       halt(400, "Missing permission.") if params[:permission].nil?
-      halt(400, "Invalid permission.") unless ["readonly", "editor", "admin"].include?(params[:permission])
+      halt(400, "Invalid permission.") unless USER_TYPES.include?(params[:permission])
       User.secure_create(params[:email], params[:password], params[:permission])
     end
   end

@@ -1,0 +1,14 @@
+<html>
+  <head>
+    <title>Team 254 Part Management System</title>
+    <link rel="icon" href="http://team254.com/wp-content/themes/cheesypoof2013/icons/favicon.ico">
+    <link href='/css/css.css' rel='stylesheet' type='text/css' />
+  </head>
+  <body>
+    <div id="header">
+      <div id='userstatus'>
+        <% if @user %>
+        Logged in as <b><%= @user.email %></b> (<a style='color:white;' href="/logout">logout</a>)
+        <% end %>
+      </div>
+    </div>

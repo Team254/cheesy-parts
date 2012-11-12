@@ -1,0 +1,7 @@
+<%= erb :header %>
+
+<div id="content">
+  <%= erb :parts_list, :locals => { :parts => @part.child_parts } %>
+</div>
+
+<%= erb :footer %>

@@ -5,6 +5,8 @@
 
 class Part < Sequel::Model
   many_to_one :project
+  many_to_one :parent_part, :class => self
+  one_to_many :child_parts, :key => :parent_part_id, :class => self
 
   def self.generate_number_and_create(project, type, name, parent_part, notes)
     parent_part_id = parent_part.nil? ? 0 : parent_part.id

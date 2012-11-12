@@ -39,7 +39,7 @@ namespace :fezzik do
   desc "kills the application by searching for the specified process name"
   remote_task :stop do
     puts "stopping app"
-    run "cd #{current_path} && ruby parts_server_control.rb stop"
+    run "(kill -9 `ps aux | grep 'parts_server' | grep -v grep | awk '{print $2}'` || true)"
   end
 
   desc "restarts the application"

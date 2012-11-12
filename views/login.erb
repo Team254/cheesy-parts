@@ -1,15 +1,16 @@
-<html>
-  <head>
-    <title>Login</title>
-  </head>
-  <body>
-    <% if @failed %>
-      Invalid e-mail address or password.
-    <% end %>
-    <form action="" method="POST">
-      <input type="text" name="email"/>
-      <input type="password" name="password"/>
-      <input type="submit" value="Go"/>
-    </form>
-  </body>
-</html>
+<%= erb :header %>
+
+<div id="content">
+  <% if @failed %>
+  <h3 style="color: red;">Invalid e-mail address or password.</h3>
+  <% end %>
+  <form action="" method="POST">
+    <label style="font-weight:bold;">E-mail</label>
+    <input type="text" name="email" />
+    <label style="font-weight:bold;">Password</label>
+    <input type="password" name="password" />
+    <label><input type="submit" value="Login" /></label>
+  </form>
+</div>
+
+<%= erb :footer %>
