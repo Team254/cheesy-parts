@@ -93,13 +93,30 @@ module CheesyParts
         halt(400, "Invalid parent part.") if parent_part.nil?
       end
 
-      Part.generate_number_and_create(project, params[:type], params[:name], parent_part, params[:notes])
+      part = Part.generate_number_and_create(project, params[:type], params[:name], parent_part,
+                                             params[:notes])
+      redirect "/parts/#{part.id}"
     end
 
     get "/parts/:id" do
       @part = Part[params[:id]]
       halt(400, "Invalid part.") if @part.nil?
       erb :part
+    end
+
+    get "/parts/:id/delete" do
+      @part = Part[params[:id]]
+      halt(400, "Invalid part.") if @part.nil?
+      erb :part_delete
+    end
+
+    post "/parts/:id/delete" do
+      @part = Part[params[:id]]
+      project_id = @part.project_id
+      halt(400, "Invalid part.") if @part.nil?
+      halt(400, "Can't delete assembly with existing children.") unless @part.child_parts.empty?
+      @part.delete
+      redirect "/projects/#{project_id}"
     end
 
     post "/users" do

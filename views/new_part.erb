@@ -13,7 +13,7 @@
     <select name="parent_part_id">
       <% @project.parts.select { |p| p.type == "assembly"}.each do |part| %>
       <option value="<%= part.id %>"<% if part.id == @parent_part_id.to_i %> selected<% end %>>
-        <%= part.full_part_number %> (<%= part.name %>)
+        <%= part.full_part_number %> - <%= part.name %>
       </option>
       <% end %>
     </select>

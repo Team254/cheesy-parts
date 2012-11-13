@@ -1,7 +1,16 @@
 <%= erb :header %>
 
 <div id="content">
+  <h2><%= @part.type.capitalize %>: <%= @part.name %></h2>
+  <entry><b>Part Number:</b> <%= @part.full_part_number %></entry>
+  <entry><b>Project:</b> <%= @part.project.part_number_prefix %> - <%= @part.project.name %></entry>
+  <% if @part.parent_part %>
+  <entry><b>Parent Assembly:</b> <a href="/parts/<%= @part.parent_part.id %>">
+      <%= @part.parent_part.full_part_number %> - <%= @part.parent_part.name %></a></entry>
+  <% end %>
+  <a href="/parts/<%= @part.id %>/delete">Delete this part</a>
   <% if @part.type == "assembly" %>
+  <entry><b>Parts & Assemblies Contained Within this Assembly:</b></entry>
   <%= erb :parts_list, :locals => { :parts => @part.child_parts } %>
   <a href="/projects/<%= @part.project_id %>/new_part?type=part&parent_part_id=<%= @part.id %>">New Part</a> |
   <a href="/projects/<%= @part.project_id %>/new_part?type=assembly&parent_part_id=<%= @part.id %>">
