@@ -5,8 +5,8 @@
   <b>Project Prefix:</b> <%= @project.part_number_prefix %><br /><br />
   <h3>All Parts & Assemblies:</h3><br />
   <%= erb :parts_list, :locals => { :parts => @project.parts } %>
-  <a href=part_new_2.php?ref=project&proj=121&parent=1>New Part</a> |
-  <a href=part_new_2.php?ref=project&proj=121&parent=1&assembly=1>New Assembly</a>
+  <a href="/projects/<%= @project.id %>/new_part?type=part">New Part</a> |
+  <a href="/projects/<%= @project.id %>/new_part?type=assembly">New Assembly</a>
 </div>
 
 <%= erb :footer %>

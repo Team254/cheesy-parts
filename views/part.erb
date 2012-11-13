@@ -1,7 +1,12 @@
 <%= erb :header %>
 
 <div id="content">
+  <% if @part.type == "assembly" %>
   <%= erb :parts_list, :locals => { :parts => @part.child_parts } %>
+  <a href="/projects/<%= @part.project_id %>/new_part?type=part&parent_part_id=<%= @part.id %>">New Part</a> |
+  <a href="/projects/<%= @part.project_id %>/new_part?type=assembly&parent_part_id=<%= @part.id %>">
+      New Assembly</a>
+  <% end %>
 </div>
 
 <%= erb :footer %>
