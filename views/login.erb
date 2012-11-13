@@ -4,7 +4,7 @@
   <% if @failed %>
   <h3 style="color: red;">Invalid e-mail address or password.</h3>
   <% end %>
-  <form action="" method="POST">
+  <form action="?redirect=<%= @redirect %>" method="POST">
     <label style="font-weight:bold;">E-mail</label>
     <input type="text" name="email" />
     <label style="font-weight:bold;">Password</label>

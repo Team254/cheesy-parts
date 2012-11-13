@@ -21,11 +21,13 @@ module CheesyParts
     end
 
     def authenticate!
-      redirect "/login" if @user.nil?
+      redirect "/login?redirect=#{request.path}" if @user.nil?
     end
 
     get "/login" do
+      redirect "/logout" if @user
       @failed = params[:failed] == "1"
+      @redirect = params[:redirect] || "/"
       erb :login
     end
 
@@ -33,6 +35,7 @@ module CheesyParts
       user = User.authenticate(params[:email], params[:password])
       redirect "/login?failed=1" if user.nil?
       session[:user_id] = user.id
+      redirect params[:redirect]
     end
 
     get "/logout" do
