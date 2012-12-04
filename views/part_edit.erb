@@ -1,0 +1,22 @@
+<%= erb :header %>
+
+<div id="content">
+  <h2>Edit Part</h2>
+  <form action="" method="POST">
+    <entry><b>Part Number:</b> <%= @part.full_part_number %></entry>
+    <entry><b>Part Name:</b> <input type="text" name="name" value="<%= @part.name %>" /></entry>
+    <entry>
+      <b>Status:</b>
+      <select name="status">
+        <% Part::STATUS_MAP.each_pair do |key, value| %>
+        <option value="<%= key %>"<% if @part.status == key %> selected<% end %>>
+          <%= value %>
+        </option>
+        <% end %>
+      </select>
+    <entry><b>Notes:</b> <textarea name="notes"><%= @part.notes %></textarea></entry>
+    <input type="submit" value="Save" />
+  </form>
+</div>
+
+<%= erb :footer %>

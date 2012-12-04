@@ -104,6 +104,25 @@ module CheesyParts
       erb :part
     end
 
+    get "/parts/:id/edit" do
+      @part = Part[params[:id]]
+      halt(400, "Invalid part.") if @part.nil?
+      erb :part_edit
+    end
+
+    post "/parts/:id/edit" do
+      @part = Part[params[:id]]
+      halt(400, "Invalid part.") if @part.nil?
+      @part.name = params[:name] if params[:name]
+      if params[:status]
+        halt(400, "Invalid status.") unless Part::STATUS_MAP.include?(params[:status])
+        @part.status = params[:status]
+      end
+      @part.notes = params[:notes] if params[:notes]
+      @part.save
+      redirect "/parts/#{params[:id]}"
+    end
+
     get "/parts/:id/delete" do
       @part = Part[params[:id]]
       halt(400, "Invalid part.") if @part.nil?

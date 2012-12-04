@@ -8,6 +8,16 @@ class Part < Sequel::Model
   many_to_one :parent_part, :class => self
   one_to_many :child_parts, :key => :parent_part_id, :class => self
 
+  STATUS_MAP = { "designing" => "Design in progress",
+                 "material" => "Material needs to be ordered",
+                 "ordered" => "Waiting for materials",
+                 "drawing" => "Needs drawing",
+                 "ready" => "Ready to manufacture",
+                 "manufacturing" => "Manufacturing in progress",
+                 "coating" => "Waiting for coating",
+                 "assembly" => "Waiting for assembly",
+                 "done" => "Done" }
+
   def self.generate_number_and_create(project, type, name, parent_part, notes)
     parent_part_id = parent_part.nil? ? 0 : parent_part.id
     parent_part_number = parent_part.nil? ? 0 : parent_part.part_number
