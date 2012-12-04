@@ -4,6 +4,7 @@
   <h2><%= @part.type.capitalize %>: <%= @part.name %></h2>
   <entry><b>Part Number:</b> <%= @part.full_part_number %></entry>
   <entry><b>Project:</b> <%= @part.project.part_number_prefix %> - <%= @part.project.name %></entry>
+  <entry><b>Status:</b> <%= @part.status %></entry>
   <% if @part.parent_part %>
   <entry><b>Parent Assembly:</b> <a href="/parts/<%= @part.parent_part.id %>">
       <%= @part.parent_part.full_part_number %> - <%= @part.parent_part.name %></a></entry>

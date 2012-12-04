@@ -19,7 +19,7 @@ class Part < Sequel::Model
       part_number += 100
     end
     create(:part_number => part_number, :project_id => project.id, :type => type, :name => name,
-           :parent_part_id => parent_part.nil? ? 0 : parent_part.id, :notes => notes)
+           :parent_part_id => parent_part.nil? ? 0 : parent_part.id, :notes => notes, :status => "designing")
   end
 
   def full_part_number
