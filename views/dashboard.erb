@@ -1,0 +1,14 @@
+<%= erb :header %>
+
+<div id="content">
+  <h2>Project: <%= @project.name %></h2><br />
+  <% Part::STATUS_MAP.keys.reject { |k| k == "done" }.each do |status| %>
+  <h3><%= Part::STATUS_MAP[status] %>:</h3><br />
+  <% Part.where(:project_id => @project.id, :status => status).each do |part| %>
+    <p><a href="/parts/<%= part.id %>"><%= part.full_part_number %> - <%= part.name %></a></p>
+  <% end %>
+  <br /><br />
+  <% end %>
+</div>
+
+<%= erb :footer %>

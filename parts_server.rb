@@ -64,6 +64,12 @@ module CheesyParts
       erb :project
     end
 
+    get "/projects/:id/dashboard" do
+      @project = Project[params[:id]]
+      halt(400, "Invalid project.") if @project.nil?
+      erb :dashboard
+    end
+
     get "/projects/:id/new_part" do
       @project = Project[params[:id]]
       halt(400, "Invalid project.") if @project.nil?
