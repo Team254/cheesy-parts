@@ -1,0 +1,12 @@
+<%= erb :header %>
+
+<div id="content">
+  <h2>Create New Project</h2>
+  <form action="/projects" method="POST">
+    Name: <input type="text" name="name" />
+    Part number prefix: <input type="text" name="part_number_prefix" />
+    <label><input type="submit" value="Create Project"></label>
+  </form>
+</div>
+
+<%= erb :footer %>

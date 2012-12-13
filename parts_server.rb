@@ -48,6 +48,10 @@ module CheesyParts
       "This page intentionally left blank, #{@user.email}."
     end
 
+    get "/new_project" do
+      erb :new_project
+    end
+
     post "/projects" do
       # Check parameter existence and format.
       halt(400, "Missing project name.") if params[:name].nil?
@@ -55,7 +59,8 @@ module CheesyParts
         halt(400, "Missing or invalid part number prefix.")
       end
 
-      Project.create(:name => params[:name], :part_number_prefix => params[:part_number_prefix])
+      project = Project.create(:name => params[:name], :part_number_prefix => params[:part_number_prefix])
+      redirect "/projects/#{project.id}"
     end
 
     get "/projects/:id" do
