@@ -1,0 +1,15 @@
+<%= erb :header %>
+
+<div id="content">
+  <h2>Edit Project</h2>
+  <form action="" method="POST">
+    <entry><b>Name:</b> <input type="text" name="name" value="<%= @project.name %>" /></entry>
+    <entry>
+      <b>Part number prefix:</b>
+      <input type="text" name="part_number_prefix" value="<%= @project.part_number_prefix %>" />
+    </entry>
+    <input type="submit" value="Save" />
+  </form>
+</div>
+
+<%= erb :footer %>

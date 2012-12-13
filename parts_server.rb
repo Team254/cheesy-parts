@@ -24,6 +24,10 @@ module CheesyParts
       redirect "/login?redirect=#{request.path}" if @user.nil?
     end
 
+    get "/" do
+      redirect "/projects"
+    end
+
     get "/login" do
       redirect "/logout" if @user
       @failed = params[:failed] == "1"
@@ -43,13 +47,12 @@ module CheesyParts
       redirect "/"
     end
   
-    get "/" do
-      authenticate!
-      "This page intentionally left blank, #{@user.email}."
-    end
-
     get "/new_project" do
       erb :new_project
+    end
+
+    get "/projects" do
+      erb :projects
     end
 
     post "/projects" do
@@ -67,6 +70,37 @@ module CheesyParts
       @project = Project[params[:id]]
       halt(400, "Invalid project.") if @project.nil?
       erb :project
+    end
+
+    get "/projects/:id/edit" do
+      @project = Project[params[:id]]
+      halt(400, "Invalid project.") if @project.nil?
+      erb :project_edit
+    end
+
+    post "/projects/:id/edit" do
+      @project = Project[params[:id]]
+      halt(400, "Invalid project.") if @project.nil?
+      @project.name = params[:name] if params[:name]
+      if params[:part_number_prefix]
+        halt(400, "Invalid part number prefix.") if params[:part_number_prefix] !~ /^\d+$/
+        @project.part_number_prefix = params[:part_number_prefix]
+      end
+      @project.save
+      redirect "/projects/#{params[:id]}"
+    end
+
+    get "/projects/:id/delete" do
+      @project = Project[params[:id]]
+      halt(400, "Invalid project.") if @project.nil?
+      erb :project_delete
+    end
+
+    post "/projects/:id/delete" do
+      @project = Project[params[:id]]
+      halt(400, "Invalid project.") if @project.nil?
+      @project.delete
+      redirect "/projects"
     end
 
     get "/projects/:id/dashboard" do

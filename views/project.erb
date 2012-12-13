@@ -3,6 +3,8 @@
 <div id="content">
   <h2>Project: <%= @project.name %></h2><br />
   <b>Project Prefix:</b> <%= @project.part_number_prefix %><br /><br />
+  <a href="/projects/<%= @project.id %>/edit">Edit this project</a>
+  <a href="/projects/<%= @project.id %>/delete">Delete this project</a>
   <h3>All Parts & Assemblies:</h3><br />
   <%= erb :parts_list, :locals => { :parts => @project.parts } %>
   <a href="/projects/<%= @project.id %>/new_part?type=part">New Part</a> |

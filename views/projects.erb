@@ -1,0 +1,11 @@
+<%= erb :header %>
+
+<div id="content">
+  <h2>Projects</h2>
+  <% Project.each do |project| %>
+  <p><a href="/projects/<%= project.id %>"><%= project.name %></a></p>
+  <% end %>
+  <a href="/new_project">New Project</a>
+</div>
+
+<%= erb :footer %>
