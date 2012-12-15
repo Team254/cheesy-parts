@@ -1,4 +1,4 @@
-<table>
+<table  class="table table-striped table-condensed table-bordered">
   <tr>
     <th>Part Number</th>
     <th>Type</th>
@@ -16,7 +16,7 @@
       <a href="/parts/<%= part.parent_part.id %>"><%= part.parent_part.name if part.parent_part%></a>
       <% end %>
     </td>
-    <td><%= Part::STATUS_MAP[part.status] %></td>
+    <td><span class="label label-info"><%= Part::STATUS_MAP[part.status] %></span></td>
   </tr>
   <% end %>
 </table>

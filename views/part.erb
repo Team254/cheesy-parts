@@ -1,23 +1,30 @@
 <%= erb :header %>
 
-<div id="content">
+<div class="container">
+  <div class="pull-right" style="margin-top: 15px;">
+  <a href="/projects/<%= @part.project_id %>/new_part?type=part&parent_part_id=<%= @part.id %>" class="btn btn-success btn-small"><i class="icon-white icon-cog"></i> New Part</a>
+  <a href="/projects/<%= @part.project_id %>/new_part?type=assembly&parent_part_id=<%= @part.id %>" class="btn btn-success btn-small"><i class="icon-white icon-th"></i> New Assembly</a>
+</div>
   <h2><%= @part.type.capitalize %>: <%= @part.name %></h2>
-  <entry><b>Part Number:</b> <%= @part.full_part_number %></entry>
-  <entry><b>Project:</b> <%= @part.project.part_number_prefix %> - <%= @part.project.name %></entry>
-  <entry><b>Status:</b> <%= Part::STATUS_MAP[@part.status] %></entry>
-  <% if @part.parent_part %>
-  <entry><b>Parent Assembly:</b> <a href="/parts/<%= @part.parent_part.id %>">
-      <%= @part.parent_part.full_part_number %> - <%= @part.parent_part.name %></a></entry>
-  <% end %>
-  <a href="/parts/<%= @part.id %>/edit">Edit this part</a>
-  <a href="/parts/<%= @part.id %>/delete">Delete this part</a>
+
   <% if @part.type == "assembly" %>
   <entry><b>Parts & Assemblies Contained Within this Assembly:</b></entry>
+
   <%= erb :parts_list, :locals => { :parts => @part.child_parts } %>
-  <a href="/projects/<%= @part.project_id %>/new_part?type=part&parent_part_id=<%= @part.id %>">New Part</a> |
-  <a href="/projects/<%= @part.project_id %>/new_part?type=assembly&parent_part_id=<%= @part.id %>">
-      New Assembly</a>
+<% end %>
+  <div><span class="label label-info">Part Number</span> <%= @part.full_part_number %></div>
+  <div><span class="label label-info">Project</span> <%= @part.project.name %></div>
+  <div><span class="label label-info">Project Prefix</span> <%= @part.project.part_number_prefix %></div>
+  <div><span class="label label-info">Status</span> <%= Part::STATUS_MAP[@part.status] %></div>
+  <% if @part.parent_part %>
+  <div><span class="label label-info">Parent Assembly</span> <a href="/parts/<%= @part.parent_part.id %>">
+      <%= @part.parent_part.full_part_number %> - <%= @part.parent_part.name %></a></div>
   <% end %>
+  <div class="pull-right" style="margin-top: -40px;">
+  <a href="/parts/<%= @part.id %>/edit" class="btn btn-primary btn-small"><i class="icon-white icon-pencil"></i> Edit this part</a>
+  <a href="/parts/<%= @part.id %>/delete" class="btn btn-danger btn-small"><i class="icon-white icon-trash"></i> Delete this part</a>
+</div>
+
 </div>
 
 <%= erb :footer %>

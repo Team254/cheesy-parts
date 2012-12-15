@@ -1,14 +1,25 @@
 <%= erb :header %>
+<div class="container">
 
-<div id="content">
-  <h2>Project: <%= @project.name %></h2><br />
-  <b>Project Prefix:</b> <%= @project.part_number_prefix %><br /><br />
-  <a href="/projects/<%= @project.id %>/edit">Edit this project</a>
-  <a href="/projects/<%= @project.id %>/delete">Delete this project</a>
-  <h3>All Parts & Assemblies:</h3><br />
-  <%= erb :parts_list, :locals => { :parts => @project.parts } %>
-  <a href="/projects/<%= @project.id %>/new_part?type=part">New Part</a> |
-  <a href="/projects/<%= @project.id %>/new_part?type=assembly">New Assembly</a>
+<div class="pull-right" style="margin-top: 15px;">
+  <a href="/projects/<%= @project.id %>/new_part?type=part" class="btn btn-success btn-small"><i class="icon-white icon-cog"></i> New Part</a>
+  <a href="/projects/<%= @project.id %>/new_part?type=assembly" class="btn btn-success btn-small"><i class="icon-white icon-th"></i> New Assembly</a>
 </div>
+  <h3><b><%= @project.name %> - All Parts & Assemblies</b></h3>
+  <%= erb :parts_list, :locals => { :parts => @project.parts } %>
+<hr>
+<div class="row">
+<div class="span3">
+    <span class="label label-info">Project Prefix</span> <%= @project.part_number_prefix %><br /><br />
+</div>
+<div class="pull-right">
+  <a href="/projects/<%= @project.id %>/edit" class="btn btn-primary btn-small"><i class="icon-white icon-pencil"></i> Edit this project</a>
+  <a href="/projects/<%= @project.id %>/delete" class="btn btn-danger btn-small"><i class="icon-white icon-trash"></i> Delete this project</a>
+</div>
+</div>
+
+
+</div>
+<br />
 
 <%= erb :footer %>
