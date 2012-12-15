@@ -1,20 +1,42 @@
-<html>
-  <head>
-    <title>Team 254 Part Management System</title>
-    <link rel="icon" href="http://team254.com/wp-content/themes/cheesypoof2013/icons/favicon.ico">
-    <link href='/css/css.css' rel='stylesheet' type='text/css' />
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-    <script>
-      $(document).ready(function() {
-        $(":text:visible:enabled:first").focus();
-      });
-    </script>
-  </head>
-  <body>
-    <div id="header">
-      <div id='userstatus'>
-        <% if @user %>
-        Logged in as <b><%= @user.email %></b> (<a style='color:white;' href="/logout">logout</a>)
-        <% end %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Team 254 Part Management System</title>
+  <link rel="icon" href="http://team254.com/wp-content/themes/cheesypoof2013/icons/favicon.ico">
+  <link href='/css/css.css' rel='stylesheet' type='text/css' />
+  <link href="/css/bootstrap.min.css" rel="stylesheet"></head>
+<body>
+  <div class="navbar">
+    <div class="navbar-inner">
+      <div class="container">
+        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </a>
+        <a class="brand" href="/">Team 254 Parts</a>
+        <div class="nav-collapse collapse">
+          <ul class="nav">
+            <li>
+              <a href="/"> <i class="icon-th-large icon-black"></i> Dashboard</a>
+            </li>
+          </ul>
+          <% if @user %>
+          <div class="pull-right">
+            <ul class="nav pull-right">
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown"> <i class="icon-user"></i>
+                  <%= @user.email %> <b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                  <li>
+                    <a href="/logout"><i class="icon-off"></i> Logout</a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+          <% end %></div>
       </div>
     </div>
+  </div>
