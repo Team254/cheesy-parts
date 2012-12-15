@@ -44,9 +44,9 @@ module CheesyParts
 
     get "/logout" do
       session[:user_id] = nil
-      redirect "/"
+      redirect "/login"
     end
-  
+
     get "/new_project" do
       erb :new_project
     end
