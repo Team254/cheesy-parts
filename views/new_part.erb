@@ -1,6 +1,6 @@
 <%= erb :header %>
 
-<div id="content">
+<div class="container">
   <h2>Create New <%= @type.capitalize %></h2>
   <form action="/parts" method="POST">
     <input type=hidden name=type value="<%= @type %>" />
@@ -17,7 +17,7 @@
       </option>
       <% end %>
     </select>
-    <label><input type="submit" value="Create <%= @type.capitalize %>"></label>
+    <label><input type="submit" class="btn btn-success btn-medium" value="Create <%= @type.capitalize %>"></label>
   </form>
 </div>
 

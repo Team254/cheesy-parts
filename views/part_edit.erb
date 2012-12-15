@@ -1,12 +1,12 @@
 <%= erb :header %>
 
-<div id="content">
+<div class="container">
   <h2>Edit Part</h2>
   <form action="" method="POST">
-    <entry><b>Part Number:</b> <%= @part.full_part_number %></entry>
-    <entry><b>Part Name:</b> <input type="text" name="name" value="<%= @part.name %>" /></entry>
-    <entry>
-      <b>Status:</b>
+    <label><span class="label label-info">Part Number</span> <%= @part.full_part_number %></label>
+    <label><b>Part Name<b></label>
+    <input type="text" name="name" value="<%= @part.name %>" />
+    <label><b>Status</b></label>
       <select name="status">
         <% Part::STATUS_MAP.each_pair do |key, value| %>
         <option value="<%= key %>"<% if @part.status == key %> selected<% end %>>
@@ -14,8 +14,9 @@
         </option>
         <% end %>
       </select>
-    <entry><b>Notes:</b> <textarea name="notes"><%= @part.notes %></textarea></entry>
-    <input type="submit" value="Save" />
+    <label><b>Notes</b></label>
+     <textarea name="notes" rows="4"><%= @part.notes %></textarea>
+    <label><input type="submit" class="btn btn-success btn-medium" value="Save Part" /></label>
   </form>
 </div>
 
