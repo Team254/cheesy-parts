@@ -228,5 +228,17 @@ module CheesyParts
       @user_delete.delete
       redirect "/users"
     end
+
+    get "/change_password" do
+      erb :change_password
+    end
+
+    post "/change_password" do
+      halt(400, "Missing password.") if params[:password].nil? || params[:password].empty?
+      halt(400, "Invalid old password.") unless User.authenticate(@user.email, params[:old_password])
+      @user.change_password(params[:password])
+      @user.save
+      redirect "/"
+    end
   end
 end
