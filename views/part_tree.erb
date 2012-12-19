@@ -1,0 +1,5 @@
+<% if part.parent_part %>
+  <%= erb :part_tree, :locals => { :part => part.parent_part } if part.parent_part %>
+  <i class="icon-chevron-right"></i>
+<% end %>
+<a href="/parts/<%= part.id %>"><b><%= part.name %></b></a>
