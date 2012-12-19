@@ -1,0 +1,25 @@
+<%= erb :header %>
+
+<div class="container">
+  <h2>Create New User</h2>
+  <form action="/users" method="POST">
+    <label style="font-weight:bold;">E-mail</label>
+    <input type="text" name="email" />
+    <label style="font-weight:bold;">Password</label>
+    <input type="password" name="password" />
+    <label style="font-weight:bold;">Verify Password</label>
+    <input type="password" name="password2" />
+    <label style="font-weight:bold;">Permission</label>
+    <select name="permission">
+      <option value="readonly" selected>Read-only</option>
+      <option value="editor">Editor</option>
+      <option value="admin">Administrator</option>
+    </select>
+    <label>
+      <input type="submit" class="btn btn-success btn-medium" value="Create User"
+          onclick="return verifyPasswordMatch(this.parentElement.parentElement);" />
+    </label>
+  </form>
+</div>
+
+<%= erb :footer %>
