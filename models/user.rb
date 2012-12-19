@@ -12,16 +12,6 @@ class User < Sequel::Model
   SALT_BYTES = 24
   PERMISSION_MAP = { "readonly" => "Read-only", "editor" => "Editor", "admin" => "Administrator" }
 
-  # Creates a database record for the given user after salting and hashing the password. Returns the new user
-  # object.
-  def self.secure_create(email, password, permission)
-    salt = SecureRandom.base64(SALT_BYTES)
-    hashed_password = Base64.encode64(OpenSSL::PKCS5::pbkdf2_hmac_sha1(password, salt, PBKDF2_ITERATIONS,
-                                                                       HASH_BYTES))
-    
-    User.create(:email => email, :password => hashed_password, :salt => salt, :permission => permission)
-  end
-
   # Checks the given credentials against the database. Returns the user object on success and nil otherwise.
   def self.authenticate(email, password)
     user = User[:email => email]
@@ -35,8 +25,9 @@ class User < Sequel::Model
     nil
   end
 
-  # Recomputes the password hash given a new password.
-  def change_password(new_password)
+  # Generates a new salt and computes the password hash for the given password.
+  def set_password(new_password)
+    self.salt = SecureRandom.base64(SALT_BYTES)
     self.password = Base64.encode64(OpenSSL::PKCS5::pbkdf2_hmac_sha1(new_password, salt, PBKDF2_ITERATIONS,
                                                                      HASH_BYTES))
   end

@@ -233,10 +233,15 @@ module CheesyParts
 
       halt(400, "Missing email.") if params[:email].nil? || params[:email].empty?
       halt(400, "User #{params[:email]} already exists.") if User[:email => params[:email]]
+      halt(400, "Missing first name.") if params[:first_name].nil? || params[:first_name].empty?
+      halt(400, "Missing last name.") if params[:last_name].nil? || params[:last_name].empty?
       halt(400, "Missing password.") if params[:password].nil? || params[:password].empty?
       halt(400, "Missing permission.") if params[:permission].nil? || params[:permission].empty?
       halt(400, "Invalid permission.") unless User::PERMISSION_MAP.include?(params[:permission])
-      User.secure_create(params[:email], params[:password], params[:permission])
+      user = User.new(:email => params[:email], :first_name => params[:first_name],
+                      :last_name => params[:last_name], :permission => params[:permission])
+      user.set_password(params[:password])
+      user.save
       redirect "/users"
     end
 
@@ -254,7 +259,9 @@ module CheesyParts
       @user_edit = User[params[:id]]
       halt(400, "Invalid user.") if @user_edit.nil?
       @user_edit.email = params[:email] if params[:email]
-      @user_edit.change_password(params[:password]) if params[:password] && !params[:password].empty?
+      @user_edit.first_name = params[:first_name] if params[:first_name]
+      @user_edit.last_name = params[:last_name] if params[:last_name]
+      @user_edit.set_password(params[:password]) if params[:password] && !params[:password].empty?
       @user_edit.permission = params[:permission] if params[:permission]
       @user_edit.save
       redirect "/users"
@@ -284,7 +291,7 @@ module CheesyParts
     post "/change_password" do
       halt(400, "Missing password.") if params[:password].nil? || params[:password].empty?
       halt(400, "Invalid old password.") unless User.authenticate(@user.email, params[:old_password])
-      @user.change_password(params[:password])
+      @user.set_password(params[:password])
       @user.save
       redirect "/"
     end
