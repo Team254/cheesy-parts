@@ -195,5 +195,21 @@ module CheesyParts
       halt(400, "Invalid permission.") unless USER_TYPES.include?(params[:permission])
       User.secure_create(params[:email], params[:password], params[:permission])
     end
+
+    get "/users/:id/edit" do
+      @user_edit = User[params[:id]]
+      halt(400, "Invalid user.") if @user_edit.nil?
+      erb :user_edit
+    end
+
+    post "/users/:id/edit" do
+      @user_edit = User[params[:id]]
+      halt(400, "Invalid user.") if @user_edit.nil?
+      @user_edit.email = params[:email] if params[:email]
+      @user_edit.change_password(params[:password]) if params[:password] && !params[:password].empty?
+      @user_edit.permission = params[:permission] if params[:permission]
+      @user_edit.save
+      redirect "/users"
+    end
   end
 end

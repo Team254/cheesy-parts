@@ -1,0 +1,27 @@
+<%= erb :header %>
+
+<div class="container">
+  <h2>Edit User</h2>
+  <form action="" method="POST">
+    <label style="font-weight:bold;">E-mail</label>
+    <input type="text" name="email" value="<%= @user_edit.email %>"/>
+    <label style="font-weight:bold;">Change Password</label>
+    <input type="password" name="password" />
+    <label style="font-weight:bold;">Verify Password</label>
+    <input type="password" name="password2" />
+    <label style="font-weight:bold;">Permission</label>
+    <select name="permission">
+      <option value="readonly"<% if @user_edit.permission == "readonly" %> selected<% end %>>
+        Read-only
+      </option>
+      <option value="editor"<% if @user_edit.permission == "editor" %> selected<% end %>>Editor</option>
+      <option value="admin"<% if @user_edit.permission == "admin" %> selected<% end %>>Administrator</option>
+    </select>
+    <label>
+      <input type="submit" class="btn btn-primary btn-medium" value="Save"
+          onclick="return verifyPasswordMatch(this.parentElement.parentElement);" />
+    </label>
+  </form>
+</div>
+
+<%= erb :footer %>

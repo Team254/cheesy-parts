@@ -33,4 +33,10 @@ class User < Sequel::Model
     end
     nil
   end
+
+  # Recomputes the password hash given a new password.
+  def change_password(new_password)
+    self.password = Base64.encode64(OpenSSL::PKCS5::pbkdf2_hmac_sha1(new_password, salt, PBKDF2_ITERATIONS,
+                                                                     HASH_BYTES))
+  end
 end
