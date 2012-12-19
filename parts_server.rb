@@ -137,8 +137,11 @@ module CheesyParts
         halt(400, "Invalid parent part.") if parent_part.nil?
       end
 
-      part = Part.generate_number_and_create(project, params[:type], params[:name], parent_part,
-                                             params[:notes])
+      part = Part.generate_number_and_create(project, params[:type], parent_part)
+      part.name = params[:name]
+      part.status = "designing"
+      part.priority = 1;
+      part.save
       redirect "/parts/#{part.id}"
     end
 
@@ -163,6 +166,12 @@ module CheesyParts
         @part.status = params[:status]
       end
       @part.notes = params[:notes] if params[:notes]
+      @part.source_material = params[:source_material] if params[:source_material]
+      @part.have_material = (params[:have_material] == "on") ? 1 : 0
+      @part.cut_length = params[:cut_length] if params[:cut_length]
+      @part.quantity = params[:quantity] if params[:quantity]
+      @part.drawing_created = (params[:drawing_created] == "on") ? 1 : 0
+      @part.priority = params[:priority] if params[:priority]
       @part.save
       redirect "/parts/#{params[:id]}"
     end

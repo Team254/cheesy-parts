@@ -2,27 +2,43 @@
 
 <div class="container">
   <div class="pull-right" style="margin-top: 15px;">
-  <a href="/projects/<%= @part.project_id %>/new_part?type=part&parent_part_id=<%= @part.id %>" class="btn btn-success btn-small"><i class="icon-white icon-cog"></i> New Part</a>
-  <a href="/projects/<%= @part.project_id %>/new_part?type=assembly&parent_part_id=<%= @part.id %>" class="btn btn-success btn-small"><i class="icon-white icon-th"></i> New Assembly</a>
+  <a href="/projects/<%= @part.project_id %>/new_part?type=part&parent_part_id=<%= @part.id %>"
+      class="btn btn-success btn-small"><i class="icon-white icon-cog"></i> New Part</a>
+  <a href="/projects/<%= @part.project_id %>/new_part?type=assembly&parent_part_id=<%= @part.id %>"
+      class="btn btn-success btn-small"><i class="icon-white icon-th"></i> New Assembly</a>
 </div>
   <h2><%= @part.type.capitalize %>: <%= @part.name %></h2>
 
   <% if @part.type == "assembly" %>
-  <entry><b>Parts & Assemblies Contained Within this Assembly:</b></entry>
+  <entry><b>Parts & assemblies contained within this assembly:</b></entry>
 
   <%= erb :parts_list, :locals => { :parts => @part.child_parts } %>
 <% end %>
-  <div><span class="label label-info">Part Number</span> <%= @part.full_part_number %></div>
   <div><span class="label label-info">Project</span> <%= @part.project.name %></div>
-  <div><span class="label label-info">Project Prefix</span> <%= @part.project.part_number_prefix %></div>
-  <div><span class="label label-info">Status</span> <%= Part::STATUS_MAP[@part.status] %></div>
+  <div><span class="label label-info">Part Number</span> <%= @part.full_part_number %></div>
   <% if @part.parent_part %>
   <div><span class="label label-info">Parent Assembly</span> <a href="/parts/<%= @part.parent_part.id %>">
       <%= @part.parent_part.full_part_number %> - <%= @part.parent_part.name %></a></div>
   <% end %>
+  <div><span class="label label-info">Status</span> <%= Part::STATUS_MAP[@part.status] %></div>
+  <div><span class="label label-info">Notes</span> <%= @part.notes.gsub("\n", "<br />") %></div>
+  <div><span class="label label-info">Source material</span> <%= @part.source_material %></div>
+  <div>
+    <span class="label label-info">Have material?</span> <%= (@part.have_material == 1) ? "Yes" : "No" %>
+  </div>
+  <div><span class="label label-info">Material cut length</span> <%= @part.cut_length %></div>
+  <div><span class="label label-info">Quantity required</span> <%= @part.quantity %></div>
+  <div>
+    <span class="label label-info">Drawing created?</span> <%= (@part.drawing_created == 1) ? "Yes" : "No" %>
+  </div>
+  <div><span class="label label-info">Priority</span> <%= Part::PRIORITY_MAP[@part.priority] %></div>
   <div class="pull-right" style="margin-top: -40px;">
-  <a href="/parts/<%= @part.id %>/edit" class="btn btn-primary btn-small"><i class="icon-white icon-pencil"></i> Edit this part</a>
-  <a href="/parts/<%= @part.id %>/delete" class="btn btn-danger btn-small"><i class="icon-white icon-trash"></i> Delete this part</a>
+  <a href="/parts/<%= @part.id %>/edit" class="btn btn-primary btn-small">
+    <i class="icon-white icon-pencil"></i> Edit this part
+  </a>
+  <a href="/parts/<%= @part.id %>/delete" class="btn btn-danger btn-small">
+    <i class="icon-white icon-trash"></i> Delete this part
+  </a>
 </div>
 
 </div>
