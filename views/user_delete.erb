@@ -1,0 +1,10 @@
+<%= erb :header %>
+
+<div class="container">
+  <h2>Are you sure you want to delete user <%= @user_delete.email %>?</h2>
+  <form action="" method="POST">
+    <input type="submit" class="btn btn-danger btn-medium" value="Yes" />
+  </form>
+</div>
+
+<%= erb :footer %>

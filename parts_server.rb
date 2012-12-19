@@ -211,5 +211,18 @@ module CheesyParts
       @user_edit.save
       redirect "/users"
     end
+
+    get "/users/:id/delete" do
+      @user_delete = User[params[:id]]
+      halt(400, "Invalid user.") if @user_delete.nil?
+      erb :user_delete
+    end
+
+    post "/users/:id/delete" do
+      @user_delete = User[params[:id]]
+      halt(400, "Invalid user.") if @user_delete.nil?
+      @user_delete.delete
+      redirect "/users"
+    end
   end
 end
