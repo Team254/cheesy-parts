@@ -11,9 +11,9 @@
     <input type="password" name="password2" />
     <label style="font-weight:bold;">Permission</label>
     <select name="permission">
-      <option value="readonly" selected>Read-only</option>
-      <option value="editor">Editor</option>
-      <option value="admin">Administrator</option>
+      <% User::PERMISSION_MAP.each_pair do |key, value| %>
+      <option value="<%= key %>"><%= value %></option>
+      <% end %>
     </select>
     <label>
       <input type="submit" class="btn btn-success btn-medium" value="Create User"

@@ -10,6 +10,7 @@ class User < Sequel::Model
   PBKDF2_ITERATIONS = 1000
   HASH_BYTES = 24
   SALT_BYTES = 24
+  PERMISSION_MAP = { "readonly" => "Read-only", "editor" => "Editor", "admin" => "Administrator" }
 
   # Creates a database record for the given user after salting and hashing the password. Returns the new user
   # object.

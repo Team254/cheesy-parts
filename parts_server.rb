@@ -11,7 +11,6 @@ require "models"
 module CheesyParts
   class Server < Sinatra::Base
     PART_TYPES = ["part", "assembly"]
-    USER_TYPES = ["readonly", "editor", "admin"]
 
     set :sessions => true
 
@@ -187,13 +186,18 @@ module CheesyParts
       erb :new_user
     end
 
+    get "/users" do
+      erb :users
+    end
+
     post "/users" do
       halt(400, "Missing email.") if params[:email].nil? || params[:email].empty?
       halt(400, "User #{params[:email]} already exists.") if User[:email => params[:email]]
       halt(400, "Missing password.") if params[:password].nil? || params[:password].empty?
       halt(400, "Missing permission.") if params[:permission].nil? || params[:permission].empty?
-      halt(400, "Invalid permission.") unless USER_TYPES.include?(params[:permission])
+      halt(400, "Invalid permission.") unless User::PERMISSION_MAP.include?(params[:permission])
       User.secure_create(params[:email], params[:password], params[:permission])
+      redirect "/users"
     end
 
     get "/users/:id/edit" do

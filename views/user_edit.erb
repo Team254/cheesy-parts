@@ -11,11 +11,9 @@
     <input type="password" name="password2" />
     <label style="font-weight:bold;">Permission</label>
     <select name="permission">
-      <option value="readonly"<% if @user_edit.permission == "readonly" %> selected<% end %>>
-        Read-only
-      </option>
-      <option value="editor"<% if @user_edit.permission == "editor" %> selected<% end %>>Editor</option>
-      <option value="admin"<% if @user_edit.permission == "admin" %> selected<% end %>>Administrator</option>
+      <% User::PERMISSION_MAP.each_pair do |key, value| %>
+      <option value=<%= key %><% if @user_edit.permission == key %> selected<% end %>><%= value %></option>
+      <% end %>
     </select>
     <label>
       <input type="submit" class="btn btn-primary btn-medium" value="Save"
