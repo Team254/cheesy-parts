@@ -23,6 +23,10 @@ module CheesyParts
       redirect "/login?redirect=#{request.path}" if @user.nil?
     end
 
+    def require_permission(user_permitted)
+      halt(400, "Insufficient permissions.") unless user_permitted
+    end
+
     get "/" do
       redirect "/projects"
     end
@@ -47,6 +51,7 @@ module CheesyParts
     end
 
     get "/new_project" do
+      require_permission(@user.can_administer?)
       erb :new_project
     end
 
@@ -55,6 +60,8 @@ module CheesyParts
     end
 
     post "/projects" do
+      require_permission(@user.can_administer?)
+
       # Check parameter existence and format.
       halt(400, "Missing project name.") if params[:name].nil?
       if params[:part_number_prefix].nil? || params[:part_number_prefix] !~ /^\d+$/
@@ -72,12 +79,16 @@ module CheesyParts
     end
 
     get "/projects/:id/edit" do
+      require_permission(@user.can_administer?)
+
       @project = Project[params[:id]]
       halt(400, "Invalid project.") if @project.nil?
       erb :project_edit
     end
 
     post "/projects/:id/edit" do
+      require_permission(@user.can_administer?)
+
       @project = Project[params[:id]]
       halt(400, "Invalid project.") if @project.nil?
       @project.name = params[:name] if params[:name]
@@ -90,12 +101,16 @@ module CheesyParts
     end
 
     get "/projects/:id/delete" do
+      require_permission(@user.can_administer?)
+
       @project = Project[params[:id]]
       halt(400, "Invalid project.") if @project.nil?
       erb :project_delete
     end
 
     post "/projects/:id/delete" do
+      require_permission(@user.can_administer?)
+
       @project = Project[params[:id]]
       halt(400, "Invalid project.") if @project.nil?
       @project.delete
@@ -109,6 +124,8 @@ module CheesyParts
     end
 
     get "/projects/:id/new_part" do
+      require_permission(@user.can_edit?)
+
       @project = Project[params[:id]]
       halt(400, "Invalid project.") if @project.nil?
       @parent_part_id = params[:parent_part_id]
@@ -118,6 +135,8 @@ module CheesyParts
     end
 
     post "/parts" do
+      require_permission(@user.can_edit?)
+
       # Check parameter existence and format.
       halt(400, "Missing project ID.") if params[:project_id].nil? || params[:project_id] !~ /^\d+$/
       halt(400, "Missing part type.") if params[:type].nil?
@@ -152,12 +171,16 @@ module CheesyParts
     end
 
     get "/parts/:id/edit" do
+      require_permission(@user.can_edit?)
+
       @part = Part[params[:id]]
       halt(400, "Invalid part.") if @part.nil?
       erb :part_edit
     end
 
     post "/parts/:id/edit" do
+      require_permission(@user.can_edit?)
+
       @part = Part[params[:id]]
       halt(400, "Invalid part.") if @part.nil?
       @part.name = params[:name] if params[:name]
@@ -177,12 +200,16 @@ module CheesyParts
     end
 
     get "/parts/:id/delete" do
+      require_permission(@user.can_edit?)
+
       @part = Part[params[:id]]
       halt(400, "Invalid part.") if @part.nil?
       erb :part_delete
     end
 
     post "/parts/:id/delete" do
+      require_permission(@user.can_edit?)
+
       @part = Part[params[:id]]
       project_id = @part.project_id
       halt(400, "Invalid part.") if @part.nil?
@@ -192,14 +219,18 @@ module CheesyParts
     end
 
     get "/new_user" do
+      require_permission(@user.can_administer?)
       erb :new_user
     end
 
     get "/users" do
+      require_permission(@user.can_administer?)
       erb :users
     end
 
     post "/users" do
+      require_permission(@user.can_administer?)
+
       halt(400, "Missing email.") if params[:email].nil? || params[:email].empty?
       halt(400, "User #{params[:email]} already exists.") if User[:email => params[:email]]
       halt(400, "Missing password.") if params[:password].nil? || params[:password].empty?
@@ -210,12 +241,16 @@ module CheesyParts
     end
 
     get "/users/:id/edit" do
+      require_permission(@user.can_administer?)
+
       @user_edit = User[params[:id]]
       halt(400, "Invalid user.") if @user_edit.nil?
       erb :user_edit
     end
 
     post "/users/:id/edit" do
+      require_permission(@user.can_administer?)
+
       @user_edit = User[params[:id]]
       halt(400, "Invalid user.") if @user_edit.nil?
       @user_edit.email = params[:email] if params[:email]
@@ -226,12 +261,16 @@ module CheesyParts
     end
 
     get "/users/:id/delete" do
+      require_permission(@user.can_administer?)
+
       @user_delete = User[params[:id]]
       halt(400, "Invalid user.") if @user_delete.nil?
       erb :user_delete
     end
 
     post "/users/:id/delete" do
+      require_permission(@user.can_administer?)
+
       @user_delete = User[params[:id]]
       halt(400, "Invalid user.") if @user_delete.nil?
       @user_delete.delete

@@ -40,4 +40,12 @@ class User < Sequel::Model
     self.password = Base64.encode64(OpenSSL::PKCS5::pbkdf2_hmac_sha1(new_password, salt, PBKDF2_ITERATIONS,
                                                                      HASH_BYTES))
   end
+
+  def can_edit?
+    ["editor", "admin"].include?(self.permission)
+  end
+
+  def can_administer?
+    self.permission == "admin"
+  end
 end
