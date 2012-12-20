@@ -134,6 +134,10 @@ module CheesyParts
       erb :new_part
     end
 
+    get "/dashboards" do
+      erb :dashboards
+    end
+
     post "/parts" do
       require_permission(@user.can_edit?)
 

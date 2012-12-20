@@ -1,0 +1,18 @@
+<%= erb :header %>
+
+<div class="container">
+  <div class="row">
+    <div class="span2">
+      <h2>Dashboards</h2>
+    </div>
+  </div>
+  <div class="well">
+  <% Project.each do |project| %>
+  <li><h4>
+    <a href="/projects/<%= project.id %>/dashboard"><%= project.name %> &ndash; Parts in progress</a>
+  </h4></li>
+  <% end %>
+  </div>
+</div>
+
+<%= erb :footer %>
