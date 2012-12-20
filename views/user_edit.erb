@@ -19,6 +19,9 @@
       <option value=<%= key %><% if @user_edit.permission == key %> selected<% end %>><%= value %></option>
       <% end %>
     </select>
+    <label style="font-weight:bold;">Enabled?</label>
+    <input type="checkbox" name="enabled"<% if @user_edit.enabled == 1 %> checked<% end %> />
+    <br /><br />
     <label>
       <input type="submit" class="btn btn-primary btn-medium" value="Save"
           onclick="return verifyPasswordMatch(this.parentElement.parentElement);" />

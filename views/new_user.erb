@@ -19,6 +19,9 @@
       <option value="<%= key %>"><%= value %></option>
       <% end %>
     </select>
+    <label style="font-weight:bold;">Enabled?</label>
+    <input type="checkbox" name="enabled" checked />
+    <br /><br />
     <label>
       <input type="submit" class="btn btn-success btn-medium" value="Create User"
           onclick="return verifyPasswordMatch(this.parentElement.parentElement);" />

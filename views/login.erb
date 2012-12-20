@@ -4,11 +4,11 @@
   <div class="row">
     <div class="span4 offset4 well">
       <legend>Please Sign In</legend>
-      <% if @failed %>
-            <div class="alert alert-error">
-                <a class="close" data-dismiss="alert" href="#">×</a>Invalid e-mail address or password.
-            </div>
-        <% end %>
+      <% if @alert %>
+      <div class="alert alert-error">
+        <a class="close" data-dismiss="alert" href="#">×</a><%= @alert %>
+      </div>
+      <% end %>
       <form action="?redirect=<%= @redirect %>" method="POST" action="" accept-charset="UTF-8">
       <input type="text" class="span4" name="email" placeholder="E-mail">
       <input type="password" class="span4" name="password" placeholder="Password">

@@ -21,6 +21,10 @@ module CheesyParts
 
     def authenticate!
       redirect "/login?redirect=#{request.path}" if @user.nil?
+      if @user.enabled == 0
+        session[:user_id] = nil
+        redirect "/login?disabled=1"
+      end
     end
 
     def require_permission(user_permitted)
@@ -33,7 +37,11 @@ module CheesyParts
 
     get "/login" do
       redirect "/logout" if @user
-      @failed = params[:failed] == "1"
+      if params[:failed] == "1"
+        @alert = "Invalid e-mail address or password."
+      elsif params[:disabled] == "1"
+        @alert = "Your account is currently disabled."
+      end
       @redirect = params[:redirect] || "/"
       erb :login
     end
@@ -41,6 +49,7 @@ module CheesyParts
     post "/login" do
       user = User.authenticate(params[:email], params[:password])
       redirect "/login?failed=1" if user.nil?
+      redirect "/login?disabled=1" if user.enabled == 0
       session[:user_id] = user.id
       redirect params[:redirect]
     end
@@ -236,6 +245,7 @@ module CheesyParts
       require_permission(@user.can_administer?)
 
       halt(400, "Missing email.") if params[:email].nil? || params[:email].empty?
+      halt(400, "Invalid email.") unless params[:email] =~ /^\S+@\S+\.\S+$/
       halt(400, "User #{params[:email]} already exists.") if User[:email => params[:email]]
       halt(400, "Missing first name.") if params[:first_name].nil? || params[:first_name].empty?
       halt(400, "Missing last name.") if params[:last_name].nil? || params[:last_name].empty?
@@ -243,7 +253,8 @@ module CheesyParts
       halt(400, "Missing permission.") if params[:permission].nil? || params[:permission].empty?
       halt(400, "Invalid permission.") unless User::PERMISSION_MAP.include?(params[:permission])
       user = User.new(:email => params[:email], :first_name => params[:first_name],
-                      :last_name => params[:last_name], :permission => params[:permission])
+                      :last_name => params[:last_name], :permission => params[:permission],
+                      :enabled => (params[:enabled] == "on") ? 1 : 0)
       user.set_password(params[:password])
       user.save
       redirect "/users"
@@ -267,6 +278,7 @@ module CheesyParts
       @user_edit.last_name = params[:last_name] if params[:last_name]
       @user_edit.set_password(params[:password]) if params[:password] && !params[:password].empty?
       @user_edit.permission = params[:permission] if params[:permission]
+      @user_edit.enabled = (params[:enabled] == "on") ? 1 : 0
       @user_edit.save
       redirect "/users"
     end
