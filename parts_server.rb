@@ -16,7 +16,7 @@ module CheesyParts
 
     before do
       @user = User[session[:user_id]]
-      authenticate! unless request.path == "/login"
+      authenticate! unless ["/login", "/register"].include?(request.path)
     end
 
     def authenticate!
@@ -233,6 +233,7 @@ module CheesyParts
 
     get "/new_user" do
       require_permission(@user.can_administer?)
+      @admin_new_user = true
       erb :new_user
     end
 
@@ -310,6 +311,26 @@ module CheesyParts
       @user.set_password(params[:password])
       @user.save
       redirect "/"
+    end
+
+    get "/register" do
+      @admin_new_user = false
+      erb :new_user
+    end
+
+    post "/register" do
+      halt(400, "Missing email.") if params[:email].nil? || params[:email].empty?
+      halt(400, "Invalid email.") unless params[:email] =~ /^\S+@\S+\.\S+$/
+      halt(400, "User #{params[:email]} already exists.") if User[:email => params[:email]]
+      halt(400, "Missing first name.") if params[:first_name].nil? || params[:first_name].empty?
+      halt(400, "Missing last name.") if params[:last_name].nil? || params[:last_name].empty?
+      halt(400, "Missing password.") if params[:password].nil? || params[:password].empty?
+      user = User.new(:email => params[:email], :first_name => params[:first_name],
+                      :last_name => params[:last_name], :permission => "readonly",
+                      :enabled => 0)
+      user.set_password(params[:password])
+      user.save
+      erb :register_confirmation
     end
   end
 end
