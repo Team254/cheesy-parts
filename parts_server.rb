@@ -3,7 +3,10 @@
 #
 # The main class of the parts management web server.
 
+require "dedent"
+require "eventmachine"
 require "pathological"
+require "pony"
 require "sinatra/base"
 
 require "models"
@@ -29,6 +32,19 @@ module CheesyParts
 
     def require_permission(user_permitted)
       halt(400, "Insufficient permissions.") unless user_permitted
+    end
+
+    # Helper function to send an e-mail through Gmail's SMTP server.
+    def send_email(to, subject, body)
+      # Run this asynchronously using EventMachine since it takes a couple of seconds.
+      EM.defer do
+        Pony.mail(:from => "Team 254 Part Management System <cheesyparts@gmail.com>", :to => to,
+                  :subject => subject, :body => body, :via => :smtp,
+                  :via_options => { :address => "smtp.gmail.com", :port => "587",
+                                    :enable_starttls_auto => true, :user_name => "cheesyparts",
+                                    :password => "254skyf1r3", :authentication => :plain,
+                                    :domain => "localhost.localdomain" })
+      end
     end
 
     get "/" do
@@ -279,7 +295,21 @@ module CheesyParts
       @user_edit.last_name = params[:last_name] if params[:last_name]
       @user_edit.set_password(params[:password]) if params[:password] && !params[:password].empty?
       @user_edit.permission = params[:permission] if params[:permission]
+      old_enabled = @user_edit.enabled
       @user_edit.enabled = (params[:enabled] == "on") ? 1 : 0
+      if @user_edit.enabled == 1 && old_enabled == 0
+        email_body = <<-EOS.dedent
+          Hello #{@user_edit.first_name},
+
+          Your account on the Team 254 Parts Management System has been approved.
+          You can log into the system at http://parts.team254.com.
+
+          Cheers,
+
+          The Cheesy Parts Robot
+        EOS
+        send_email(@user_edit.email, "Account approved", email_body)
+      end
       @user_edit.save
       redirect "/users"
     end
@@ -330,6 +360,18 @@ module CheesyParts
                       :enabled => 0)
       user.set_password(params[:password])
       user.save
+      email_body = <<-EOS.dedent
+        Hello,
+
+        This is a notification that #{user.first_name} #{user.last_name} has created an account on the Team
+        254 Parts Management System and it is disabled pending approval.
+        Please visit the user control panel at http://parts.team254.com/users to take action.
+
+        Cheers,
+
+        The Cheesy Parts Robot
+      EOS
+      send_email("cheesyparts@gmail.com", "Approval needed for #{user.email}", email_body)
       erb :register_confirmation
     end
   end
