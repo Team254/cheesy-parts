@@ -11,9 +11,18 @@ function verifyPasswordMatch(form) {
   }
 }
 
-function loadParts(projectId, status) {
+// Global variables to store current filter state for auto-refresh.
+var dashboardProjectId, dashboardStatus;
+
+function changeDashboardFilter(projectId, status) {
+  dashboardProjectId = projectId;
+  dashboardStatus = status;
+  loadParts();
+}
+
+function loadParts() {
   $.ajax({
-    url: "/projects/" + projectId + "/dashboard/parts?status=" + status,
+    url: "/projects/" + dashboardProjectId + "/dashboard/parts?status=" + dashboardStatus,
     complete: function(response) {
       $("#dashboard-parts").html(response.responseText);
     }

@@ -2,8 +2,8 @@
 
 <div class="container">
   <select class="pull-right" name="status" style="margin-top: 15px;"
-      onchange="loadParts(<%= @project.id %>, this.value);">
-    <option selected>Filter by status...</option>
+      onchange="changeDashboardFilter(<%= @project.id %>, this.value);">
+    <option value="all" selected>Filter by status...</option>
     <% Part::STATUS_MAP.each_pair do |key, value| %>
     <option value="<%= key %>"><%= value %></option>
     <% end %>
@@ -13,5 +13,9 @@
     <%= erb :dashboard_parts %>
   </div>
 </div>
+<script type="text/javascript">
+  changeDashboardFilter(<%= @project.id %>, "all");
+  setInterval(function() { loadParts(); }, 10000);
+</script>
 
 <%= erb :footer %>
