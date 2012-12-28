@@ -148,6 +148,13 @@ module CheesyParts
       erb :dashboard
     end
 
+    get "/projects/:id/dashboard/parts" do
+      @project = Project[params[:id]]
+      halt(400, "Invalid project.") if @project.nil?
+      @status = params[:status] if Part::STATUS_MAP.has_key?(params[:status])
+      erb :dashboard_parts
+    end
+
     get "/projects/:id/new_part" do
       require_permission(@user.can_edit?)
 

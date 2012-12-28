@@ -1,3 +1,27 @@
 .label {
   cursor: default;
 }
+.dashboard-part {
+  width: 70px;
+  height: 25px;
+  line-height: 25px;
+  text-align: center;
+  border: 1px solid black;
+  float: left;
+  margin: 3px;
+  font-weight: bold;
+  color: black;
+}
+.dashboard-status {
+  margin-top: 0;
+  margin-bottom: 5px;
+}
+.priority-0 {
+  background-color: #fa4;
+}
+.priority-1 {
+  background-color: #4a7;
+}
+.priority-2 {
+  background-color: #aaa;
+}
