@@ -1,6 +1,33 @@
 .label {
   cursor: default;
 }
+.label-status-designing {
+  background-color: #38e;
+}
+.label-status-material {
+  background-color: #f77;
+}
+.label-status-ordered {
+  background-color: #f90;
+}
+.label-status-drawing {
+  background-color: #bb0;
+}
+.label-status-ready {
+  background-color: #0bb;
+}
+.label-status-manufacturing {
+  background-color: #b0b;
+}
+.label-status-coating {
+  background-color: brown;
+}
+.label-status-assembly {
+  background-color: #666;
+}
+.label-status-done {
+  background-color: #3d6;
+}
 .dashboard-part {
   width: 70px;
   height: 25px;

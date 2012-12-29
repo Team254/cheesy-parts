@@ -25,9 +25,17 @@
   <%= erb :parts_list, :locals => { :parts => @part.child_parts } %>
   <% end %>
   <table class="table table-striped table-condensed table-bordered" style="width: auto;">
-    <tr><td><b>Project</b></td><td><%= @part.project.name %></td></tr>
+    <tr>
+      <td><b>Project</b></td>
+      <td><a href="/projects/<%= @part.project_id %>"><%= @part.project.name %></a></td>
+    </tr>
     <tr><td><b>Part Number</b></td><td><%= @part.full_part_number %></td></tr>
-    <tr><td><b>Status</b></td><td><%= Part::STATUS_MAP[@part.status] %></td></tr>
+    <tr>
+      <td><b>Status</b></td>
+      <td>
+        <span class="label label-status-<%= @part.status %>"><%= Part::STATUS_MAP[@part.status] %></span>
+      </td>
+    </tr>
     <tr><td><b>Notes</b></td><td><%= (@part.notes || "").gsub("\n", "<br />") %></td></tr>
     <tr><td><b>Source material</b></td><td><%= @part.source_material %></td></tr>
     <tr><td><b>Have material?</b></td><td><%= (@part.have_material == 1) ? "Yes" : "No" %></td></tr>
