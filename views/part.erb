@@ -24,24 +24,18 @@
 
   <%= erb :parts_list, :locals => { :parts => @part.child_parts } %>
   <% end %>
-  <div><span class="label label-info">Project</span> <%= @part.project.name %></div>
-  <div><span class="label label-info">Part Number</span> <%= @part.full_part_number %></div>
-  <% if @part.parent_part %>
-  <div><span class="label label-info">Parent Assembly</span> <a href="/parts/<%= @part.parent_part.id %>">
-      <%= @part.parent_part.full_part_number %> - <%= @part.parent_part.name %></a></div>
-  <% end %>
-  <div><span class="label label-info">Status</span> <%= Part::STATUS_MAP[@part.status] %></div>
-  <div><span class="label label-info">Notes</span> <%= (@part.notes || "").gsub("\n", "<br />") %></div>
-  <div><span class="label label-info">Source material</span> <%= @part.source_material %></div>
-  <div>
-    <span class="label label-info">Have material?</span> <%= (@part.have_material == 1) ? "Yes" : "No" %>
-  </div>
-  <div><span class="label label-info">Material cut length</span> <%= @part.cut_length %></div>
-  <div><span class="label label-info">Quantity required</span> <%= @part.quantity %></div>
-  <div>
-    <span class="label label-info">Drawing created?</span> <%= (@part.drawing_created == 1) ? "Yes" : "No" %>
-  </div>
-  <div><span class="label label-info">Priority</span> <%= Part::PRIORITY_MAP[@part.priority] %></div>
+  <table class="table table-striped table-condensed table-bordered" style="width: auto;">
+    <tr><td><b>Project</b></td><td><%= @part.project.name %></td></tr>
+    <tr><td><b>Part Number</b></td><td><%= @part.full_part_number %></td></tr>
+    <tr><td><b>Status</b></td><td><%= Part::STATUS_MAP[@part.status] %></td></tr>
+    <tr><td><b>Notes</b></td><td><%= (@part.notes || "").gsub("\n", "<br />") %></td></tr>
+    <tr><td><b>Source material</b></td><td><%= @part.source_material %></td></tr>
+    <tr><td><b>Have material?</b></td><td><%= (@part.have_material == 1) ? "Yes" : "No" %></td></tr>
+    <tr><td><b>Material cut length</b></td><td><%= @part.cut_length %></td></tr>
+    <tr><td><b>Quantity required</b></td><td><%= @part.quantity %></td></tr>
+    <tr><td><b>Drawing created?</b></td><td><%= (@part.drawing_created == 1) ? "Yes" : "No" %></td></tr>
+    <tr><td><b>Priority</b></td><td><%= Part::PRIORITY_MAP[@part.priority] %></td></tr>
+  </table>
   <% if @user.can_edit? %>
   <div class="pull-right" style="margin-top: -40px;">
     <a href="/parts/<%= @part.id %>/edit" class="btn btn-primary btn-small">
