@@ -11,13 +11,14 @@
   <% end %>
   <h2><%= @part.type.capitalize %>: <%= @part.name %></h2>
 
-  <% if @part.parent_part %>
   <div>
-    <%= erb :part_tree, :locals => { :part => @part.parent_part } %>
+    <a href="/projects/<%= @part.project_id %>"><b><%= @part.project.name %></b></a>
+    <% if @part.parent_part %>
+    <i class="icon-chevron-right"></i> <%= erb :part_tree, :locals => { :part => @part.parent_part } %>
+    <% end %>
     <i class="icon-chevron-right"></i> <b><%= @part.name %></b>
   </div>
   <br />
-  <% end %>
 
   <% if @part.type == "assembly" %>
   <entry><b>Parts & assemblies contained within this assembly:</b></entry>
