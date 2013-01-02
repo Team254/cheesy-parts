@@ -195,7 +195,7 @@ module CheesyParts
       end
 
       part = Part.generate_number_and_create(project, params[:type], parent_part)
-      part.name = params[:name]
+      part.name = params[:name].gsub("\"", "&quot;")
       part.status = "designing"
       part.priority = 1;
       part.save
@@ -227,7 +227,7 @@ module CheesyParts
       @part = Part[params[:id]]
       halt(400, "Invalid part.") if @part.nil?
       halt(400, "Missing part name.") if params[:name] && params[:name].empty?
-      @part.name = params[:name] if params[:name]
+      @part.name = params[:name].gsub("\"", "&quot;") if params[:name]
       if params[:status]
         halt(400, "Invalid status.") unless Part::STATUS_MAP.include?(params[:status])
         @part.status = params[:status]
