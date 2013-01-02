@@ -89,9 +89,7 @@ module CheesyParts
 
       # Check parameter existence and format.
       halt(400, "Missing project name.") if params[:name].nil?
-      if params[:part_number_prefix].nil? || params[:part_number_prefix] !~ /^\d+$/
-        halt(400, "Missing or invalid part number prefix.")
-      end
+      halt(400, "Missing part number prefix.") if params[:part_number_prefix].nil?
 
       project = Project.create(:name => params[:name], :part_number_prefix => params[:part_number_prefix])
       redirect "/projects/#{project.id}"
@@ -118,7 +116,6 @@ module CheesyParts
       halt(400, "Invalid project.") if @project.nil?
       @project.name = params[:name] if params[:name]
       if params[:part_number_prefix]
-        halt(400, "Invalid part number prefix.") if params[:part_number_prefix] !~ /^\d+$/
         @project.part_number_prefix = params[:part_number_prefix]
       end
       @project.save

@@ -23,10 +23,11 @@ class Part < Sequel::Model
     parent_part_id = parent_part.nil? ? 0 : parent_part.id
     parent_part_number = parent_part.nil? ? 0 : parent_part.part_number
     if type == "part"
-      part_number = Part.filter(:parent_part_id => parent_part_id).max(:part_number) || parent_part_number
+      part_number = Part.filter(:project_id => project.id, :parent_part_id => parent_part_id)
+                        .max(:part_number) || parent_part_number
       part_number += 1
     else
-      part_number = Part.filter(:type => "assembly").max(:part_number)  || -100
+      part_number = Part.filter(:project_id => project.id, :type => "assembly").max(:part_number)  || -100
       part_number += 100
     end
     new(:part_number => part_number, :project_id => project.id, :type => type,
@@ -34,6 +35,6 @@ class Part < Sequel::Model
   end
 
   def full_part_number
-    "%d%04d" % [project.part_number_prefix, part_number]
+    "#{project.part_number_prefix}-#{type == "assembly" ? "A" : "P"}-%04d" % part_number
   end
 end
