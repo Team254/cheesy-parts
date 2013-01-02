@@ -23,7 +23,7 @@
   <% if @part.type == "assembly" %>
   <entry><b>Parts & assemblies contained within this assembly:</b></entry>
 
-  <%= erb :parts_list, :locals => { :parts => @part.child_parts } %>
+  <%= erb :parts_list, :locals => { :parts => Part.where(:parent_part_id => @part.id).order(@part_sort) } %>
   <% end %>
   <table class="table table-striped table-condensed table-bordered" style="width: auto;">
     <tr>

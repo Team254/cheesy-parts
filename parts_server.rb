@@ -98,6 +98,11 @@ module CheesyParts
     get "/projects/:id" do
       @project = Project[params[:id]]
       halt(400, "Invalid project.") if @project.nil?
+      if ["type", "name", "parent_part_id", "status"].include?(params[:sort])
+        @part_sort = params[:sort].to_sym
+      else
+        @part_sort = :id
+      end
       erb :project
     end
 
@@ -200,6 +205,11 @@ module CheesyParts
     get "/parts/:id" do
       @part = Part[params[:id]]
       halt(400, "Invalid part.") if @part.nil?
+      if ["type", "name", "parent_part_id", "status"].include?(params[:sort])
+        @part_sort = params[:sort].to_sym
+      else
+        @part_sort = :id
+      end
       erb :part
     end
 
