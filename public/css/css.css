@@ -28,8 +28,15 @@
 .label-status-done {
   background-color: #3d6;
 }
+.dashboard-label {
+  padding: 2px 4px;
+  color: #ffffff;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+}
 .dashboard-part {
-  width: 70px;
+  width: 115px;
   height: 25px;
   line-height: 25px;
   text-align: center;

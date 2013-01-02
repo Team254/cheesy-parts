@@ -5,7 +5,9 @@
     <% next if parts.empty? && statuses.size > 1 %>
     <tr>
       <td style="padding: 10px 15px 20px 15px;">
-        <h3 class="dashboard-status"><%= Part::STATUS_MAP[status] %>:</h3>
+        <h3 class="dashboard-status">
+          <span class="dashboard-label label-status-<%= status %>"><%= Part::STATUS_MAP[status] %></span>
+        </h3>
         <% parts.each do |part| %>
           <a href="/parts/<%= part.id %>" title="<%= part.name %>">
             <div class="dashboard-part priority-<%= part.priority %>">
