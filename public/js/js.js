@@ -25,6 +25,10 @@ function loadParts() {
     url: "/projects/" + dashboardProjectId + "/dashboard/parts?status=" + dashboardStatus,
     complete: function(response) {
       $("#dashboard-parts").html(response.responseText);
+      $("#dashboard-parts").tooltip({
+        selector: ".dashboard-part",
+        placement: "bottom"
+      });
     }
   });
 }

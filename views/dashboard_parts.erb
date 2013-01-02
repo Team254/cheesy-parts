@@ -9,8 +9,8 @@
           <span class="dashboard-label label-status-<%= status %>"><%= Part::STATUS_MAP[status] %></span>
         </h3>
         <% parts.each do |part| %>
-          <a href="/parts/<%= part.id %>" title="<%= part.name %>">
-            <div class="dashboard-part priority-<%= part.priority %>">
+          <a href="/parts/<%= part.id %>">
+            <div class="dashboard-part priority-<%= part.priority %>" title="<%= part.name %>">
               <%= part.full_part_number %>
             </div>
           </a>
