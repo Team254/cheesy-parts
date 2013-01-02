@@ -23,7 +23,7 @@ class Part < Sequel::Model
     parent_part_id = parent_part.nil? ? 0 : parent_part.id
     parent_part_number = parent_part.nil? ? 0 : parent_part.part_number
     if type == "part"
-      part_number = Part.filter(:project_id => project.id, :parent_part_id => parent_part_id)
+      part_number = Part.filter(:project_id => project.id, :parent_part_id => parent_part_id, :type => "part")
                         .max(:part_number) || parent_part_number
       part_number += 1
     else
