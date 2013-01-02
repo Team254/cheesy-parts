@@ -37,9 +37,11 @@
       </td>
     </tr>
     <tr><td><b>Notes</b></td><td><%= (@part.notes || "").gsub("\n", "<br />") %></td></tr>
+    <% if @part.type == "part" %>
     <tr><td><b>Source material</b></td><td><%= @part.source_material %></td></tr>
     <tr><td><b>Have material?</b></td><td><%= (@part.have_material == 1) ? "Yes" : "No" %></td></tr>
     <tr><td><b>Material cut length</b></td><td><%= @part.cut_length %></td></tr>
+    <% end %>
     <tr><td><b>Quantity required</b></td><td><%= @part.quantity %></td></tr>
     <tr><td><b>Drawing created?</b></td><td><%= (@part.drawing_created == 1) ? "Yes" : "No" %></td></tr>
     <tr><td><b>Priority</b></td><td><%= Part::PRIORITY_MAP[@part.priority] %></td></tr>
