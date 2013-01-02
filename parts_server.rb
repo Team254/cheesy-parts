@@ -174,7 +174,7 @@ module CheesyParts
       halt(400, "Missing project ID.") if params[:project_id].nil? || params[:project_id] !~ /^\d+$/
       halt(400, "Missing part type.") if params[:type].nil?
       halt(400, "Invalid part type.") unless PART_TYPES.include?(params[:type])
-      halt(400, "Missing part name.") if params[:name].nil?
+      halt(400, "Missing part name.") if params[:name].nil? || params[:name].empty?
       if params[:parent_part_id] && params[:parent_part_id] !~ /^\d+$/
         halt(400, "Invalid parent part ID.")
       end
@@ -216,6 +216,7 @@ module CheesyParts
 
       @part = Part[params[:id]]
       halt(400, "Invalid part.") if @part.nil?
+      halt(400, "Missing part name.") if params[:name] && params[:name].empty?
       @part.name = params[:name] if params[:name]
       if params[:status]
         halt(400, "Invalid status.") unless Part::STATUS_MAP.include?(params[:status])
