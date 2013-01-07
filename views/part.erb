@@ -1,7 +1,7 @@
 <%= erb :header %>
 
 <div class="container">
-  <% if @part.type == "assembly" %>
+  <% if @part.type == "assembly" && @user.can_edit? %>
   <div class="pull-right" style="margin-top: 15px;">
   <a href="/projects/<%= @part.project_id %>/new_part?type=part&parent_part_id=<%= @part.id %>"
       class="btn btn-success btn-small"><i class="icon-white icon-cog"></i> New Part</a>
