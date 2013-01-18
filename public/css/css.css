@@ -19,6 +19,12 @@
 .label-status-manufacturing {
   background-color: #b0b;
 }
+.label-status-anodize {
+  background-color: #000;
+}
+.label-status-powder {
+  background-color: #00a;
+}
 .label-status-coating {
   background-color: brown;
 }
