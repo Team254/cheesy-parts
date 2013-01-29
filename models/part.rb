@@ -14,6 +14,7 @@ class Part < Sequel::Model
                  "drawing" => "Needs drawing",
                  "ready" => "Ready to manufacture",
                  "manufacturing" => "Manufacturing in progress",
+                 "outsourced" => "Waiting for outsourced manufacturing",
                  "anodize" => "Ready for anodize",
                  "powder" => "Ready for powder coating",
                  "coating" => "Waiting for coating",

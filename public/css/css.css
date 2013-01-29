@@ -16,6 +16,9 @@
 .label-status-ready {
   background-color: #0bb;
 }
+.label-status-outsourced {
+  background-color: #f06;
+}
 .label-status-manufacturing {
   background-color: #b0b;
 }
