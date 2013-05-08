@@ -22,6 +22,12 @@
 .label-status-manufacturing {
   background-color: #b0b;
 }
+.label-status-welding {
+  background-color: #99b;
+}
+.label-status-scotchbrite {
+  background-color: #796;
+}
 .label-status-anodize {
   background-color: #000;
 }

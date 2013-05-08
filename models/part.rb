@@ -15,6 +15,8 @@ class Part < Sequel::Model
                  "ready" => "Ready to manufacture",
                  "manufacturing" => "Manufacturing in progress",
                  "outsourced" => "Waiting for outsourced manufacturing",
+                 "welding" => "Waiting for welding",
+                 "scotchbrite" => "Waiting for Scotch-Brite",
                  "anodize" => "Ready for anodize",
                  "powder" => "Ready for powder coating",
                  "coating" => "Waiting for coating",
