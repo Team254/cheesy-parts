@@ -3,6 +3,7 @@
 <div class="container">
   <h2>Edit Part</h2>
   <form action="" method="POST">
+    <input type="hidden" name="referrer" value="<%= @referrer %>" />
     <label><span class="label label-info">Part Number</span> <%= @part.full_part_number %></label>
     <label><b>Part Name<b></label>
     <input type="text" name="name" value="<%= @part.name %>" />

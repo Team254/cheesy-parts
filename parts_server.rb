@@ -218,6 +218,7 @@ module CheesyParts
 
       @part = Part[params[:id]]
       halt(400, "Invalid part.") if @part.nil?
+      @referrer = request.referrer
       erb :part_edit
     end
 
@@ -240,7 +241,7 @@ module CheesyParts
       @part.drawing_created = (params[:drawing_created] == "on") ? 1 : 0
       @part.priority = params[:priority] if params[:priority]
       @part.save
-      redirect "/parts/#{params[:id]}"
+      redirect params[:referrer] || "/parts/#{params[:id]}"
     end
 
     get "/parts/:id/delete" do
@@ -248,6 +249,7 @@ module CheesyParts
 
       @part = Part[params[:id]]
       halt(400, "Invalid part.") if @part.nil?
+      @referrer = request.referrer
       erb :part_delete
     end
 
@@ -259,7 +261,7 @@ module CheesyParts
       halt(400, "Invalid part.") if @part.nil?
       halt(400, "Can't delete assembly with existing children.") unless @part.child_parts.empty?
       @part.delete
-      redirect "/projects/#{project_id}"
+      redirect params[:referrer] || "/projects/#{project_id}"
     end
 
     get "/new_user" do
