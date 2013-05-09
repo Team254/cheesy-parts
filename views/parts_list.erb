@@ -1,35 +1,35 @@
-<table  class="table table-striped table-condensed table-bordered">
+<table class="table table-striped table-condensed table-bordered">
   <tr>
-    <th><a href="?sort=id" style="color: #000;">Part Number</a></th>
-    <th><a href="?sort=type" style="color: #000;">Type</a></th>
-    <th><a href="?sort=name" style="color: #000;">Name</a></th>
-    <th><a href="?sort=parent_part_id" style="color: #000;">Parent</th>
-    <th><a href="?sort=status" style="color: #000;">Status</th>
+    <th><a href="?sort=id">Part Number</a></th>
+    <th><a href="?sort=type">Type</a></th>
+    <th><a href="?sort=name">Name</a></th>
+    <th><a href="?sort=parent_part_id">Parent</th>
+    <th><a href="?sort=status">Status</th>
     <% if @user.can_edit? %>
-    <th>Action</th>
+      <th>Action</th>
     <% end %>
   </tr>
   <% parts.each do |part| %>
-  <tr>
-    <td><a href="/parts/<%= part.id %>"><%= part.full_part_number %></a></td>
-    <td><%= part.type.capitalize %></td>
-    <td><a href="/parts/<%= part.id %>"><%= part.name %></a></td>
-    <td>
-      <% if part.parent_part %>
-      <a href="/parts/<%= part.parent_part.id %>"><%= part.parent_part.name if part.parent_part%></a>
+    <tr>
+      <td><a href="/parts/<%= part.id %>"><%= part.full_part_number %></a></td>
+      <td><%= part.type.capitalize %></td>
+      <td><a href="/parts/<%= part.id %>"><%= part.name %></a></td>
+      <td>
+        <% if part.parent_part %>
+          <a href="/parts/<%= part.parent_part.id %>"><%= part.parent_part.name if part.parent_part%></a>
+        <% end %>
+      </td>
+      <td><span class="label label-status-<%= part.status %>"><%= Part::STATUS_MAP[part.status] %></span></td>
+      <% if @user.can_edit? %>
+        <td>
+          <a href="/parts/<%= part.id %>/edit" class="btn btn-primary btn-small">
+            <i class="icon-white icon-pencil"></i>
+          </a>
+          <a href="/parts/<%= part.id %>/delete" class="btn btn-danger btn-small">
+            <i class="icon-white icon-trash"></i>
+          </a>
+        </td>
       <% end %>
-    </td>
-    <td><span class="label label-status-<%= part.status %>"><%= Part::STATUS_MAP[part.status] %></span></td>
-    <% if @user.can_edit? %>
-    <td>
-      <a href="/parts/<%= part.id %>/edit" class="btn btn-primary btn-small">
-        <i class="icon-white icon-pencil"></i>
-      </a>
-      <a href="/parts/<%= part.id %>/delete" class="btn btn-danger btn-small">
-        <i class="icon-white icon-trash"></i>
-      </a>
-    </td>
-    <% end %>
-  </tr>
+    </tr>
   <% end %>
 </table>

@@ -3,24 +3,24 @@
 <div class="container">
   <h2>Create User Account</h2>
   <form action="<% if @admin_new_user %>/users<% end %>" method="POST">
-    <label style="font-weight:bold;">E-mail</label>
+    <label>E-mail</label>
     <input type="text" name="email" />
-    <label style="font-weight:bold;">First Name</label>
+    <label>First Name</label>
     <input type="text" name="first_name" />
-    <label style="font-weight:bold;">Last Name</label>
+    <label>Last Name</label>
     <input type="text" name="last_name" />
-    <label style="font-weight:bold;">Password</label>
+    <label>Password</label>
     <input type="password" name="password" />
-    <label style="font-weight:bold;">Verify Password</label>
+    <label>Verify Password</label>
     <input type="password" name="password2" />
     <% if @admin_new_user %>
-    <label style="font-weight:bold;">Permission</label>
+    <label>Permission</label>
     <select name="permission">
       <% User::PERMISSION_MAP.each_pair do |key, value| %>
       <option value="<%= key %>"><%= value %></option>
       <% end %>
     </select>
-    <label style="font-weight:bold;">Enabled?</label>
+    <label>Enabled?</label>
     <input type="checkbox" name="enabled" checked />
     <br /><br />
     <% end %>

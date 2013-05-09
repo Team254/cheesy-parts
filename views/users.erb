@@ -13,19 +13,19 @@
       <th>Action</th>
     </tr>
     <% User.where(:enabled => 1).order_append(:last_name).order_append(:first_name).each do |user| %>
-    <tr>
-      <td><%= user.email %></td>
-      <td><%= user.first_name %> <%= user.last_name %></td>
-      <td><%= User::PERMISSION_MAP[user.permission] %></td>
-      <td>
-        <a href="/users/<%= user.id %>/edit" class="btn btn-primary btn-small">
-          <i class="icon-white icon-pencil"></i> Edit
-        </a>
-        <a href="/users/<%= user.id %>/delete" class="btn btn-danger btn-small">
-          <i class="icon-white icon-trash"></i> Delete
-        </a>
-      </td>
-    </tr>
+      <tr>
+        <td><%= user.email %></td>
+        <td><%= user.first_name %> <%= user.last_name %></td>
+        <td><%= User::PERMISSION_MAP[user.permission] %></td>
+        <td>
+          <a href="/users/<%= user.id %>/edit" class="btn btn-primary btn-small">
+            <i class="icon-white icon-pencil"></i> Edit
+          </a>
+          <a href="/users/<%= user.id %>/delete" class="btn btn-danger btn-small">
+            <i class="icon-white icon-trash"></i> Delete
+          </a>
+        </td>
+      </tr>
     <% end %>
   </table>
   <h2>Disabled/Pending Users</h2>
@@ -37,19 +37,19 @@
       <th>Action</th>
     </tr>
     <% User.where(:enabled => 0).order_append(:last_name).order_append(:first_name).each do |user| %>
-    <tr>
-      <td><%= user.email %></td>
-      <td><%= user.first_name %> <%= user.last_name %></td>
-      <td><%= User::PERMISSION_MAP[user.permission] %></td>
-      <td>
-        <a href="/users/<%= user.id %>/edit" class="btn btn-primary btn-small">
-          <i class="icon-white icon-pencil"></i> Edit
-        </a>
-        <a href="/users/<%= user.id %>/delete" class="btn btn-danger btn-small">
-          <i class="icon-white icon-trash"></i> Delete
-        </a>
-      </td>
-    </tr>
+      <tr>
+        <td><%= user.email %></td>
+        <td><%= user.first_name %> <%= user.last_name %></td>
+        <td><%= User::PERMISSION_MAP[user.permission] %></td>
+        <td>
+          <a href="/users/<%= user.id %>/edit" class="btn btn-primary btn-small">
+            <i class="icon-white icon-pencil"></i> Edit
+          </a>
+          <a href="/users/<%= user.id %>/delete" class="btn btn-danger btn-small">
+            <i class="icon-white icon-trash"></i> Delete
+          </a>
+        </td>
+      </tr>
     <% end %>
   </table>
 </div>

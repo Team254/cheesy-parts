@@ -1,3 +1,8 @@
+# Copyright 2012 Team 254. All Rights Reserved.
+# @author pat@patfairbank.com (Patrick Fairbank)
+#
+# Fezzik tasks for deploying and controlling the parts server.
+
 require "fileutils"
 
 namespace :fezzik do
@@ -20,7 +25,7 @@ namespace :fezzik do
   desc "rsyncs the project from its staging location to each destination server"
   remote_task :push => [:stage, :setup] do
     puts "pushing to #{target_host}:#{release_path}"
-    # Copy on top of previous release to optimize rsync
+    # Copy on top of previous release to optimize rsync.
     rsync "-q", "--copy-dest=#{current_path}", "/tmp/#{app}/staged/", "#{target_host}:#{release_path}"
   end
 
@@ -30,13 +35,13 @@ namespace :fezzik do
     run "cd #{deploy_to} && ln -fns #{release_path} current"
   end
 
-  desc "runs the executable in project/bin"
+  desc "runs the application"
   remote_task :start do
     puts "starting from #{Fezzik::Util.capture_output { run "readlink #{current_path}" }}"
     run "cd #{current_path} && ruby parts_server_control.rb start"
   end
 
-  desc "kills the application by searching for the specified process name"
+  desc "kills the application"
   remote_task :stop do
     puts "stopping app"
     run "(kill -9 `ps aux | grep 'parts_server' | grep -v grep | awk '{print $2}'` || true)"

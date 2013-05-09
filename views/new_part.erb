@@ -4,12 +4,12 @@
   <h2>Create New <%= @type.capitalize %></h2>
   <form action="/parts" method="POST">
     <input type=hidden name=type value="<%= @type %>" />
-    <label style="font-weight:bold;">Project</label>
+    <label>Project</label>
     <input type="text" disabled value="<%= @project.name %>" />
     <input type="hidden" name="project_id" value="<%= @project.id %>" />
-    <label style="font-weight:bold;"><%= @type.capitalize %> Name</label>
+    <label><%= @type.capitalize %> Name</label>
     <input type="text" name="name" />
-    <label style="font-weight:bold;">Parent Assembly</label>
+    <label>Parent Assembly</label>
     <select name="parent_part_id">
       <% @project.parts.select { |p| p.type == "assembly"}.each do |part| %>
       <option value="<%= part.id %>"<% if part.id == @parent_part_id.to_i %> selected<% end %>>
@@ -17,7 +17,9 @@
       </option>
       <% end %>
     </select>
-    <label><input type="submit" class="btn btn-success btn-medium" value="Create <%= @type.capitalize %>"></label>
+    <label>
+      <input type="submit" class="btn btn-success btn-medium" value="Create <%= @type.capitalize %>">
+    </label>
   </form>
 </div>
 

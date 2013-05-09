@@ -3,23 +3,23 @@
 <div class="container">
   <h2>Edit User</h2>
   <form action="" method="POST">
-    <label style="font-weight:bold;">E-mail</label>
+    <label>E-mail</label>
     <input type="text" name="email" value="<%= @user_edit.email %>"/>
-    <label style="font-weight:bold;">First Name</label>
+    <label>First Name</label>
     <input type="text" name="first_name" value="<%= @user_edit.first_name %>"/>
-    <label style="font-weight:bold;">Last Name</label>
+    <label>Last Name</label>
     <input type="text" name="last_name" value="<%= @user_edit.last_name %>"/>
-    <label style="font-weight:bold;">Change Password</label>
+    <label>Change Password</label>
     <input type="password" name="password" />
-    <label style="font-weight:bold;">Verify Password</label>
+    <label>Verify Password</label>
     <input type="password" name="password2" />
-    <label style="font-weight:bold;">Permission</label>
+    <label>Permission</label>
     <select name="permission">
       <% User::PERMISSION_MAP.each_pair do |key, value| %>
-      <option value=<%= key %><% if @user_edit.permission == key %> selected<% end %>><%= value %></option>
+        <option value=<%= key %><% if @user_edit.permission == key %> selected<% end %>><%= value %></option>
       <% end %>
     </select>
-    <label style="font-weight:bold;">Enabled?</label>
+    <label>Enabled?</label>
     <input type="checkbox" name="enabled"<% if @user_edit.enabled == 1 %> checked<% end %> />
     <br /><br />
     <label>

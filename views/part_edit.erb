@@ -5,36 +5,36 @@
   <form action="" method="POST">
     <input type="hidden" name="referrer" value="<%= @referrer %>" />
     <label><span class="label label-info">Part Number</span> <%= @part.full_part_number %></label>
-    <label><b>Part Name<b></label>
+    <label>Part Name</label>
     <input type="text" name="name" value="<%= @part.name %>" />
-    <label><b>Status</b></label>
+    <label>Status</label>
     <select name="status">
       <% Part::STATUS_MAP.each_pair do |key, value| %>
-      <option value="<%= key %>"<% if @part.status == key %> selected<% end %>>
-        <%= value %>
-      </option>
+        <option value="<%= key %>"<% if @part.status == key %> selected<% end %>>
+          <%= value %>
+        </option>
       <% end %>
     </select>
-    <label><b>Notes</b></label>
+    <label>Notes</label>
      <textarea name="notes" rows="4"><%= @part.notes %></textarea>
-    <label><b>Source Material</b></label>
+    <label>Source Material</label>
     <input type="text" name="source_material" value="<%= @part.source_material %>" />
-    <label><b>Have Material?</b>
+    <label>Have Material?</b>
       <input type="checkbox" name="have_material"<% if @part.have_material == 1 %>checked<% end %>/>
     </label>
-    <label><b>Material Cut Length</b></label>
+    <label>Material Cut Length</label>
     <input type="text" name="cut_length" value="<%= @part.cut_length %>" />
-    <label><b>Quantity Required</b></label>
+    <label>Quantity Required</label>
     <input type="text" name="quantity" value="<%= @part.quantity %>" />
-    <label><b>Drawing Created?</b>
+    <label>Drawing Created?</b>
       <input type="checkbox" name="drawing_created"<% if @part.drawing_created == 1 %>checked<% end %>/>
     </label>
-    <label><b>Priority</b></label>
+    <label>Priority</label>
     <select name="priority">
       <% Part::PRIORITY_MAP.each_pair do |key, value| %>
-      <option value="<%= key %>"<% if @part.priority == key %> selected<% end %>>
-        <%= value %>
-      </option>
+        <option value="<%= key %>"<% if @part.priority == key %> selected<% end %>>
+          <%= value %>
+        </option>
       <% end %>
     </select>
     <label><input type="submit" class="btn btn-primary btn-medium" value="Save Part" /></label>

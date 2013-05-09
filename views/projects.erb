@@ -6,16 +6,16 @@
       <h2>Projects</h2>
     </div>
     <% if @user.can_administer? %>
-    <div class="pull-right" style="margin-top: 20px;">
-      <a href="/new_project" class="btn btn-success btn-small">
-        <i class="icon-white icon-file"></i> New Project
-      </a>
-    </div>
+      <div class="pull-right" style="margin-top: 20px;">
+        <a href="/new_project" class="btn btn-success btn-small">
+          <i class="icon-white icon-file"></i> New Project
+        </a>
+      </div>
     <% end %>
   </div>
   <div class="well">
   <% Project.each do |project| %>
-  <li><h4><a href="/projects/<%= project.id %>"><%= project.name %></a></h4></li>
+    <li><h4><a href="/projects/<%= project.id %>"><%= project.name %></a></h4></li>
   <% end %>
   </div>
 </div>

@@ -13,10 +13,9 @@ require "models"
 
 module CheesyParts
   class Server < Sinatra::Base
-    PART_TYPES = ["part", "assembly"]
-
     set :sessions => true
 
+    # Enforce authentication for all routes except login and user registration.
     before do
       @user = User[session[:user_id]]
       authenticate! unless ["/login", "/register"].include?(request.path)
@@ -164,7 +163,7 @@ module CheesyParts
       halt(400, "Invalid project.") if @project.nil?
       @parent_part_id = params[:parent_part_id]
       @type = params[:type] || "part"
-      halt(400, "Invalid part type.") unless PART_TYPES.include?(@type)
+      halt(400, "Invalid part type.") unless Part::PART_TYPES.include?(@type)
       erb :new_part
     end
 
@@ -178,7 +177,7 @@ module CheesyParts
       # Check parameter existence and format.
       halt(400, "Missing project ID.") if params[:project_id].nil? || params[:project_id] !~ /^\d+$/
       halt(400, "Missing part type.") if params[:type].nil?
-      halt(400, "Invalid part type.") unless PART_TYPES.include?(params[:type])
+      halt(400, "Invalid part type.") unless Part::PART_TYPES.include?(params[:type])
       halt(400, "Missing part name.") if params[:name].nil? || params[:name].empty?
       if params[:parent_part_id] && params[:parent_part_id] !~ /^\d+$/
         halt(400, "Invalid parent part ID.")

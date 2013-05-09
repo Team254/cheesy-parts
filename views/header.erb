@@ -22,34 +22,35 @@
         <a class="brand" href="/">Team 254 Parts</a>
         <div class="nav-collapse collapse">
           <% if @user %>
-          <ul class="nav">
-            <li>
-              <a href="/projects"> <i class="icon-th-large icon-black"></i> Projects</a>
-            </li>
-            <li>
-              <a href="/dashboards"> <i class="icon-list-alt icon-black"></i> Dashboards</a>
-            </li>
-            <% if @user.can_administer? %>
-            <li>
-              <a href="/users"> <i class="icon-th-list icon-black"></i> Users</a>
-            </li>
-            <% end %>
-          </ul>
-          <div class="pull-right">
-            <ul class="nav pull-right">
-              <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown"> <i class="icon-user"></i>
-                  <%= @user.first_name %> <%= @user.last_name %> <b class="caret"></b></a>
-                <ul class="dropdown-menu">
-                  <li>
-                    <a href="/logout"><i class="icon-off"></i> Logout</a>
-                    <a href="/change_password"><i class="icon-wrench"></i> Change Password</a>
-                  </li>
-                </ul>
+            <ul class="nav">
+              <li>
+                <a href="/projects"> <i class="icon-th-large icon-black"></i> Projects</a>
               </li>
+              <li>
+                <a href="/dashboards"> <i class="icon-list-alt icon-black"></i> Dashboards</a>
+              </li>
+              <% if @user.can_administer? %>
+                <li>
+                  <a href="/users"> <i class="icon-th-list icon-black"></i> Users</a>
+                </li>
+              <% end %>
             </ul>
-          </div>
-          <% end %></div>
+            <div class="pull-right">
+              <ul class="nav pull-right">
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown"> <i class="icon-user"></i>
+                    <%= @user.first_name %> <%= @user.last_name %> <b class="caret"></b></a>
+                  <ul class="dropdown-menu">
+                    <li>
+                      <a href="/logout"><i class="icon-off"></i> Logout</a>
+                      <a href="/change_password"><i class="icon-wrench"></i> Change Password</a>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+          <% end %>
+        </div>
       </div>
     </div>
   </div>

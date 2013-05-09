@@ -2,14 +2,14 @@
 
 <div class="container">
   <% if @user.can_edit? %>
-  <div class="pull-right" style="margin-top: 15px;">
-    <a href="/projects/<%= @project.id %>/new_part?type=part" class="btn btn-success btn-small">
-      <i class="icon-white icon-cog"></i> New Part
-    </a>
-    <a href="/projects/<%= @project.id %>/new_part?type=assembly" class="btn btn-success btn-small">
-      <i class="icon-white icon-th"></i> New Assembly
-    </a>
-  </div>
+    <div class="pull-right" style="margin-top: 15px;">
+      <a href="/projects/<%= @project.id %>/new_part?type=part" class="btn btn-success btn-small">
+        <i class="icon-white icon-cog"></i> New Part
+      </a>
+      <a href="/projects/<%= @project.id %>/new_part?type=assembly" class="btn btn-success btn-small">
+        <i class="icon-white icon-th"></i> New Assembly
+      </a>
+    </div>
   <% end %>
   <h3><b><%= @project.name %> - All Parts & Assemblies</b></h3>
   <%= erb :parts_list, :locals => { :parts => Part.where(:project_id => @project.id).order(@part_sort) } %>
@@ -19,14 +19,14 @@
         <span class="label label-info">Project Prefix</span> <%= @project.part_number_prefix %><br /><br />
     </div>
     <% if @user.can_administer? %>
-    <div class="pull-right">
-      <a href="/projects/<%= @project.id %>/edit" class="btn btn-primary btn-small">
-        <i class="icon-white icon-pencil"></i> Edit this project
-      </a>
-      <a href="/projects/<%= @project.id %>/delete" class="btn btn-danger btn-small">
-        <i class="icon-white icon-trash"></i> Delete this project
-      </a>
-    </div>
+      <div class="pull-right">
+        <a href="/projects/<%= @project.id %>/edit" class="btn btn-primary btn-small">
+          <i class="icon-white icon-pencil"></i> Edit this project
+        </a>
+        <a href="/projects/<%= @project.id %>/delete" class="btn btn-danger btn-small">
+          <i class="icon-white icon-trash"></i> Delete this project
+        </a>
+      </div>
     <% end %>
   </div>
 </div>

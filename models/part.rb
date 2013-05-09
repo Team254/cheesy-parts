@@ -8,6 +8,9 @@ class Part < Sequel::Model
   many_to_one :parent_part, :class => self
   one_to_many :child_parts, :key => :parent_part_id, :class => self
 
+  PART_TYPES = ["part", "assembly"]
+
+  # The list of possible part statuses. Key: string stored in database, value: what is displayed to the user.
   STATUS_MAP = { "designing" => "Design in progress",
                  "material" => "Material needs to be ordered",
                  "ordered" => "Waiting for materials",
@@ -22,8 +25,11 @@ class Part < Sequel::Model
                  "coating" => "Waiting for coating",
                  "assembly" => "Waiting for assembly",
                  "done" => "Done" }
+
+  # Mapping of priority integer stored in database to what is displayed to the user.
   PRIORITY_MAP = { 0 => "High", 1 => "Normal", 2 => "Low" }
 
+  # Assigns a part number based on the parent and type and returns a new Part object.
   def self.generate_number_and_create(project, type, parent_part)
     parent_part_id = parent_part.nil? ? 0 : parent_part.id
     parent_part_number = parent_part.nil? ? 0 : parent_part.part_number
