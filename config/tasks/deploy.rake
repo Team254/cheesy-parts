@@ -14,6 +14,7 @@ namespace :fezzik do
     FileUtils.mkdir_p "/tmp/#{app}/staged"
     # Use rsync to preserve executability and follow symlinks.
     system("rsync -aqE #{local_path}/. /tmp/#{app}/staged")
+    Rake::Task["fezzik:save_environment"].invoke
   end
 
   desc "performs any necessary setup on the destination servers prior to deployment"

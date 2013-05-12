@@ -3,5 +3,8 @@
 #
 # Sets up database connection.
 
-DB = Sequel.mysql2({ :host => "localhost", :user => "team254", :password => "skyf1r3",
-                     :database => "cheesy_parts" })
+require "pathological"
+
+require "config/environment"
+
+DB = Sequel.mysql2({ :host => DB_HOST, :user => DB_USER, :password => DB_PASSWORD, :database => DB_DATABASE })

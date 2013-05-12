@@ -18,6 +18,7 @@ namespace :db do
   end
 end
 
+include Fezzik::DSL
 Fezzik.init(:tasks => "config/tasks")
 
 set :app, "cheesy-parts"
@@ -28,4 +29,12 @@ set :user, "ubuntu"
 
 Fezzik.destination :prod do
   set :domain, "#{user}@parts.team254.com"
+  env :port, 9000
+  env :db_host, "localhost"
+  env :db_user, "team254"
+  env :db_password, "skyf1r3"
+  env :db_database, "cheesy_parts"
+  env :url, "http://parts.team254.com"
+  env :gmail_user, "cheesyparts@gmail.com"
+  env :gmail_password, "254skyf1r3"
 end

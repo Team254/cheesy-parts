@@ -9,6 +9,7 @@ require "pathological"
 require "pony"
 require "sinatra/base"
 
+require "config/environment"
 require "models"
 
 module CheesyParts
@@ -37,11 +38,11 @@ module CheesyParts
     def send_email(to, subject, body)
       # Run this asynchronously using EventMachine since it takes a couple of seconds.
       EM.defer do
-        Pony.mail(:from => "Team 254 Part Management System <cheesyparts@gmail.com>", :to => to,
+        Pony.mail(:from => "Cheesy Parts <#{GMAIL_USER}>", :to => to,
                   :subject => subject, :body => body, :via => :smtp,
                   :via_options => { :address => "smtp.gmail.com", :port => "587",
-                                    :enable_starttls_auto => true, :user_name => "cheesyparts",
-                                    :password => "254skyf1r3", :authentication => :plain,
+                                    :enable_starttls_auto => true, :user_name => GMAIL_USER.split("@").first,
+                                    :password => GMAIL_PASSWORD, :authentication => :plain,
                                     :domain => "localhost.localdomain" })
       end
     end
@@ -317,8 +318,8 @@ module CheesyParts
         email_body = <<-EOS.dedent
           Hello #{@user_edit.first_name},
 
-          Your account on the Team 254 Parts Management System has been approved.
-          You can log into the system at http://parts.team254.com.
+          Your account on Cheesy Parts has been approved.
+          You can log into the system at #{URL}.
 
           Cheers,
 
@@ -379,15 +380,15 @@ module CheesyParts
       email_body = <<-EOS.dedent
         Hello,
 
-        This is a notification that #{user.first_name} #{user.last_name} has created an account on the Team
-        254 Parts Management System and it is disabled pending approval.
-        Please visit the user control panel at http://parts.team254.com/users to take action.
+        This is a notification that #{user.first_name} #{user.last_name} has created an account on Cheesy
+        Parts and it is disabled pending approval.
+        Please visit the user control panel at #{URL}/users to take action.
 
         Cheers,
 
         The Cheesy Parts Robot
       EOS
-      send_email("cheesyparts@gmail.com", "Approval needed for #{user.email}", email_body)
+      send_email(GMAIL_USER, "Approval needed for #{user.email}", email_body)
       erb :register_confirmation
     end
   end
