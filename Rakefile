@@ -28,13 +28,14 @@ set :local_path, Dir.pwd
 set :user, "ubuntu"
 
 Fezzik.destination :prod do
+  # Fill in parameters for deployment host, database and e-mail account here.
   set :domain, "#{user}@parts.team254.com"
   env :port, 9000
   env :db_host, "localhost"
   env :db_user, "team254"
-  env :db_password, "skyf1r3"
+  env :db_password, "correcthorsebatterystaple"
   env :db_database, "cheesy_parts"
   env :url, "http://parts.team254.com"
   env :gmail_user, "cheesyparts@gmail.com"
-  env :gmail_password, "254skyf1r3"
+  env :gmail_password, "correcthorsebatterystaple"
 end
