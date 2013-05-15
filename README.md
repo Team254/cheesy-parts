@@ -5,7 +5,7 @@ Cheesy Parts is a web-based system for tracking parts through the design and man
 part numbers according to a common scheme, with which CAD files can be saved to version control, and stores
 information about the part's current manufacturing status.
 
-Cheesy Parts is written in Ruby using the (http://sinatrarb.com)[Sinatra] framework, and uses MySQL as the
+Cheesy Parts is written in Ruby using the [Sinatra](http://sinatrarb.com) framework, and uses MySQL as the
 backing datastore.
 
 ## Development
@@ -13,12 +13,12 @@ backing datastore.
 Prerequisites:
 
 * Ruby 1.9 (1.9.3-p286 is used in development and production)
-* (http://gembundler.com)[Bundler]
+* [Bundler](http://gembundler.com)
 * MySQL
 
 To run Cheesy Parts locally, use the following procedure:
 
-1. Create an empty MySQL database and a user account with full permissions on it
+1. Create an empty MySQL database and a user account with full permissions on it.
 1. Populate config/environment.rb with the parameters for the development environment. This file is
 overwritten on deploy with the parameters in the Rakefile, so it's okay to set the development values in it
 and then forget about it.
@@ -30,7 +30,7 @@ MySQL.
 
 ## Deployment
 
-The Cheesy Parts codebase includes (https://github.com/dmacdougall/fezzik)[Fezzik] scripts for deploying to
+The Cheesy Parts codebase includes [Fezzik](https://github.com/dmacdougall/fezzik) scripts for deploying to
 a remote server via SSH.
 
 1. Set up the remote server with the same prerequisites and procedure as for development.
