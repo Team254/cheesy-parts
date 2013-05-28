@@ -38,4 +38,5 @@ Fezzik.destination :prod do
   env :url, "http://parts.team254.com"
   env :gmail_user, "cheesyparts@gmail.com"
   env :gmail_password, "correcthorsebatterystaple"
+  env :wordpress_auth_url, ""
 end

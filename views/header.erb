@@ -43,7 +43,9 @@
                   <ul class="dropdown-menu">
                     <li>
                       <a href="/logout"><i class="icon-off"></i> Logout</a>
-                      <a href="/change_password"><i class="icon-wrench"></i> Change Password</a>
+                      <% if @user.wordpress_user_id.nil? %>
+                        <a href="/change_password"><i class="icon-wrench"></i> Change Password</a>
+                      <% end %>
                     </li>
                   </ul>
                 </li>

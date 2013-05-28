@@ -4,15 +4,22 @@
   <div class="row">
     <div class="span4 offset4 well">
       <legend>Please Sign In</legend>
+      <% unless WORDPRESS_AUTH_URL.empty? %>
+        <a href="http://www.team254.com/wp-login.php?redirect_to=<%= URI.encode("#{URL}#{@redirect}") %>"
+            class="btn btn-primary btn-block">
+          Click here to sign in with your team254.com account
+        </a>
+        <hr>
+      <% end %>
       <% if @alert %>
-      <div class="alert alert-error">
-        <a class="close" data-dismiss="alert" href="#">×</a><%= @alert %>
-      </div>
+        <div class="alert alert-error">
+          <a class="close" data-dismiss="alert" href="#">×</a><%= @alert %>
+        </div>
       <% end %>
       <form action="?redirect=<%= @redirect %>" method="POST" action="" accept-charset="UTF-8">
-      <input type="text" class="span4" name="email" placeholder="E-mail">
-      <input type="password" class="span4" name="password" placeholder="Password">
-      <button type="submit" name="submit" class="btn btn-info btn-block">Sign in</button>
+        <input type="text" class="span4" name="email" placeholder="E-mail">
+        <input type="password" class="span4" name="password" placeholder="Password">
+        <button type="submit" name="submit" class="btn btn-info btn-block">Sign in</button>
       </form>
     </div>
   </div>

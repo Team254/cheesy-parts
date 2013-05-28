@@ -5,15 +5,19 @@
 
 require "dedent"
 require "eventmachine"
+require "json"
 require "pathological"
 require "pony"
 require "sinatra/base"
 
 require "config/environment"
 require "models"
+require "wordpress_authentication"
 
 module CheesyParts
   class Server < Sinatra::Base
+    include WordpressAuthentication
+
     set :sessions => true
 
     # Enforce authentication for all routes except login and user registration.
@@ -53,12 +57,30 @@ module CheesyParts
 
     get "/login" do
       redirect "/logout" if @user
+      @redirect = params[:redirect] || "/"
+
+      unless WORDPRESS_AUTH_URL.empty?
+        # Try authenticating against Wordpress.
+        wordpress_user_info = get_wordpress_user_info
+        if wordpress_user_info
+          user = User[:wordpress_user_id => wordpress_user_info["id"]]
+          unless user
+            names = wordpress_user_info["name"].split(" ")
+            first_name = names.first
+            last_name = names[1..-1].join(" ")
+            user = User.create(:wordpress_user_id => wordpress_user_info["id"], :first_name => first_name,
+                               :last_name => last_name, :permission => "editor", :enabled => 1)
+          end
+          session[:user_id] = user.id
+          redirect @redirect
+        end
+      end
+
       if params[:failed] == "1"
         @alert = "Invalid e-mail address or password."
       elsif params[:disabled] == "1"
         @alert = "Your account is currently disabled."
       end
-      @redirect = params[:redirect] || "/"
       erb :login
     end
 
@@ -72,7 +94,7 @@ module CheesyParts
 
     get "/logout" do
       session[:user_id] = nil
-      redirect "/"
+      redirect "http://team254.com"
     end
 
     get "/new_project" do
