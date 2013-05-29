@@ -69,7 +69,8 @@ module CheesyParts
             first_name = names.first
             last_name = names[1..-1].join(" ")
             user = User.create(:wordpress_user_id => wordpress_user_info["id"], :first_name => first_name,
-                               :last_name => last_name, :permission => "editor", :enabled => 1)
+                               :last_name => last_name, :permission => "editor", :enabled => 1,
+                               :email => wordpress_user_info["username"])
           end
           session[:user_id] = user.id
           redirect @redirect
