@@ -29,6 +29,10 @@ MySQL.
 1. Run `ruby parts_server_control.rb <command>` to control the running of the Cheesy Parts server, where
 `<command>` can be one of `start`|`stop`|`run`|`restart`.
 
+The database migration will create an admin account (username "deleteme@team254.com", password "chezypofs")
+that you can use to first get into the system and create other accounts. It is highly recommended that you
+delete this account after having created your own admin account.
+
 ## Deployment
 
 The Cheesy Parts codebase includes [Fezzik](https://github.com/dmacdougall/fezzik) scripts for deploying to

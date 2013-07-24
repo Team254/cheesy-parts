@@ -5,6 +5,7 @@
 
 require "base64"
 require "openssl"
+require "securerandom"
 
 class User < Sequel::Model
   PBKDF2_ITERATIONS = 1000
