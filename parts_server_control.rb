@@ -3,6 +3,7 @@
 #
 # Script for starting/stopping the parts management server.
 
+require "bundler/setup"
 require "daemons"
 require "pathological"
 require "thin"
