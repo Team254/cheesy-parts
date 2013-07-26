@@ -220,7 +220,12 @@ module CheesyParts
       part = Part.generate_number_and_create(project, params[:type], parent_part)
       part.name = params[:name].gsub("\"", "&quot;")
       part.status = "designing"
-      part.priority = 1;
+      part.source_material = ""
+      part.have_material = 0
+      part.quantity = ""
+      part.cut_length = ""
+      part.priority = 1
+      part.drawing_created = 0
       part.save
       redirect "/parts/#{part.id}"
     end
