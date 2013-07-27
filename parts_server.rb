@@ -289,6 +289,7 @@ module CheesyParts
       halt(400, "Invalid part.") if @part.nil?
       halt(400, "Can't delete assembly with existing children.") unless @part.child_parts.empty?
       @part.delete
+      params[:referrer] = nil if params[:referrer] =~ /\/parts\/#{params[:id]}$/
       redirect params[:referrer] || "/projects/#{project_id}"
     end
 
