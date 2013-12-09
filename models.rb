@@ -6,6 +6,8 @@
 require "sequel"
 
 require "db"
+require "models/order"
+require "models/order_item"
 require "models/part"
 require "models/project"
 require "models/user"
