@@ -46,6 +46,15 @@ label {
 .label-status-done {
   background-color: #3d6;
 }
+.label-status-received {
+  background-color: #3d6;
+}
+.label-status-not_ordered {
+  background-color: #f77;
+}
+.label-status-ready_to_order {
+  background-color: #0bb;
+}
 .dashboard-label {
   padding: 2px 4px;
   color: #ffffff;

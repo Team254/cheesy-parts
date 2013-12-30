@@ -1,0 +1,20 @@
+<table class="table table-striped table-condensed table-bordered">
+  <tr>
+    <th>Quantity</th>
+    <th>Part Number</th>
+    <th>Description</th>
+    <th>Unit Cost</th>
+    <th>Total Cost</th>
+    <th>Notes</th>
+  </tr>
+  <% order_items.each do |item| %>
+    <tr>
+      <td><%= item.quantity %></td>
+      <td><%= item.part_number %></td>
+      <td><%= item.description %></td>
+      <td><%= "$%.2f" % item.unit_cost %></td>
+      <td><%= "$%.2f" % item.total_cost %></td>
+      <td><%= item.notes %></td>
+    </tr>
+  <% end %>
+</table>

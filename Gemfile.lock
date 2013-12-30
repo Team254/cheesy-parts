@@ -1,6 +1,9 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    activesupport (3.2.13)
+      i18n (= 0.6.1)
+      multi_json (~> 1.0)
     colorize (0.5.8)
     daemons (1.1.9)
     dedent (0.0.2)
@@ -50,6 +53,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  activesupport
   daemons
   dedent
   fezzik

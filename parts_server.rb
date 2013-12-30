@@ -3,6 +3,7 @@
 #
 # The main class of the parts management web server.
 
+require "active_support/time"
 require "dedent"
 require "eventmachine"
 require "json"
@@ -419,6 +420,21 @@ module CheesyParts
       EOS
       send_email(GMAIL_USER, "Approval needed for #{user.email}", email_body)
       erb :register_confirmation
+    end
+
+    get "/orders" do
+      erb :orders_project_list
+    end
+
+    get "/projects/:id/orders/pending" do
+      @no_vendor_order_items = OrderItem.where(:order_id => nil, :project_id => params[:id])
+      @vendor_orders = Order.filter(:status => "received").invert.where(:project_id => params[:id])
+      erb :pending_orders
+    end
+
+    get "/projects/:id/orders/complete" do
+      @vendor_orders = Order.filter(:status => "received").where(:project_id => params[:id])
+      erb :completed_orders
     end
   end
 end
