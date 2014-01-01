@@ -427,6 +427,16 @@ module CheesyParts
       erb :completed_orders
     end
 
+    get "/projects/:id/orders/stats" do
+      @orders = Order.filter(:status => "received").where(:project_id => params[:id]).all
+      @orders_by_vendor = @orders.inject({}) do |map, order|
+        map[order.vendor_name] ||= []
+        map[order.vendor_name] << order
+        map
+      end
+      erb :order_stats
+    end
+
     post "/projects/:id/order_items" do
       # Check parameter existence and format.
       quantity = params[:quantity].to_i
