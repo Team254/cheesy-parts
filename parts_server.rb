@@ -451,5 +451,21 @@ module CheesyParts
                        :unit_cost => unit_cost, :notes => params[:notes])
       redirect "/projects/#{@project.id}/orders/pending"
     end
+
+    get "/projects/:id/orders/:order_id" do
+      @order = Order[params[:order_id]]
+      halt(400, "Invalid order.") if @order.nil?
+      erb :order
+    end
+
+    post "/projects/:id/orders/:order_id/edit" do
+      @order = Order[params[:order_id]]
+      halt(400, "Invalid order.") if @order.nil?
+
+      @order.update(:status => params[:status], :ordered_at => params[:ordered_at],
+                    :paid_for_by => params[:paid_for_by], :tax_cost => params[:tax_cost].gsub(/\$/, ""),
+                    :shipping_cost => params[:shipping_cost].gsub(/\$/, ""), :notes => params[:notes])
+      redirect "/projects/#{@project.id}/orders/#{@order.id}"
+    end
   end
 end

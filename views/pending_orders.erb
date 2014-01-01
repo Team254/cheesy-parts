@@ -16,11 +16,11 @@
     <%= erb :order_items_list, :locals => { :order_items => @no_vendor_order_items } %>
   <% end %>
   <% @vendor_orders.each do |order| %>
-    <h2>
+    <a href="/projects/<%= @project.id %>/orders/<%= order.id %>" style="color: black;"><h2>
       <%= order.vendor_name %>
       <%= order.ordered_at.strftime("%D") rescue "" %>
       <span class="label label-status-<%= order.status %>"><%= Order::STATUS_MAP[order.status] %></span>
-    </h2>
+    </h2></a>
     <%= erb :order_items_list, :locals => { :order_items => order.order_items } %>
   <% end %>
 </div>

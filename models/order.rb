@@ -13,4 +13,12 @@ class Order < Sequel::Model
     "ordered" => "Ordered",
     "received" => "Received"
   }
+
+  def subtotal
+    order_items.map(&:total_cost).inject(0) { |sum, cost| sum + cost }
+  end
+
+  def total_cost
+    subtotal + tax_cost.to_f + shipping_cost.to_f
+  end
 end
