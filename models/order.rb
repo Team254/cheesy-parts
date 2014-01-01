@@ -9,8 +9,7 @@ class Order < Sequel::Model
 
   # The list of possible order statuses. Key: string stored in database, value: what is displayed to the user.
   STATUS_MAP = {
-    "not_ordered" => "Not ordered",
-    "ready_to_order" => "Ready to order",
+    "open" => "Open",
     "ordered" => "Ordered",
     "received" => "Received"
   }

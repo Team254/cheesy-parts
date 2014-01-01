@@ -32,3 +32,15 @@ function loadParts() {
     }
   });
 }
+
+$(function() {
+  $("#vendor").typeahead({
+    source: vendors
+  });
+  $("#vendor").keypress(function(e) {
+    // Disable the enter key from doing anything when no vendor is selected.
+    if (e.which == 13) {
+      return false;
+    }
+  });
+});

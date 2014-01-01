@@ -5,6 +5,7 @@
 
 class OrderItem < Sequel::Model
   many_to_one :order
+  many_to_one :project
 
   def total_cost
     unit_cost * quantity

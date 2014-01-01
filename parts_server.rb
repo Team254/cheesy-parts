@@ -119,9 +119,12 @@ module CheesyParts
       redirect "/projects/#{project.id}"
     end
 
-    get "/projects/:id" do
+    before "/projects/:id*" do
       @project = Project[params[:id]]
       halt(400, "Invalid project.") if @project.nil?
+    end
+
+    get "/projects/:id" do
       if ["type", "name", "parent_part_id", "status"].include?(params[:sort])
         @part_sort = params[:sort].to_sym
       else
@@ -133,16 +136,12 @@ module CheesyParts
     get "/projects/:id/edit" do
       require_permission(@user.can_administer?)
 
-      @project = Project[params[:id]]
-      halt(400, "Invalid project.") if @project.nil?
       erb :project_edit
     end
 
     post "/projects/:id/edit" do
       require_permission(@user.can_administer?)
 
-      @project = Project[params[:id]]
-      halt(400, "Invalid project.") if @project.nil?
       @project.name = params[:name] if params[:name]
       if params[:part_number_prefix]
         @project.part_number_prefix = params[:part_number_prefix]
@@ -154,29 +153,21 @@ module CheesyParts
     get "/projects/:id/delete" do
       require_permission(@user.can_administer?)
 
-      @project = Project[params[:id]]
-      halt(400, "Invalid project.") if @project.nil?
       erb :project_delete
     end
 
     post "/projects/:id/delete" do
       require_permission(@user.can_administer?)
 
-      @project = Project[params[:id]]
-      halt(400, "Invalid project.") if @project.nil?
       @project.delete
       redirect "/projects"
     end
 
     get "/projects/:id/dashboard" do
-      @project = Project[params[:id]]
-      halt(400, "Invalid project.") if @project.nil?
       erb :dashboard
     end
 
     get "/projects/:id/dashboard/parts" do
-      @project = Project[params[:id]]
-      halt(400, "Invalid project.") if @project.nil?
       @status = params[:status] if Part::STATUS_MAP.has_key?(params[:status])
       erb :dashboard_parts
     end
@@ -184,8 +175,6 @@ module CheesyParts
     get "/projects/:id/new_part" do
       require_permission(@user.can_edit?)
 
-      @project = Project[params[:id]]
-      halt(400, "Invalid project.") if @project.nil?
       @parent_part_id = params[:parent_part_id]
       @type = params[:type] || "part"
       halt(400, "Invalid part type.") unless Part::PART_TYPES.include?(@type)
@@ -429,12 +418,38 @@ module CheesyParts
     get "/projects/:id/orders/pending" do
       @no_vendor_order_items = OrderItem.where(:order_id => nil, :project_id => params[:id])
       @vendor_orders = Order.filter(:status => "received").invert.where(:project_id => params[:id])
+      @show_new_item_form = params[:new_item] == "true"
       erb :pending_orders
     end
 
     get "/projects/:id/orders/complete" do
       @vendor_orders = Order.filter(:status => "received").where(:project_id => params[:id])
       erb :completed_orders
+    end
+
+    post "/projects/:id/order_items" do
+      # Check parameter existence and format.
+      quantity = params[:quantity].to_i
+      halt(400, "Invalid quantity.") unless quantity > 0
+      unit_cost = params[:unit_cost].to_f
+      halt(400, "Invalid unit cost.") unless unit_cost > 0
+
+      # Match vendor to an existing open order or create it if there isn't one.
+      if params[:vendor].nil? || params[:vendor].empty?
+        order_id = nil
+      else
+        order = Order.where(:project_id => @project.id, :vendor_name => params[:vendor],
+                            :status => "open").first
+        if order.nil?
+          order = Order.create(:project => @project, :vendor_name => params[:vendor], :status => "open")
+        end
+        order_id = order.id
+      end
+
+      OrderItem.create(:project => @project, :order_id => order_id, :quantity => quantity,
+                       :part_number => params[:part_number], :description => params[:description],
+                       :unit_cost => unit_cost, :notes => params[:notes])
+      redirect "/projects/#{@project.id}/orders/pending"
     end
   end
 end

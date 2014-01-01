@@ -49,10 +49,7 @@ label {
 .label-status-received {
   background-color: #3d6;
 }
-.label-status-not_ordered {
-  background-color: #f77;
-}
-.label-status-ready_to_order {
+.label-status-open {
   background-color: #0bb;
 }
 .dashboard-label {

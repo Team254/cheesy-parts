@@ -1,0 +1,27 @@
+<form action="/projects/<%= @project.id %>/order_items" method="POST">
+  <table class="table table-striped table-condensed table-bordered">
+    <tr>
+      <th>Vendor</th>
+      <th>Quantity</th>
+      <th>Part Number</th>
+      <th>Description</th>
+      <th>Unit Cost</th>
+      <th>Notes</th>
+      <th>&nbsp;</th>
+    </tr>
+    <tr>
+      <td><input type="text" name="vendor" style="width: 200px" id="vendor" autocomplete="off" /></td>
+      <td><input type="text" name="quantity" style="width: 30px" /></td>
+      <td><input type="text" name="part_number" style="width: 100px" /></td>
+      <td><input type="text" name="description" style="width: 200px" /></td>
+      <td><input type="text" name="unit_cost" style="width: 80px" /></td>
+      <td><input type="text" name="notes" style="width: 200px" /></td>
+      <td>
+        <input type="submit" value="Save" class="btn btn-primary btn-small">
+        <a href="/projects/<%= @project.id %>/orders/pending" class="btn btn-danger btn-small">
+          <i class="icon-white icon-trash"></i>
+        </a>
+      </td>
+    </tr>
+  </table>
+</form>
