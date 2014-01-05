@@ -1,22 +1,34 @@
-<table class="table table-striped table-condensed table-bordered">
-  <tr>
-    <th>Vendor</th>
-    <th>Quantity</th>
-    <th>Part Number</th>
-    <th>Description</th>
-    <th>Unit Cost</th>
-    <th>Total Cost</th>
-    <th>Notes</th>
-  </tr>
-  <% order_items.each do |item| %>
+<form action="/projects/<%= @project.id %>/order_items/edit" method="POST">
+  <table class="table table-striped table-condensed table-bordered">
     <tr>
-      <td><%= item.order.vendor_name rescue "" %></td>
-      <td><%= item.quantity %></td>
-      <td><%= item.part_number %></td>
-      <td><%= item.description %></td>
-      <td><%= "$%.2f" % item.unit_cost %></td>
-      <td><%= "$%.2f" % item.total_cost %></td>
-      <td><%= item.notes %></td>
+      <th>Vendor</th>
+      <th>Quantity</th>
+      <th>Part Number</th>
+      <th>Description</th>
+      <th>Unit Cost</th>
+      <th>Total Cost</th>
+      <th>Notes</th>
+      <th>Action</th>
     </tr>
-  <% end %>
-</table>
+    <% order_items.each do |item| %>
+      <tr id="order-item-<%= item.id %>">
+        <td><%= item.order.vendor_name rescue "" %></td>
+        <td><%= item.quantity %></td>
+        <td><%= item.part_number %></td>
+        <td><%= item.description %></td>
+        <td><%= "$%.2f" % item.unit_cost %></td>
+        <td><%= "$%.2f" % item.total_cost %></td>
+        <td><%= item.notes %></td>
+        <td>
+          <a class="btn btn-primary btn-small" onclick="editOrderItem(<%= @project.id %>, <%= item.id %>);">
+            <i class="icon-white icon-pencil"></i>
+          </a>
+          <a href="/projects/<%= @project.id %>/order_items/<%= item.id %>/delete"
+              class="btn btn-danger btn-small">
+            <i class="icon-white icon-trash"></i>
+          </a>
+        </td>
+      </tr>
+    <% end %>
+  </table>
+</form>

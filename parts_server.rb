@@ -462,6 +462,51 @@ module CheesyParts
       redirect "/projects/#{@project.id}/orders/pending"
     end
 
+    get "/projects/:project_id/order_items/:id/editable" do
+      @item = OrderItem[params[:id]]
+      halt(400, "Invalid order item.") if @item.nil?
+      erb :edit_order_item
+    end
+
+    post "/projects/:project_id/order_items/edit" do
+      # Check parameter existence and format.
+      @item = OrderItem[params[:order_item_id]]
+      halt(400, "Invalid order item.") if @item.nil?
+      quantity = params[:quantity].to_i
+      halt(400, "Invalid quantity.") unless quantity > 0
+      unit_cost = params[:unit_cost].gsub(/\$/, "").to_f
+      halt(400, "Invalid unit cost.") unless unit_cost > 0
+
+      # Handle a vendor change.
+      order_id = @item.order.id rescue nil
+      if @item.order.nil? && !params[:vendor].empty? || params[:vendor] != @item.order.vendor_name
+        order = Order.where(:project_id => @project.id, :vendor_name => params[:vendor],
+                            :status => "open").first
+        if order.nil?
+          order = Order.create(:project => @project, :vendor_name => params[:vendor], :status => "open")
+        end
+        order_id = order.id
+      end
+
+      @item.update(:order_id => order_id, :quantity => quantity, :part_number => params[:part_number],
+                   :description => params[:description], :unit_cost => unit_cost, :notes => params[:notes])
+      redirect params[:referrer]
+    end
+
+    get "/projects/:project_id/order_items/:id/delete" do
+      @item = OrderItem[params[:id]]
+      halt(400, "Invalid order item.") if @item.nil?
+      @referrer = request.referrer
+      erb :order_item_delete
+    end
+
+    post "/projects/:project_id/order_items/:id/delete" do
+      @item = OrderItem[params[:id]]
+      halt(400, "Invalid order item.") if @item.nil?
+      @item.delete
+      redirect params[:referrer]
+    end
+
     get "/projects/:id/orders/:order_id" do
       @order = Order[params[:order_id]]
       halt(400, "Invalid order.") if @order.nil?

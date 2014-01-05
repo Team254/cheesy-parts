@@ -23,11 +23,11 @@
     <% end %>
     <tr>
       <th>Total</th>
-        <td><%= @orders.size %></td>
-        <td><%= @orders.inject(0) { |sum, order| sum + order.order_items.size } %></td>
-        <td><%= "$%.2f" % @orders.inject(0) { |sum, order| sum + order.total_cost } %></td>
-        <td><%= "$%.2f" % @orders.inject(0) { |sum, order| sum + order.tax_cost.to_f } %></td>
-        <td><%= "$%.2f" % @orders.inject(0) { |sum, order| sum + order.shipping_cost.to_f } %></td>
+        <th><%= @orders.size %></th>
+        <th><%= @orders.inject(0) { |sum, order| sum + order.order_items.size } %></th>
+        <th><%= "$%.2f" % @orders.inject(0) { |sum, order| sum + order.total_cost } %></th>
+        <th><%= "$%.2f" % @orders.inject(0) { |sum, order| sum + order.tax_cost.to_f } %></th>
+        <th><%= "$%.2f" % @orders.inject(0) { |sum, order| sum + order.shipping_cost.to_f } %></th>
     </tr>
   </table>
 </div>

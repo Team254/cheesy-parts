@@ -1,0 +1,11 @@
+<%= erb :header %>
+
+<div class="container">
+  <h2>Are you sure you want to delete this order item?</h2>
+  <form action="" method="POST">
+    <input type="submit" class="btn btn-danger btn-medium" value="Yes" />
+    <input type="hidden" name="referrer" value="<%= @referrer %>" />
+  </form>
+</div>
+
+<%= erb :footer %>

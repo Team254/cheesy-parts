@@ -33,14 +33,31 @@ function loadParts() {
   });
 }
 
-$(function() {
-  $("#vendor").typeahead({
+function vendorAutoComplete(selector) {
+  $(selector).typeahead({
     source: vendors
   });
-  $("#vendor").keypress(function(e) {
-    // Disable the enter key from doing anything when no vendor is selected.
-    if (e.which == 13) {
-      return false;
+}
+
+// Only allow editing one item at a time.
+var editingOrderItem = false;
+
+function editOrderItem(projectId, orderItemId) {
+  if (editingOrderItem) {
+    alert("Can only edit one item at a time.");
+    return;
+  }
+  editingOrderItem = true;
+  $.ajax({
+    url: "/projects/" + projectId + "/order_items/" + orderItemId + "/editable",
+    complete: function(response) {
+      $("#order-item-" + orderItemId).html(response.responseText);
+      vendorAutoComplete("#edit-vendor");
+      $("#edit-vendor").focus();
     }
   });
+}
+
+$(function() {
+  vendorAutoComplete("#vendor");
 });
