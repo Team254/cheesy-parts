@@ -440,12 +440,6 @@ module CheesyParts
     post "/projects/:id/order_items" do
       require_permission(@user.can_edit?)
 
-      # Check parameter existence and format.
-      quantity = params[:quantity].to_i
-      halt(400, "Invalid quantity.") unless quantity > 0
-      unit_cost = params[:unit_cost].to_f
-      halt(400, "Invalid unit cost.") unless unit_cost > 0
-
       # Match vendor to an existing open order or create it if there isn't one.
       if params[:vendor].nil? || params[:vendor].empty?
         order_id = nil
@@ -458,9 +452,9 @@ module CheesyParts
         order_id = order.id
       end
 
-      OrderItem.create(:project => @project, :order_id => order_id, :quantity => quantity,
+      OrderItem.create(:project => @project, :order_id => order_id, :quantity => params[:quantity].to_i,
                        :part_number => params[:part_number], :description => params[:description],
-                       :unit_cost => unit_cost, :notes => params[:notes])
+                       :unit_cost => params[:unit_cost].to_f, :notes => params[:notes])
       redirect "/projects/#{@project.id}/orders/pending"
     end
 
@@ -475,17 +469,14 @@ module CheesyParts
     post "/projects/:project_id/order_items/edit" do
       require_permission(@user.can_edit?)
 
-      # Check parameter existence and format.
       @item = OrderItem[params[:order_item_id]]
       halt(400, "Invalid order item.") if @item.nil?
-      quantity = params[:quantity].to_i
-      halt(400, "Invalid quantity.") unless quantity > 0
-      unit_cost = params[:unit_cost].gsub(/\$/, "").to_f
-      halt(400, "Invalid unit cost.") unless unit_cost > 0
 
       # Handle a vendor change.
       order_id = @item.order.id rescue nil
-      if @item.order.nil? && !params[:vendor].empty? || params[:vendor] != @item.order.vendor_name
+      old_vendor = @item.order.vendor_name rescue ""
+      new_vendor = params[:vendor]
+      unless old_vendor == new_vendor
         order = Order.where(:project_id => @project.id, :vendor_name => params[:vendor],
                             :status => "open").first
         if order.nil?
@@ -494,8 +485,9 @@ module CheesyParts
         order_id = order.id
       end
 
-      @item.update(:order_id => order_id, :quantity => quantity, :part_number => params[:part_number],
-                   :description => params[:description], :unit_cost => unit_cost, :notes => params[:notes])
+      @item.update(:order_id => order_id, :quantity => params[:quantity].to_i,
+                   :part_number => params[:part_number], :description => params[:description],
+                   :unit_cost => params[:unit_cost].gsub(/\$/, "").to_f, :notes => params[:notes])
       redirect params[:referrer]
     end
 
