@@ -73,6 +73,6 @@ namespace :fezzik do
   desc "runs database migrations"
   remote_task :migrate_db do
     puts "running database migrations"
-    run "cd #{current_path} && rake db:migrate"
+    run "cd #{current_path} && bundle exec rake db:migrate"
   end
 end
