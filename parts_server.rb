@@ -438,6 +438,8 @@ module CheesyParts
     end
 
     post "/projects/:id/order_items" do
+      require_permission(@user.can_edit?)
+
       # Check parameter existence and format.
       quantity = params[:quantity].to_i
       halt(400, "Invalid quantity.") unless quantity > 0
@@ -463,12 +465,16 @@ module CheesyParts
     end
 
     get "/projects/:project_id/order_items/:id/editable" do
+      require_permission(@user.can_edit?)
+
       @item = OrderItem[params[:id]]
       halt(400, "Invalid order item.") if @item.nil?
       erb :edit_order_item
     end
 
     post "/projects/:project_id/order_items/edit" do
+      require_permission(@user.can_edit?)
+
       # Check parameter existence and format.
       @item = OrderItem[params[:order_item_id]]
       halt(400, "Invalid order item.") if @item.nil?
@@ -494,6 +500,8 @@ module CheesyParts
     end
 
     get "/projects/:project_id/order_items/:id/delete" do
+      require_permission(@user.can_edit?)
+
       @item = OrderItem[params[:id]]
       halt(400, "Invalid order item.") if @item.nil?
       @referrer = request.referrer
@@ -501,6 +509,8 @@ module CheesyParts
     end
 
     post "/projects/:project_id/order_items/:id/delete" do
+      require_permission(@user.can_edit?)
+
       @item = OrderItem[params[:id]]
       halt(400, "Invalid order item.") if @item.nil?
       @item.delete
@@ -514,6 +524,8 @@ module CheesyParts
     end
 
     post "/projects/:id/orders/:order_id/edit" do
+      require_permission(@user.can_edit?)
+
       @order = Order[params[:order_id]]
       halt(400, "Invalid order.") if @order.nil?
 

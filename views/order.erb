@@ -8,7 +8,7 @@
   <%= erb :order_items_list, :locals => { :order_items => @order.order_items } %>
   <form action="/projects/<%= @project.id %>/orders/<%= @order.id %>/edit" method="POST">
     <label>Status</label>
-    <select name="status">
+    <select name="status" <% unless @user.can_edit? %>disabled <% end %>>
       <% Order::STATUS_MAP.each_pair do |key, value| %>
         <option value="<%= key %>"<% if @order.status == key %> selected<% end %>>
           <%= value %>
@@ -18,19 +18,26 @@
     <label>Subtotal</label>
     <input type="text" disabled value="<%= "$%.2f" % @order.subtotal %>" />
     <label>Tax</label>
-    <input type="text" name="tax_cost" value="<%= "$%.2f" % @order.tax_cost.to_f %>" />
+    <input type="text" <% unless @user.can_edit? %>disabled <% end %>name="tax_cost"
+        value="<%= "$%.2f" % @order.tax_cost.to_f %>" />
     <label>Shipping</label>
-    <input type="text" name="shipping_cost" value="<%= "$%.2f" % @order.shipping_cost.to_f %>" />
+    <input type="text" <% unless @user.can_edit? %>disabled <% end %>name="shipping_cost"
+        value="<%= "$%.2f" % @order.shipping_cost.to_f %>" />
     <label>Total</label>
     <input type="text" disabled value="<%= "$%.2f" % @order.total_cost %>" />
     <label>Paid for by</label>
-    <input type="text" name="paid_for_by" value="<%= @order.paid_for_by %>" />
+    <input type="text" <% unless @user.can_edit? %>disabled <% end %>name="paid_for_by"
+        value="<%= @order.paid_for_by %>" />
     <label>Date ordered</label>
-    <input type="text" class="datepicker" data-date-format="yyyy-mm-dd" name="ordered_at"
+    <input type="text" <% unless @user.can_edit? %>disabled <% end %>class="datepicker"
+        data-date-format="yyyy-mm-dd" name="ordered_at"
         value="<%= @order.ordered_at.strftime("%F") rescue "" %>"/>
     <label>Notes</label>
-     <textarea name="notes" rows="3"><%= @order.notes %></textarea>
-    <label><input type="submit" class="btn btn-primary btn-medium" value="Save" /></label>
+      <textarea name="notes" <% unless @user.can_edit? %>disabled <% end %>
+          rows="3"><%= @order.notes %></textarea>
+    <% if @user.can_edit? %>
+      <label><input type="submit" class="btn btn-primary btn-medium" value="Save" /></label>
+    <% end %>
   </form>
 </div>
 

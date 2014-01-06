@@ -8,7 +8,9 @@
       <th>Unit Cost</th>
       <th>Total Cost</th>
       <th>Notes</th>
-      <th>Action</th>
+      <% if @user.can_edit? %>
+        <th>Action</th>
+      <% end %>
     </tr>
     <% order_items.each do |item| %>
       <tr id="order-item-<%= item.id %>">
@@ -19,15 +21,17 @@
         <td><%= "$%.2f" % item.unit_cost %></td>
         <td><%= "$%.2f" % item.total_cost %></td>
         <td><%= item.notes %></td>
-        <td>
-          <a class="btn btn-primary btn-small" onclick="editOrderItem(<%= @project.id %>, <%= item.id %>);">
-            <i class="icon-white icon-pencil"></i>
-          </a>
-          <a href="/projects/<%= @project.id %>/order_items/<%= item.id %>/delete"
-              class="btn btn-danger btn-small">
-            <i class="icon-white icon-trash"></i>
-          </a>
-        </td>
+        <% if @user.can_edit? %>
+          <td>
+            <a class="btn btn-primary btn-small" onclick="editOrderItem(<%= @project.id %>, <%= item.id %>);">
+              <i class="icon-white icon-pencil"></i>
+            </a>
+            <a href="/projects/<%= @project.id %>/order_items/<%= item.id %>/delete"
+                class="btn btn-danger btn-small">
+              <i class="icon-white icon-trash"></i>
+            </a>
+          </td>
+        <% end %>
       </tr>
     <% end %>
   </table>

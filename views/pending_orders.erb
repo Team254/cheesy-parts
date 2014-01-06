@@ -1,15 +1,17 @@
 <%= erb :header %>
 
 <div class="container">
-  <% if @show_new_item_form %>
-    <h2>New item</h2>
-    <%= erb :new_order_item %>
-  <% else %>
-    <div class="pull-right" style="margin-top: 15px;">
-      <a href="?new_item=true" class="btn btn-success btn-small">
-        <i class="icon-white icon-user"></i> New Item
-      </a>
-    </div>
+  <% if @user.can_edit? %>
+    <% if @show_new_item_form %>
+      <h2>New item</h2>
+      <%= erb :new_order_item %>
+    <% else %>
+      <div class="pull-right" style="margin-top: 15px;">
+        <a href="?new_item=true" class="btn btn-success btn-small">
+          <i class="icon-white icon-user"></i> New Item
+        </a>
+      </div>
+    <% end %>
   <% end %>
   <% unless @no_vendor_order_items.empty? %>
     <h2>Unclassified items</h2>
