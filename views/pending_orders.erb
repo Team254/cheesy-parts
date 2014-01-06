@@ -18,7 +18,7 @@
   <% @vendor_orders.each do |order| %>
     <a href="/projects/<%= @project.id %>/orders/<%= order.id %>" style="color: black;"><h2>
       <%= order.vendor_name %>
-      <%= order.ordered_at.strftime("%D") rescue "" %>
+      <%= order.ordered_at.strftime("%F") rescue "" %>
       <span class="label label-status-<%= order.status %>"><%= Order::STATUS_MAP[order.status] %></span>
     </h2></a>
     <%= erb :order_items_list, :locals => { :order_items => order.order_items } %>

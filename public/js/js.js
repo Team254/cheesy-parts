@@ -60,4 +60,5 @@ function editOrderItem(projectId, orderItemId) {
 
 $(function() {
   vendorAutoComplete("#vendor");
+  $(".datepicker").datepicker();
 });
