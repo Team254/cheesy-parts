@@ -1,15 +1,21 @@
 <td>
   <input type="hidden" name="referrer" value="<%= request.referrer %>" />
   <input type="hidden" name="order_item_id" value="<%= @item.id %>" />
-  <input type="text" name="vendor" id="edit-vendor" value="<%= @item.order.vendor_name rescue "" %>"
-      style="width: 200px" />
+  <input type="text" name="vendor" id="edit-vendor"
+      value="<%= CGI.escapeHTML(@item.order.vendor_name) rescue "" %>" style="width: 200px" />
 </td>
 <td><input type="text" name="quantity" value="<%= @item.quantity %>" style="width: 30px" /></td>
-<td><input type="text" name="part_number" value="<%= @item.part_number %>" style="width: 100px" /></td>
-<td><input type="text" name="description" value="<%= @item.description %>" style="width: 200px" /></td>
+<td>
+  <input type="text" name="part_number" value="<%= CGI.escapeHTML(@item.part_number) %>"
+      style="width: 100px" />
+</td>
+<td>
+  <input type="text" name="description" value="<%= CGI.escapeHTML(@item.description) %>"
+      style="width: 200px" />
+</td>
 <td><input type="text" name="unit_cost" value="<%= "$%.2f" % @item.unit_cost %>" style="width: 80px" /></td>
 <td>&nbsp;</td>
-<td><input type="text" name="notes" value="<%= @item.notes %>" style="width: 200px" /></td>
+<td><input type="text" name="notes" value="<%= CGI.escapeHTML(@item.notes) %>" style="width: 200px" /></td>
 <td>
   <input type="submit" class="btn btn-primary btn-small" value="Save" />
   <a href="<%= request.referrer %>" class="btn btn-danger btn-small"><i class="icon-white icon-trash"></i></a>

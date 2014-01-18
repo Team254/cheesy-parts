@@ -4,6 +4,7 @@
 # The main class of the parts management web server.
 
 require "active_support/time"
+require "cgi"
 require "dedent"
 require "eventmachine"
 require "json"
