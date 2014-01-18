@@ -1,7 +1,7 @@
 <%= erb :header %>
 
 <div class="container">
-  <h2>Completed Order Statistics</h2>
+  <h2>Orders by Vendor</h2>
   <table class="table table-striped table-condensed table-bordered">
     <tr>
       <th>Vendor</th>
@@ -29,6 +29,24 @@
         <th><%= "$%.2f" % @orders.inject(0) { |sum, order| sum + order.tax_cost.to_f } %></th>
         <th><%= "$%.2f" % @orders.inject(0) { |sum, order| sum + order.shipping_cost.to_f } %></th>
     </tr>
+  </table>
+
+  <h2>Orders by Purchaser</h2>
+  <table class="table table-striped table-condensed table-bordered">
+    <tr>
+      <th>Purchaser</th>
+      <th>Amount Reimbursed</th>
+      <th>Amount Outstanding</th>
+      <th>Total Spent</th>
+    </tr>
+    <% @orders_by_purchaser.each_pair do |purchaser, stats| %>
+      <tr>
+        <td><%= purchaser %></td>
+        <td><%= "$%.2f" % stats[:reimbursed] %></td>
+        <td><%= "$%.2f" % stats[:outstanding] %></td>
+        <td><%= "$%.2f" % (stats[:reimbursed] + stats[:outstanding]) %></td>
+      </tr>
+    <% end %>
   </table>
 </div>
 

@@ -28,6 +28,11 @@
     <label>Paid for by</label>
     <input type="text" <% unless @user.can_edit? %>disabled <% end %>name="paid_for_by"
         value="<%= @order.paid_for_by %>" />
+    <label>
+      Reimbursed?
+      <input type="checkbox" <% unless @user.can_edit? %>disabled <% end %>name="reimbursed"
+          <% if @order.reimbursed == 1 %>checked<% end %>/>
+    </label>
     <label>Date ordered</label>
     <input type="text" <% unless @user.can_edit? %>disabled <% end %>class="datepicker"
         data-date-format="yyyy-mm-dd" name="ordered_at"

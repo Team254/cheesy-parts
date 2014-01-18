@@ -440,6 +440,19 @@ module CheesyParts
         map[order.vendor_name] << order
         map
       end
+
+      @orders_by_purchaser = @orders.inject({}) do |map, order|
+        map[order.paid_for_by] ||= {}
+        map[order.paid_for_by][:reimbursed] ||= 0
+        map[order.paid_for_by][:outstanding] ||= 0
+        if order.reimbursed == 1
+          map[order.paid_for_by][:reimbursed] += order.total_cost
+        else
+          map[order.paid_for_by][:outstanding] += order.total_cost
+        end
+        map
+      end
+
       erb :order_stats
     end
 
@@ -526,10 +539,10 @@ module CheesyParts
 
       @order = Order[params[:order_id]]
       halt(400, "Invalid order.") if @order.nil?
-
       @order.update(:status => params[:status], :ordered_at => params[:ordered_at],
                     :paid_for_by => params[:paid_for_by], :tax_cost => params[:tax_cost].gsub(/\$/, ""),
-                    :shipping_cost => params[:shipping_cost].gsub(/\$/, ""), :notes => params[:notes])
+                    :shipping_cost => params[:shipping_cost].gsub(/\$/, ""), :notes => params[:notes],
+                    :reimbursed => params[:reimbursed] ? 1 : 0)
       redirect "/projects/#{@project.id}/orders/#{@order.id}"
     end
   end
