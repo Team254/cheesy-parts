@@ -474,7 +474,7 @@ module CheesyParts
       OrderItem.create(:project => @project, :order_id => order_id, :quantity => params[:quantity].to_i,
                        :part_number => params[:part_number], :description => params[:description],
                        :unit_cost => params[:unit_cost].to_f, :notes => params[:notes])
-      redirect "/projects/#{@project.id}/orders/pending"
+      redirect "/projects/#{@project.id}/orders/open"
     end
 
     get "/projects/:project_id/order_items/:id/editable" do
