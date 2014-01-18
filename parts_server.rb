@@ -416,11 +416,16 @@ module CheesyParts
       erb :orders_project_list
     end
 
-    get "/projects/:id/orders/pending" do
+    get "/projects/:id/orders/open" do
       @no_vendor_order_items = OrderItem.where(:order_id => nil, :project_id => params[:id])
-      @vendor_orders = Order.filter(:status => "received").invert.where(:project_id => params[:id])
+      @vendor_orders = Order.filter(:status => "open").where(:project_id => params[:id])
       @show_new_item_form = params[:new_item] == "true"
-      erb :pending_orders
+      erb :open_orders
+    end
+
+    get "/projects/:id/orders/ordered" do
+      @vendor_orders = Order.filter(:status => "ordered").where(:project_id => params[:id])
+      erb :completed_orders
     end
 
     get "/projects/:id/orders/complete" do

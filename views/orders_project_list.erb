@@ -9,7 +9,10 @@
   <div class="well">
   <% Project.reject { |project| project.hide_dashboards == 1 }.each do |project| %>
     <li><h4>
-      <a href="/projects/<%= project.id %>/orders/pending"><%= project.name %> &ndash; Pending orders</a>
+      <a href="/projects/<%= project.id %>/orders/open"><%= project.name %> &ndash; Open orders</a>
+    </h4></li>
+    <li><h4>
+      <a href="/projects/<%= project.id %>/orders/ordered"><%= project.name %> &ndash; Ordered orders</a>
     </h4></li>
     <li><h4>
       <a href="/projects/<%= project.id %>/orders/complete"><%= project.name %> &ndash; Completed orders</a>
