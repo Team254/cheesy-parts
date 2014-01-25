@@ -41,7 +41,7 @@
     </tr>
     <% @orders_by_purchaser.each_pair do |purchaser, stats| %>
       <tr>
-        <td><%= purchaser %></td>
+        <td><%= purchaser.empty? ? "<i>Unspecified</i>" : purchaser %></td>
         <td><%= "$%.2f" % stats[:reimbursed] %></td>
         <td><%= "$%.2f" % stats[:outstanding] %></td>
         <td><%= "$%.2f" % (stats[:reimbursed] + stats[:outstanding]) %></td>
