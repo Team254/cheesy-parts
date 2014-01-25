@@ -41,7 +41,11 @@
       <textarea name="notes" <% unless @user.can_edit? %>disabled <% end %>
           rows="3"><%= @order.notes %></textarea>
     <% if @user.can_edit? %>
-      <label><input type="submit" class="btn btn-primary btn-medium" value="Save" /></label>
+      <br />
+      <input type="submit" class="btn btn-primary btn-medium" value="Save" />
+      <a href="/projects/<%= @project.id %>/orders/<%= @order.id %>/delete" class="btn btn-danger btn-medium">
+        Delete
+      </a>
     <% end %>
   </form>
 </div>

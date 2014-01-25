@@ -545,5 +545,24 @@ module CheesyParts
                     :reimbursed => params[:reimbursed] ? 1 : 0)
       redirect "/projects/#{@project.id}/orders/#{@order.id}"
     end
+
+    get "/projects/:id/orders/:order_id/delete" do
+      require_permission(@user.can_edit?)
+
+      @order = Order[params[:order_id]]
+      halt(400, "Invalid order.") if @order.nil?
+      halt(400, "Can't delete a non-empty order.") unless @order.order_items.empty?
+      erb :order_delete
+    end
+
+    post "/projects/:id/orders/:order_id/delete" do
+      require_permission(@user.can_edit?)
+
+      @order = Order[params[:order_id]]
+      halt(400, "Invalid order.") if @order.nil?
+      halt(400, "Can't delete a non-empty order.") unless @order.order_items.empty?
+      @order.delete
+      redirect "/orders"
+    end
   end
 end
