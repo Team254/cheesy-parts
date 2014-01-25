@@ -38,5 +38,21 @@
         <% end %>
       </tr>
     <% end %>
+    <% if order %>
+      <tr>
+        <th colspan="2">Purchaser</th>
+        <th>Subtotal</th>
+        <th>Tax</th>
+        <th>Shipping</th>
+        <th colspan="3">Total</th>
+      </tr>
+      <tr>
+        <td colspan="2"><%= order.paid_for_by %></td>
+        <td><%= "$%.2f" % order.subtotal %></td>
+        <td><%= "$%.2f" % order.tax_cost.to_f %></td>
+        <td><%= "$%.2f" % order.shipping_cost.to_f %></td>
+        <td colspan="3"><%= "$%.2f" % order.total_cost %></td>
+      </tr>
+    <% end %>
   </table>
 </form>

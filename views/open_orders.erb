@@ -15,7 +15,7 @@
   <% end %>
   <% unless @no_vendor_order_items.empty? %>
     <h2>Unclassified items</h2>
-    <%= erb :order_items_list, :locals => { :order_items => @no_vendor_order_items } %>
+    <%= erb :order_items_list, :locals => { :order_items => @no_vendor_order_items, :order => nil } %>
   <% end %>
   <% @vendor_orders.each do |order| %>
     <a href="/projects/<%= @project.id %>/orders/<%= order.id %>" style="color: black;"><h2>
@@ -23,7 +23,7 @@
       <%= order.ordered_at.strftime("%F") rescue "" %>
       <span class="label label-status-<%= order.status %>"><%= Order::STATUS_MAP[order.status] %></span>
     </h2></a>
-    <%= erb :order_items_list, :locals => { :order_items => order.order_items } %>
+    <%= erb :order_items_list, :locals => { :order_items => order.order_items, :order => order } %>
   <% end %>
 </div>
 

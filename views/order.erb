@@ -5,7 +5,7 @@
     <%= @order.vendor_name %>
     <%= @order.ordered_at.strftime("%F") rescue "" %>
   </h2>
-  <%= erb :order_items_list, :locals => { :order_items => @order.order_items } %>
+  <%= erb :order_items_list, :locals => { :order_items => @order.order_items, :order => nil } %>
   <form action="/projects/<%= @project.id %>/orders/<%= @order.id %>/edit" method="POST">
     <label>Status</label>
     <select name="status" <% unless @user.can_edit? %>disabled <% end %>>
