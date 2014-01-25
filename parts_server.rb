@@ -418,18 +418,30 @@ module CheesyParts
 
     get "/projects/:id/orders/open" do
       @no_vendor_order_items = OrderItem.where(:order_id => nil, :project_id => params[:id])
-      @vendor_orders = Order.filter(:status => "open").where(:project_id => params[:id])
+      @vendor_orders = Order.filter(:status => "open").where(:project_id => params[:id]).
+          order(:vendor_name, :ordered_at)
       @show_new_item_form = params[:new_item] == "true"
       erb :open_orders
     end
 
     get "/projects/:id/orders/ordered" do
-      @vendor_orders = Order.filter(:status => "ordered").where(:project_id => params[:id])
+      @vendor_orders = Order.filter(:status => "ordered").where(:project_id => params[:id]).
+          order(:vendor_name, :ordered_at)
       erb :completed_orders
     end
 
     get "/projects/:id/orders/complete" do
-      @vendor_orders = Order.filter(:status => "received").where(:project_id => params[:id])
+      @vendor_orders = Order.filter(:status => "received").where(:project_id => params[:id]).
+          order(:vendor_name, :ordered_at)
+      erb :completed_orders
+    end
+
+    get "/projects/:id/orders/all" do
+      @vendor_orders = Order.where(:project_id => params[:id]).order(:vendor_name, :ordered_at)
+      if params[:filter]
+        key, value = params[:filter].split(":")
+        @vendor_orders = @vendor_orders.filter(key.to_sym => value)
+      end
       erb :completed_orders
     end
 

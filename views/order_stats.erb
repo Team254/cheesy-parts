@@ -13,7 +13,12 @@
     </tr>
     <% @orders_by_vendor.each_pair do |vendor, orders| %>
       <tr>
-        <td><%= vendor %></td>
+        <td>
+          <a href="/projects/<%= @project.id %>/orders/all?filter=vendor_name:<%= vendor %>"
+              style="color: black;">
+            <%= vendor %>
+          </a>
+        </td>
         <td><%= orders.size %></td>
         <td><%= orders.inject(0) { |sum, order| sum + order.order_items.size } %></td>
         <td><%= "$%.2f" % orders.inject(0) { |sum, order| sum + order.total_cost } %></td>
@@ -41,7 +46,12 @@
     </tr>
     <% @orders_by_purchaser.each_pair do |purchaser, stats| %>
       <tr>
-        <td><%= purchaser.empty? ? "<i>Unspecified</i>" : purchaser %></td>
+        <td>
+          <a href="/projects/<%= @project.id %>/orders/all?filter=paid_for_by:<%= purchaser %>"
+              style="color: black;">
+            <%= purchaser.empty? ? "<i>Unspecified</i>" : purchaser %>
+          </a>
+        </td>
         <td><%= "$%.2f" % stats[:reimbursed] %></td>
         <td><%= "$%.2f" % stats[:outstanding] %></td>
         <td><%= "$%.2f" % (stats[:reimbursed] + stats[:outstanding]) %></td>
