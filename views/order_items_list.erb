@@ -14,7 +14,11 @@
     </tr>
     <% order_items.each do |item| %>
       <tr id="order-item-<%= item.id %>">
-        <td><%= item.order.vendor_name rescue "" %></td>
+        <td>
+          <a href="/projects/<%= @project.id %>/orders/stats" style="color: black;">
+            <%= item.order.vendor_name rescue "" %>
+          </a>
+        </td>
         <td><%= item.quantity %></td>
         <td><%= item.part_number %></td>
         <td><%= item.description %></td>
