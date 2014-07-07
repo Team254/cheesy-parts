@@ -25,7 +25,7 @@ set :app, "cheesy-parts"
 set :deploy_to, "/opt/team254/#{app}"
 set :release_path, "#{deploy_to}/releases/#{Time.now.strftime("%Y%m%d%H%M")}"
 set :local_path, Dir.pwd
-set :user, "ubuntu"
+set :user, "team254"
 
 Fezzik.destination :prod do
   # Fill in parameters for deployment host, database and e-mail account here.
