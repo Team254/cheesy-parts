@@ -20,7 +20,7 @@ module CheesyParts
   class Server < Sinatra::Base
     include WordpressAuthentication
 
-    set :sessions => true
+    use Rack::Session::Cookie, :key => "rack.session"
 
     # Enforce authentication for all routes except login and user registration.
     before do
