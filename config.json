@@ -1,0 +1,19 @@
+{
+  "global": {
+    "db_host": "localhost",
+    "db_user": "team254",
+    "db_database": "cheesy_parts",
+    "port": 9000,
+    "base_address": "https://parts.team254.com",
+    "gmail_user": "cheesyparts@gmail.com",
+    "enable_wordpress_auth": true
+    },
+  "dev": {
+    "db_password": "correcthorsebatterystaple",
+    "gmail_password": "correcthorsebatterystaple"
+  },
+  "prod": {
+    "db_password": "Encrypted:0iYLP6HuJ7qY1/BtUYAQ+Q==\n",
+    "gmail_password": "Encrypted:0iYLP6HuJ7qY1/BtUYAQ+Q==\n"
+  }
+}

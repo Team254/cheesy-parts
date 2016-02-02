@@ -1,6 +1,6 @@
 require "pathological"
 
-require "models/user"
+require_relative "../../models/user"
 
 Sequel.migration do
   up do

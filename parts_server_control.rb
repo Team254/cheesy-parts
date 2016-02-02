@@ -11,5 +11,5 @@ require "thin"
 Daemons.run_proc("parts_server", :monitor => true) do
   require "parts_server"
 
-  Thin::Server.start("0.0.0.0", PORT, CheesyParts::Server)
+  Thin::Server.start("0.0.0.0", Config.port, CheesyParts::Server)
 end

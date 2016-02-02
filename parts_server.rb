@@ -12,7 +12,7 @@ require "pathological"
 require "pony"
 require "sinatra/base"
 
-require "config/environment"
+require "config"
 require "models"
 require "wordpress_authentication"
 
@@ -44,11 +44,11 @@ module CheesyParts
     def send_email(to, subject, body)
       # Run this asynchronously using EventMachine since it takes a couple of seconds.
       EM.defer do
-        Pony.mail(:from => "Cheesy Parts <#{GMAIL_USER}>", :to => to,
+        Pony.mail(:from => "Cheesy Parts <#{Config.gmail_user}>", :to => to,
                   :subject => subject, :body => body, :via => :smtp,
                   :via_options => { :address => "smtp.gmail.com", :port => "587",
-                                    :enable_starttls_auto => true, :user_name => GMAIL_USER.split("@").first,
-                                    :password => GMAIL_PASSWORD, :authentication => :plain,
+                                    :enable_starttls_auto => true, :user_name => Config.gmail_user.split("@").first,
+                                    :password => Config.gmail_password, :authentication => :plain,
                                     :domain => "localhost.localdomain" })
       end
     end
@@ -61,7 +61,7 @@ module CheesyParts
       redirect "/logout" if @user
       @redirect = params[:redirect] || "/"
 
-      unless WORDPRESS_AUTH_URL.empty?
+      if Config.enable_wordpress_auth?
         # Try authenticating against Wordpress.
         wordpress_user_info = get_wordpress_user_info
         if wordpress_user_info
@@ -97,7 +97,7 @@ module CheesyParts
 
     get "/logout" do
       session[:user_id] = nil
-      redirect LOGOUT_URL
+      redirect "/login"
     end
 
     get "/new_project" do
@@ -408,7 +408,7 @@ module CheesyParts
 
         The Cheesy Parts Robot
       EOS
-      send_email(GMAIL_USER, "Approval needed for #{user.email}", email_body)
+      send_email(Config.gmail_user, "Approval needed for #{user.email}", email_body)
       erb :register_confirmation
     end
 

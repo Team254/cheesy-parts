@@ -5,11 +5,13 @@ require "httparty"
 require "pathological"
 require "json"
 
-require "config/environment"
+require "config"
 
 module CheesyParts
   # Helper mixin for third-party authentication using Wordpress.
   module WordpressAuthentication
+    WORDPRESS_AUTH_URL = "http://www.team254.com/auth/"
+
     def wordpress_cookie
       request.cookies[request.cookies.keys.select { |key| key =~ /wordpress_logged_in_[0-9a-f]{32}/ }.first]
     end
