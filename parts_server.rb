@@ -61,7 +61,7 @@ module CheesyParts
       redirect "/logout" if @user
       @redirect = params[:redirect] || "/"
 
-      if Config.enable_wordpress_auth?
+      if Config.enable_wordpress_auth
         # Try authenticating against Wordpress.
         wordpress_user_info = get_wordpress_user_info
         if wordpress_user_info
