@@ -10,10 +10,12 @@
     },
   "dev": {
     "db_password": "correcthorsebatterystaple",
-    "gmail_password": "correcthorsebatterystaple"
+    "gmail_password": "correcthorsebatterystaple",
+    "members_url": "http://members.team254.dev:8081"
   },
   "prod": {
     "db_password": "Encrypted:0iYLP6HuJ7qY1/BtUYAQ+Q==\n",
-    "gmail_password": "Encrypted:0iYLP6HuJ7qY1/BtUYAQ+Q==\n"
+    "gmail_password": "Encrypted:0iYLP6HuJ7qY1/BtUYAQ+Q==\n",
+    "members_url": "https://members.team254.com"
   }
 }

@@ -3,7 +3,7 @@
 #
 # Sets up database connection.
 
-require_relative "config"
+require "cheesy-common"
 
-DB = Sequel.mysql2({ :host => Config.db_host, :user => Config.db_user, :password => Config.db_password,
-	:database => Config.db_database })
+DB = Sequel.mysql2({ :host => CheesyCommon::Config.db_host, :user => CheesyCommon::Config.db_user,
+	:password => CheesyCommon::Config.db_password, :database => CheesyCommon::Config.db_database })

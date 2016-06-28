@@ -4,8 +4,8 @@
   <div class="row">
     <div class="span4 offset4 well">
       <legend>Please Sign In</legend>
-      <% unless WORDPRESS_AUTH_URL.empty? %>
-        <a href="http://www.team254.com/wp-login.php?redirect_to=<%= URI.encode("#{Config.base_address}#{@redirect}") %>"
+      <% if CheesyCommon::Config.enable_wordpress_auth %>
+        <a href="<%= CheesyCommon::Config.members_url %>?site=parts&path=<%= @redirect %>"
             class="btn btn-primary btn-block">
           Click here to sign in with your team254.com account
         </a>
