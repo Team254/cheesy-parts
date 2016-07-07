@@ -22,8 +22,8 @@ class Part < Sequel::Model
                  "scotchbrite" => "Waiting for Scotch-Brite",
                  "anodize" => "Ready for anodize",
                  "powder" => "Ready for powder coating",
-                 "laser" => "Waiting for laser cutting",
                  "coating" => "Waiting for coating",
+                 "laser" => "Waiting for laser cutting",
                  "assembly" => "Waiting for assembly",
                  "obsolete" => "Obsolete",
                  "done" => "Done" }
