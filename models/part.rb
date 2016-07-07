@@ -23,7 +23,9 @@ class Part < Sequel::Model
                  "anodize" => "Ready for anodize",
                  "powder" => "Ready for powder coating",
                  "coating" => "Waiting for coating",
+                 "coating" => "Waiting for coating",
                  "assembly" => "Waiting for assembly",
+                 "obsolete" => "Obsolete",
                  "done" => "Done" }
 
   # Mapping of priority integer stored in database to what is displayed to the user.
