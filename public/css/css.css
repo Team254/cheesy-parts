@@ -40,8 +40,14 @@ label {
 .label-status-coating {
   background-color: brown;
 }
+.label-status-laser {
+  background-color: red;
+}
 .label-status-assembly {
   background-color: #666;
+}
+.label-status-obsolete {
+  background-color: #fff;
 }
 .label-status-done {
   background-color: #3d6;
