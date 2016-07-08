@@ -17,6 +17,7 @@
       </option>
       <% end %>
     </select>
+    <input type="text" name="creator" disabled value="<%= @user.first_name %> <%= @user.last_name %>" />
     <label>
       <input type="submit" class="btn btn-success btn-medium" value="Create <%= @type.capitalize %>">
     </label>
