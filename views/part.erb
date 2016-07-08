@@ -46,6 +46,8 @@
     <tr><td><b>Quantity required</b></td><td><%= @part.quantity %></td></tr>
     <tr><td><b>Drawing created?</b></td><td><%= (@part.drawing_created == 1) ? "Yes" : "No" %></td></tr>
     <tr><td><b>Priority</b></td><td><%= Part::PRIORITY_MAP[@part.priority] %></td></tr>
+    <tr><td><b>Created by</b></td><td><%= @part.creator %></td></tr>
+
   </table>
   <% if @user.can_edit? %>
     <div class="pull-right" style="margin-top: -40px;">
