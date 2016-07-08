@@ -1,5 +1,6 @@
 <table  class="table table-striped table-bordered">
-  <% statuses = @status.nil? ? Part::STATUS_MAP.keys.reject { |k| k == "done" } : [@status] %>
+  <% statuses = @status.nil? ? Part::STATUS_MAP.keys: [@status] %>
+  <% statuses = Part::STATUS_MAP.keys.reject { |k| k == "done" } if @status == "progress" %>
   <% statuses.each do |status| %>
     <% parts = Part.where(:project_id => @project.id, :status => status).order_append(:priority) %>
     <% next if parts.empty? && statuses.size > 1 %>
