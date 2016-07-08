@@ -216,6 +216,7 @@ module CheesyParts
       part.cut_length = ""
       part.priority = 1
       part.drawing_created = 0
+      part.creator = params[:creator].gsub("\"","&quot;")
       part.save
       redirect "/parts/#{part.id}"
     end
