@@ -4,6 +4,8 @@
   <select class="pull-right" name="status" style="margin-top: 15px;"
       onchange="changeDashboardFilter(<%= @project.id %>, this.value);">
     <option value="all" selected>Filter by status...</option>
+    <option value="progress" selected>Parts in progress</option>
+    <option value="all" selected>All parts</option>
     <% Part::STATUS_MAP.each_pair do |key, value| %>
     <option value="<%= key %>"><%= value %></option>
     <% end %>
