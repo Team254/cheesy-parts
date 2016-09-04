@@ -20,9 +20,9 @@ Prerequisites:
 To run Cheesy Parts locally:
 
 1. Create an empty MySQL database and a user account with full permissions on it.
-1. Populate `config/environment.rb` with the parameters for the development environment. This file is
-overwritten on deploy with the parameters in the Rakefile, so it's okay to set the development values in it
-and then forget about it.
+1. Populate `config.json` with the parameters for the development and production environments. Set
+`enable_wordpress_auth` to false and `members_url` to blank; they are used for a single sign-on (SSO)
+mechanism specific to Team 254.
 1. Run `bundle install`. This will download and install the gems that Cheesy Parts depends on.
 1. Run `bundle exec rake db:migrate`. This will run the database migrations to create the necessary tables in
 MySQL.
@@ -35,16 +35,18 @@ delete this account after having created your own admin account.
 
 ## Deployment
 
-The Cheesy Parts codebase includes [Fezzik](https://github.com/dmacdougall/fezzik) scripts for deploying to
-a remote server via SSH. To deploy:
+Cheesy Parts deploys by checking out from Git on the production server. If you don't plan on making any
+changes, you can simply put a copy of the code on your server and edit the config in place. If you do plan on
+making periodic changes to the code, you can follow this procedure:
 
-1. Set up the remote server with the same prerequisites and procedure as for development.
-1. Set up the remote server for password-less (public-key) login.
-1. Fill in the hostname, database credentials and other parameters in the Rakefile.
-1. Run `bundle exec fez prod deploy`.
+1. Fork cheesy-parts on Github, make your initial code/config changes, and commit them.
+1. On the production server, clone your fork and start it up the first time.
+1. Fill in your server-specific information in the `deploy` script.
+1. Make any incremental changes in your development machine, test them locally, commit and push them, then run
+the `deploy` script.
 
-This last command will create the remote directory structure, copy the code over, install the necessary gems,
-run the database migrations, and start the server on the port specified in the Rakefile.
+The deploy script uses SSH to log into the production server, discard any local changes in the checked-out
+version of Cheesy Parts, pull from the origin, and restart the server.
 
 ## Contributing
 
