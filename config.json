@@ -6,16 +6,20 @@
     "port": 9000,
     "base_address": "https://parts.team254.com",
     "gmail_user": "cheesyparts@gmail.com",
-    "enable_wordpress_auth": true
+    "onshape": true,
+    "onshape_key": "4xUG0lvwhzXVBdFYNt0TzYnh",
+    "onshape_secret": "Encrypted:K4ZudLRWAbo1AT9yrM5xlh1tz6lrEAQefQvHhWW07vJlAEp1/IX7CkNh1vCAp45kfAgDy1tUneFP066+dZJzaA==\n"
     },
   "dev": {
     "db_password": "correcthorsebatterystaple",
     "gmail_password": "correcthorsebatterystaple",
-    "members_url": "http://members.team254.dev:8081"
+    "members_url": "http://members.team254.dev:8081",
+    "enable_wordpress_auth": false
   },
   "prod": {
     "db_password": "Encrypted:0iYLP6HuJ7qY1/BtUYAQ+Q==\n",
     "gmail_password": "Encrypted:0iYLP6HuJ7qY1/BtUYAQ+Q==\n",
-    "members_url": "https://members.team254.com"
+    "members_url": "https://members.team254.com",
+    "enable_wordpress_auth": true
   }
 }
