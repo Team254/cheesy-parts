@@ -6,10 +6,14 @@ require "openssl"
 require "Base64"
 require "uri"
 require "net/https"
+require "json"
 
-require "cheesy-common"
+require "sequel"
+require "./db"
+require "./models/project"
 
-def onshape_request(method, path, query='')
+def onshape_request(path, query='')
+  method = 'get'
   base = "https://cad.onshape.com"
   access = CheesyCommon::Config.onshape_key
   secret = CheesyCommon::Config.onshape_secret
@@ -28,12 +32,7 @@ def onshape_request(method, path, query='')
   http.use_ssl = true
   http.verify_mode = OpenSSL::SSL::VERIFY_NONE
 
-  if method == 'get'
-    req = Net::HTTP::Get.new(uri.request_uri)
-  else
-    raise "Method not supported"
-  end
-
+  req = Net::HTTP::Get.new(uri.request_uri)
   req.add_field('Date', date)
   req.add_field('Accept', contenttype)
   req.add_field('Content-Type', contenttype)
@@ -42,10 +41,70 @@ def onshape_request(method, path, query='')
   req.add_field('Authorization', authkey)
 
   response = http.request(req)
+  JSON.parse(response.body)
+end
 
-  if response.code == 200
-    return response.body
-  else
-    print response.body
+def onshape_mainworkspace(document)
+  res = onshape_request('/api/documents/d/'+document+'/workspaces')
+  for x in res
+    if x["name"] == 'Main'
+      return x['id']
+    end
+  end
+end
+
+def onshape_getchildren(assydef)
+  res = {}
+  for x in assydef["rootAssembly"]["instances"]
+    obj = {}
+    obj["name"] = x["name"]
+    obj["type"] = x["type"]
+    obj["documentId"] = x["documentId"]
+    obj["elementId"] = x["elementId"]
+    obj["quantity"] = 1
+
+    uid = x["elementId"]
+    if x.key?("partId")
+      uid = uid + x["partId"]
+      obj["partId"] = x["partId"]
+    end
+
+    # Bump quantity if already in tree
+    if res.key?(uid)
+      res[uid]["quantity"] += 1
+
+    # Otherwise add to tree
+    else
+      unless x.key?("partId")
+        workspace = onshape_mainworkspace(x["documentId"])
+        assydef2 = onshape_request('/api/assemblies/d/'+x["documentId"]+'/w/'+workspace+'/e/'+x["elementId"])
+        obj["children"] = onshape_getchildren(assydef2)
+      end
+      res[uid] = obj
+    end
+
+  end
+  return res
+end
+
+def onshape_assemblytree(project)
+  document = project.onshape_top_document
+  element = project.onshape_top_element
+  workspace = onshape_mainworkspace(document)
+
+  assydef = onshape_request("/api/assemblies/d/"+document+"/w/"+workspace+"/e/"+element)
+  tree = {}
+  tree["type"] = "Assembly"
+  tree["documentId"] = document
+  tree["elementId"] = element
+  tree["workspaceId"] = workspace
+  tree["children"] = onshape_getchildren(assydef)
+
+  print tree.to_json
+end
+
+for project in Project.all
+  unless project.onshape_top_document.to_s.strip.empty?
+    onshape_assemblytree(project)
   end
 end
