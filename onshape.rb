@@ -6,7 +6,7 @@ require "uri"
 require "net/https"
 require "json"
 
-def onshape_request(path, query='')
+def onshape_request(path, query='', json=true)
   method = 'get'
   base = "https://cad.onshape.com"
   access = CheesyCommon::Config.onshape_key
@@ -35,8 +35,12 @@ def onshape_request(path, query='')
   req.add_field('Authorization', authkey)
 
   response = http.request(req)
-  raise "Onshape API Error" unless response.code.to_i == 200
-  JSON.parse(response.body)
+  if json == true
+    raise "Onshape API Error" unless response.code.to_i == 200
+    JSON.parse(response.body)
+  else
+    response.body
+  end
 end
 
 def onshape_mainworkspace(document)

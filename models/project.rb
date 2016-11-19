@@ -25,6 +25,8 @@ class Project < Sequel::Model
   end
 
   def onshape_update_tree()
+    raise "Not an Onshape Assembly" unless self[:onshape_top_document]
+
     DB.transaction do
 
     # Delete Non-CP Parts
@@ -50,7 +52,6 @@ class Project < Sequel::Model
       self[:onshape_top_document],
       self[:onshape_top_element],
       onshape_mainworkspace(self[:onshape_top_document]))
-
     end
   end
 

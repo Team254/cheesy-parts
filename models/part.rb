@@ -51,38 +51,50 @@ class Part < Sequel::Model
 
   def partname_to_number(pn)
     prefix = self.project[:part_number_prefix]
-    pn.sub(/#{Regexp.quote(prefix)}-(P|A|p|a)-/, '').to_i   
+    if pn =~ /#{Regexp.quote(prefix)}-(P|A|p|a)-/
+      return pn.sub(/#{Regexp.quote(prefix)}-(P|A|p|a)-/, '').to_i
+    else
+      return -1
+    end
   end
 
-  def update_onshape_assy(project, document, element, workspace)
+  def update_onshape_assy(project, document, element, workspace, cp_part=true)
     # Save Onshape Tags
     self[:onshape_document]  = document
     self[:onshape_element]   = element
     self[:onshape_workspace] = workspace
     self.save
 
-    # Crawl Assembly Definition
-    assy_def = onshape_request("/api/assemblies/d/"+document+"/w/"+workspace+"/e/"+element)
-    for item in assy_def["rootAssembly"]["instances"]
+    # If a CP Part, Crawl Assembly
+    if cp_part == true
+      assy_def = onshape_request("/api/assemblies/d/"+document+"/w/"+workspace+"/e/"+element)
+      for item in assy_def["rootAssembly"]["instances"]
 
-      # Lookup CP Parts
-      partname = onshape_partname(item)
-      part_number = partname_to_number(partname)
-      part = Part[:part_number => part_number, :project_id => project[:id]]
+        # Lookup CP Parts
+        partname = onshape_partname(item)
+        part_number = partname_to_number(partname)
+        part = Part[:part_number => part_number, :project_id => project[:id]]
 
-      # If Not a CP Part
-      if part.nil?
-        part = Part[:onshape_element => item["elementId"], :onshape_part => item["partId"], :parent_part_id => self.id]
+        print partname
+        puts part_number
+
+        # If Not a CP Part
         if part.nil?
-          part = Part.create(:project_id => project[:id], :name => partname, :parent_part_id => self.id, :type => "unassigned")
+          part = Part[:onshape_element => item["elementId"], :onshape_part => item["partId"], :parent_part_id => self.id]
+          if part.nil?
+            part = Part.create(:project_id => project[:id], :name => partname, :parent_part_id => self.id, :type => "unassigned")
+          end
+          part.update_onshape_part(item, false)
+
+        # If a CP Part
+        else
+          part.update_onshape_part(item, true)
         end
       end
-
-      part.update_onshape_part(item)
     end
   end
 
-  def update_onshape_part(part_def)
+  def update_onshape_part(part_def, cp_part)
     self[:quantity] = self[:quantity].to_i + 1
 
     if self[:quantity] == 1
@@ -97,7 +109,7 @@ class Part < Sequel::Model
       
       # Update Assy
       else
-        self.update_onshape_assy(project, part_def["documentId"], part_def["elementId"], onshape_mainworkspace(part_def["documentId"]))
+        self.update_onshape_assy(project, part_def["documentId"], part_def["elementId"], onshape_mainworkspace(part_def["documentId"]), cp_part)
       end
 
     end
@@ -105,12 +117,15 @@ class Part < Sequel::Model
   end
 
   def onshape_image
+    # Use Thumbnail for Assembly
     if self.onshape_part.nil?
-      res = onshape_request("/api/assemblies/d/"+self.onshape_document+"/w/"+self.onshape_workspace+"/e/"+self.onshape_element+"/shadedviews", "outputHeight=200&outputWidth=300&viewMatrix=0.612,0.612,0,0,-0.354,0.354,0.707,0,0.707,-0.707,0.707,0")
+      onshape_request("/api/thumbnails/d/"+self.onshape_document+"/w/"+self.onshape_workspace+"/e/"+self.onshape_element+"/s/300x300", "", false)
+
+    # Generate Shaded View for Part
     else
-      res = onshape_request("/api/parts/d/"+self.onshape_document+"/m/"+self.onshape_microversion+"/e/"+self.onshape_element+"/partid/"+self.onshape_part+"/shadedviews", "outputHeight=200&outputWidth=300&viewMatrix=0.612,0.612,0,0,-0.354,0.354,0.707,0,0.707,-0.707,0.707,0")
+      res = onshape_request("/api/parts/d/"+self.onshape_document+"/m/"+self.onshape_microversion+"/e/"+self.onshape_element+"/partid/"+self.onshape_part+"/shadedviews", "outputHeight=300&outputWidth=300&viewMatrix=1,1,0,0,-0.5,0.5,1,0,1,-1,1,0&pixelSize=0")
+      Base64.decode64(res["images"][0])
     end
-    Base64.decode64(res["images"][0])
   end
 
 end
