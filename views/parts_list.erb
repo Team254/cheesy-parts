@@ -2,6 +2,9 @@
   <tr>
     <th><a href="?sort=id">Part Number</a></th>
     <th><a href="?sort=type">Type</a></th>
+    <% if CheesyCommon::Config.onshape %>
+      <th><a href="?sort=onshape_qty">Qty</a></th>
+    <% end %>
     <th><a href="?sort=name">Name</a></th>
     <th><a href="?sort=parent_part_id">Parent</th>
     <th><a href="?sort=status">Status</th>
@@ -13,6 +16,9 @@
     <tr>
       <td><a href="/parts/<%= part.id %>"><%= part.full_part_number %></a></td>
       <td><%= part.type.capitalize %></td>
+      <% if CheesyCommon::Config.onshape %>
+        <td><%= part.onshape_qty %></td>
+      <% end %>
       <td><a href="/parts/<%= part.id %>"><%= part.name %></a></td>
       <td>
         <% if part.parent_part %>
@@ -28,6 +34,11 @@
           <a href="/parts/<%= part.id %>/delete" class="btn btn-danger btn-small">
             <i class="icon-white icon-trash"></i>
           </a>
+          <% if CheesyCommon::Config.onshape && part.onshape_workspace %>
+            <a href="https://cad.onshape.com/documents/<%= part.onshape_document %>/w/<%= part.onshape_workspace %>/e/<%= part.onshape_element %>" target="_blank" class="btn btn-info btn-small">
+              <i class="icon-white icon-share-alt"></i>
+            </a>
+          <% end %>
         </td>
       <% end %>
     </tr>

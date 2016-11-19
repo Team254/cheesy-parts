@@ -13,6 +13,7 @@ require "pony"
 require "sinatra/base"
 
 require "models"
+require "onshape"
 
 module CheesyParts
   class Server < Sinatra::Base
@@ -229,6 +230,11 @@ module CheesyParts
         @part_sort = :id
       end
       erb :part
+    end
+
+    get "/parts/:id/img" do
+      content_type 'image/png'
+      Part[params[:id]].onshape_image
     end
 
     get "/parts/:id/edit" do

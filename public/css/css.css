@@ -86,3 +86,15 @@ label {
 .table th a {
   color: black;
 }
+.onshape_image {
+  border: 1px solid black;
+  height: 200px;
+  overflow: hidden;
+}
+.onshape_image img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+  height: 100%;
+}

@@ -57,20 +57,20 @@ def onshape_partname(item)
   item["name"].sub(/ +<\d+>/, '')
 end
 
-for project in Project.where('onshape_top_document IS NOT NULL')
-  DB.transaction do
+# for project in Project.where('onshape_top_document IS NOT NULL')
+#   DB.transaction do
 
-    Part.where(:project_id => project[:id]).update(:onshape_qty => 0,
-      :onshape_document => nil,
-      :onshape_element => nil,
-      :onshape_workspace => nil,
-      :onshape_part => nil,
-      :onshape_microversion => nil)
+#     Part.where(:project_id => project[:id]).update(:onshape_qty => 0,
+#       :onshape_document => nil,
+#       :onshape_element => nil,
+#       :onshape_workspace => nil,
+#       :onshape_part => nil,
+#       :onshape_microversion => nil)
 
-    Part[:part_number => 0, :project_id => project[:id]].update_onshape_assy(project,
-        project[:onshape_top_document],
-        project[:onshape_top_element],
-        onshape_mainworkspace(project[:onshape_top_document]))
+#     Part[:part_number => 0, :project_id => project[:id]].update_onshape_assy(project,
+#         project[:onshape_top_document],
+#         project[:onshape_top_element],
+#         onshape_mainworkspace(project[:onshape_top_document]))
 
-  end
-end
+#   end
+# end
