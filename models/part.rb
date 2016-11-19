@@ -66,25 +66,27 @@ class Part < Sequel::Model
     self[:onshape_mass] = 0
 
     # Crawl Assembly
-    assy_def = onshape_request("/api/assemblies/d/"+document+"/w/"+workspace+"/e/"+element)
-    for item in assy_def["rootAssembly"]["instances"]
+    assy_def = onshape_request("/api/assemblies/d/"+document+"/w/"+workspace+"/e/"+element) rescue nil
+    unless assy_def.nil?
+      for item in assy_def["rootAssembly"]["instances"]
 
-      # Lookup CP Parts
-      partname = onshape_partname(item)
-      part_number = partname_to_number(partname)
-      part = Part[:part_number => part_number, :project_id => project[:id]]
+        # Lookup CP Parts
+        partname = onshape_partname(item)
+        part_number = partname_to_number(partname)
+        part = Part[:part_number => part_number, :project_id => project[:id]]
 
-      # If Not a CP Part
-      if part.nil?
-        part = Part[:onshape_element => item["elementId"], :onshape_part => item["partId"], :parent_part_id => self.id]
+        # If Not a CP Part
         if part.nil?
-          part = Part.create(:project_id => project[:id], :name => partname, :parent_part_id => self.id, :type => "unassigned")
-        end
-        part.update_onshape_part(item, false)
+          part = Part[:onshape_element => item["elementId"], :onshape_part => item["partId"], :parent_part_id => self.id]
+          if part.nil?
+            part = Part.create(:project_id => project[:id], :name => partname, :parent_part_id => self.id, :type => "unassigned")
+          end
+          part.update_onshape_part(item, false)
 
-      # If a CP Part
-      else
-        part.update_onshape_part(item)
+        # If a CP Part
+        else
+          part.update_onshape_part(item)
+        end
       end
     end
 
@@ -111,8 +113,10 @@ class Part < Sequel::Model
         self[:onshape_microversion] = part_def["documentMicroversion"]
 
         # Update Material
-        res = onshape_request("/api/parts/d/"+self[:onshape_document]+"/w/"+self[:onshape_workspace]+"/e/"+self[:onshape_element]+"/partid/"+self[:onshape_part]+"/metadata")
-        self[:source_material] = res["material"]["id"] rescue nil
+        res = onshape_request("/api/parts/d/"+self[:onshape_document]+"/w/"+self[:onshape_workspace]+"/e/"+self[:onshape_element]+"/partid/"+self[:onshape_part]+"/metadata") rescue nil
+        unless res.nil?
+          self[:source_material] = res["material"]["id"] rescue nil
+        end
 
         # Update Mass
         self.update_onshape_mass() if self[:source_material]
@@ -127,19 +131,23 @@ class Part < Sequel::Model
   end
 
   def update_onshape_mass()
-    res = onshape_request("/api/parts/d/"+self[:onshape_document]+"/w/"+self[:onshape_workspace]+"/e/"+self[:onshape_element]+"/partid/"+self[:onshape_part]+"/massproperties")
-    self[:onshape_mass] = kg_to_lb(res["bodies"][self[:onshape_part]]["mass"][0].to_f) rescue nil
+    res = onshape_request("/api/parts/d/"+self[:onshape_document]+"/w/"+self[:onshape_workspace]+"/e/"+self[:onshape_element]+"/partid/"+self[:onshape_part]+"/massproperties") rescue nil
+    unless res.nil?
+      self[:onshape_mass] = kg_to_lb(res["bodies"][self[:onshape_part]]["mass"][0].to_f) rescue nil
+    end
   end
 
   def onshape_image
     # Use Thumbnail for Assembly
     if self.onshape_part.nil?
-      onshape_request("/api/thumbnails/d/"+self.onshape_document+"/w/"+self.onshape_workspace+"/e/"+self.onshape_element+"/s/300x300", "", false)
+      onshape_request("/api/thumbnails/d/"+self.onshape_document+"/w/"+self.onshape_workspace+"/e/"+self.onshape_element+"/s/300x300", "", false) rescue nil
 
     # Generate Shaded View for Part
     else
-      res = onshape_request("/api/parts/d/"+self.onshape_document+"/m/"+self.onshape_microversion+"/e/"+self.onshape_element+"/partid/"+self.onshape_part+"/shadedviews", "outputHeight=300&outputWidth=300&viewMatrix=1,1,0,0,-0.5,0.5,1,0,1,-1,1,0&pixelSize=0")
-      Base64.decode64(res["images"][0])
+      res = onshape_request("/api/parts/d/"+self.onshape_document+"/m/"+self.onshape_microversion+"/e/"+self.onshape_element+"/partid/"+self.onshape_part+"/shadedviews", "outputHeight=300&outputWidth=300&viewMatrix=1,1,0,0,-0.5,0.5,1,0,1,-1,1,0&pixelSize=0") rescue nil
+      unless res.nil?
+        Base64.decode64(res["images"][0])
+      end
     end
   end
 

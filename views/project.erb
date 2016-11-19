@@ -5,7 +5,7 @@
     <div class="pull-right" style="margin-top: 15px;">
       <% if CheesyCommon::Config.onshape && @project.onshape_top_document %>
         <a href="/projects/<%= @project.id %>/onshape_update" class="btn btn-info btn-small">
-          <i class="icon-white icon-refresh"></i> Import Assembly Tree from Onshape
+          <i class="icon-white icon-refresh"></i> Import Full Assembly Tree from Onshape
         </a>
       <% end %>
       <a href="/projects/<%= @project.id %>/new_part?type=part" class="btn btn-success btn-small">

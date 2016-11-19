@@ -44,9 +44,11 @@ def onshape_request(path, query='', json=true)
 end
 
 def onshape_mainworkspace(document)
-  res = onshape_request('/api/documents/d/'+document+'/workspaces')
-  for x in res
-    return x['id'] if x["name"] == 'Main'
+  res = onshape_request('/api/documents/d/'+document+'/workspaces') rescue nil
+  unless res.nil?
+    for x in res
+      return x['id'] if x["name"] == 'Main'
+    end
   end
 end
 
