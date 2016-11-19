@@ -51,6 +51,15 @@ module CheesyParts
       end
     end
 
+    # Helper function to set part sort criteria
+    def part_sort(params)
+      @part_sort = [:type, :part_number, :name]
+      if ["part_number", "type", "name", "parent_part_id", "status", "quantity", "source_material", "onshape_mass"].include?(params[:sort])
+        @part_sort[0] = params[:sort].to_sym
+        @part_sort[0] = Sequel.desc(@part_sort[0]) if ["quantity", "onshape_mass"].include?(params[:sort])
+      end
+    end
+
     get "/" do
       redirect "/projects"
     end
@@ -126,12 +135,7 @@ module CheesyParts
     end
 
     get "/projects/:id" do
-      if ["part_number", "type", "name", "parent_part_id", "status", "quantity", "source_material", "onshape_mass"].include?(params[:sort])
-        @part_sort = params[:sort].to_sym
-        @part_sort = Sequel.desc(@part_sort) if ["quantity", "onshape_mass"].include?(params[:sort])
-      else
-        @part_sort = :type
-      end
+      part_sort(params)
       erb :project
     end
 
@@ -233,12 +237,7 @@ module CheesyParts
     get "/parts/:id" do
       @part = Part[params[:id]]
       halt(400, "Invalid part.") if @part.nil?
-      if ["part_number", "type", "name", "parent_part_id", "status", "quantity", "source_material", "onshape_mass"].include?(params[:sort])
-        @part_sort = params[:sort].to_sym
-        @part_sort = Sequel.desc(@part_sort) if ["quantity", "onshape_mass"].include?(params[:sort])
-      else
-        @part_sort = :id
-      end
+      part_sort(params)
       erb :part
     end
 
