@@ -32,7 +32,7 @@ class Project < Sequel::Model
 
     # Clear Onshape Metadata
     Part.where(:project_id => self.id).update(
-      :onshape_qty => 0,
+      :quantity => 0,
       :onshape_document => nil,
       :onshape_element => nil,
       :onshape_workspace => nil,

@@ -83,9 +83,9 @@ class Part < Sequel::Model
   end
 
   def update_onshape_part(part_def)
-    self[:onshape_qty] = self[:onshape_qty].to_i + 1
+    self[:quantity] = self[:quantity].to_i + 1
 
-    if self[:onshape_qty] == 1
+    if self[:quantity] == 1
 
       # Update Part
       if part_def["type"] == 'Part'
