@@ -1,7 +1,7 @@
 <table class="table table-striped table-condensed table-bordered">
   <tr>
-    <th><a href="?sort=id">Part Number</a></th>
-    <th><a href="?sort=type">Type</a></th>
+    <th><a href="?">Part Number</a></th>
+    <th><a href="?">Type</a></th>
     <% if CheesyCommon::Config.onshape %>
       <th><a href="?sort=onshape_qty">Qty</a></th>
     <% end %>
@@ -10,6 +10,9 @@
     <th><a href="?sort=status">Status</th>
     <% if @user.can_edit? %>
       <th>Action</th>
+    <% end %>
+    <% if CheesyCommon::Config.onshape %>
+      <th>CAD</th>
     <% end %>
   </tr>
   <% parts.each do |part| %>
@@ -25,16 +28,26 @@
           <a href="/parts/<%= part.parent_part.id %>"><%= part.parent_part.name if part.parent_part%></a>
         <% end %>
       </td>
-      <td><span class="label label-status-<%= part.status %>"><%= Part::STATUS_MAP[part.status] %></span></td>
+      <td>
+        <% unless part.part_number.nil? %>
+          <span class="label label-status-<%= part.status %>"><%= Part::STATUS_MAP[part.status] %></span>
+        <% end %>
+      </td>
       <% if @user.can_edit? %>
         <td>
-          <a href="/parts/<%= part.id %>/edit" class="btn btn-primary btn-small">
-            <i class="icon-white icon-pencil"></i>
-          </a>
-          <a href="/parts/<%= part.id %>/delete" class="btn btn-danger btn-small">
-            <i class="icon-white icon-trash"></i>
-          </a>
-          <% if CheesyCommon::Config.onshape && part.onshape_workspace %>
+          <% unless part.part_number.nil? %>
+            <a href="/parts/<%= part.id %>/edit" class="btn btn-primary btn-small">
+              <i class="icon-white icon-pencil"></i>
+            </a>
+            <a href="/parts/<%= part.id %>/delete" class="btn btn-danger btn-small">
+              <i class="icon-white icon-trash"></i>
+            </a>
+          <% end %>
+        </td>
+      <% end %>
+      <% if CheesyCommon::Config.onshape %>
+        <td>
+          <% unless part.onshape_workspace.nil? %>
             <a href="https://cad.onshape.com/documents/<%= part.onshape_document %>/w/<%= part.onshape_workspace %>/e/<%= part.onshape_element %>" target="_blank" class="btn btn-info btn-small">
               <i class="icon-white icon-share-alt"></i>
             </a>

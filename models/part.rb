@@ -46,7 +46,7 @@ class Part < Sequel::Model
   end
 
   def full_part_number
-    "#{project.part_number_prefix}-#{type == "assembly" ? "A" : "P"}-%04d" % part_number
+    "#{project.part_number_prefix}-#{type == "assembly" ? "A" : "P"}-%04d" % part_number unless part_number.nil?
   end
 
   def partname_to_number(pn)
@@ -64,13 +64,21 @@ class Part < Sequel::Model
     # Crawl Assembly Definition
     assy_def = onshape_request("/api/assemblies/d/"+document+"/w/"+workspace+"/e/"+element)
     for item in assy_def["rootAssembly"]["instances"]
+
+      # Lookup CP Parts
       partname = onshape_partname(item)
-      
-      # Check if part exists in database
       part_number = partname_to_number(partname)
       part = Part[:part_number => part_number, :project_id => project[:id]]
-      part.update_onshape_part(item) unless part.nil?
 
+      # If Not a CP Part
+      if part.nil?
+        part = Part[:onshape_element => item["elementId"], :onshape_part => item["partId"], :parent_part_id => self.id]
+        if part.nil?
+          part = Part.create(:project_id => project[:id], :name => partname, :parent_part_id => self.id, :type => "unassigned")
+        end
+      end
+
+      part.update_onshape_part(item)
     end
   end
 

@@ -23,7 +23,7 @@
   <% if @part.type == "assembly" %>
     <entry><b>Parts & assemblies contained within this assembly:</b></entry>
 
-    <%= erb :parts_list, :locals => { :parts => Part.where(:parent_part_id => @part.id).order(@part_sort) } %>
+    <%= erb :parts_list, :locals => { :parts => Part.where(:parent_part_id => @part.id).order(@part_sort, :part_number, :name) } %>
   <% end %>
   <div class="row">
     <div class="span4">
@@ -58,7 +58,7 @@
       </div>
     <% end %>
   </div>
-  <% if @user.can_edit? %>
+  <% if @user.can_edit? && @part.part_number %>
     <div class="pull-right" style="margin-top: -40px;">
       <a href="/parts/<%= @part.id %>/edit" class="btn btn-primary btn-small">
         <i class="icon-white icon-pencil"></i> Edit this part

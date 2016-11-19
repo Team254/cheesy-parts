@@ -12,7 +12,7 @@
     </div>
   <% end %>
   <h3><b><%= @project.name %> - All Parts & Assemblies</b></h3>
-  <%= erb :parts_list, :locals => { :parts => Part.where(:project_id => @project.id).order(@part_sort) } %>
+  <%= erb :parts_list, :locals => { :parts => Part.where(:project_id => @project.id).order(@part_sort, :part_number, :name) } %>
   <hr>
   <div class="row">
     <div class="span3">

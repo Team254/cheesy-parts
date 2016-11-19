@@ -60,6 +60,10 @@ end
 # for project in Project.where('onshape_top_document IS NOT NULL')
 #   DB.transaction do
 
+#     # Delete Non-CP Parts
+#     Part.where(:project_id => project[:id], :part_number => nil).delete
+
+#     # Clear Onshape Metadata
 #     Part.where(:project_id => project[:id]).update(:onshape_qty => 0,
 #       :onshape_document => nil,
 #       :onshape_element => nil,
@@ -67,6 +71,7 @@ end
 #       :onshape_part => nil,
 #       :onshape_microversion => nil)
 
+#     # Update Database from Onshape
 #     Part[:part_number => 0, :project_id => project[:id]].update_onshape_assy(project,
 #         project[:onshape_top_document],
 #         project[:onshape_top_element],
