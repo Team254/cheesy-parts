@@ -48,4 +48,61 @@ class Part < Sequel::Model
   def full_part_number
     "#{project.part_number_prefix}-#{type == "assembly" ? "A" : "P"}-%04d" % part_number
   end
+
+  def partname_to_number(pn)
+    prefix = self.project[:part_number_prefix]
+    pn.sub(/#{Regexp.quote(prefix)}-(P|A|p|a)-/, '').to_i   
+  end
+
+  def update_onshape_assy(project, document, element, workspace)
+    # Save Onshape Tags
+    self[:onshape_document]  = document
+    self[:onshape_element]   = element
+    self[:onshape_workspace] = workspace
+    self.save
+
+    # Crawl Assembly Definition
+    assy_def = onshape_request("/api/assemblies/d/"+document+"/w/"+workspace+"/e/"+element)
+    for item in assy_def["rootAssembly"]["instances"]
+      partname = onshape_partname(item)
+      
+      # Check if part exists in database
+      part_number = partname_to_number(partname)
+      part = Part[:part_number => part_number, :project_id => project[:id]]
+      part.update_onshape_part(item) unless part.nil?
+
+    end
+  end
+
+  def update_onshape_part(part_def)
+    self[:onshape_qty] = self[:onshape_qty].to_i + 1
+
+    if self[:onshape_qty] == 1
+
+      # Update Part
+      if part_def["type"] == 'Part'
+        self[:onshape_document]  = part_def["documentId"]
+        self[:onshape_element]   = part_def["elementId"]
+        self[:onshape_workspace] = onshape_mainworkspace(part_def["documentId"])
+        self[:onshape_part] = part_def["partId"]
+        self[:onshape_microversion] = part_def["documentMicroversion"]
+      
+      # Update Assy
+      else
+        self.update_onshape_assy(project, part_def["documentId"], part_def["elementId"], onshape_mainworkspace(part_def["documentId"]))
+      end
+
+    end
+    self.save
+  end
+
+  def onshape_image
+    if self.onshape_part.nil?
+      res = onshape_request("/api/assemblies/d/"+self.onshape_document+"/w/"+self.onshape_workspace+"/e/"+self.onshape_element+"/shadedviews", "outputHeight=200&outputWidth=300&viewMatrix=0.612,0.612,0,0,-0.354,0.354,0.707,0,0.707,-0.707,0.707,0")
+    else
+      res = onshape_request("/api/parts/d/"+self.onshape_document+"/m/"+self.onshape_microversion+"/e/"+self.onshape_element+"/partid/"+self.onshape_part+"/shadedviews", "outputHeight=200&outputWidth=300&viewMatrix=0.612,0.612,0,0,-0.354,0.354,0.707,0,0.707,-0.707,0.707,0")
+    end
+    Base64.decode64(res["images"][0])
+  end
+
 end

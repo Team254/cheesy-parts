@@ -10,6 +10,7 @@ require "json"
 
 require "sequel"
 require "./db"
+require "./models/part"
 require "./models/project"
 
 def onshape_request(path, query='')
@@ -47,64 +48,29 @@ end
 def onshape_mainworkspace(document)
   res = onshape_request('/api/documents/d/'+document+'/workspaces')
   for x in res
-    if x["name"] == 'Main'
-      return x['id']
-    end
+    return x['id'] if x["name"] == 'Main'
   end
 end
 
-def onshape_getchildren(assydef)
-  res = {}
-  for x in assydef["rootAssembly"]["instances"]
-    obj = {}
-    obj["name"] = x["name"]
-    obj["type"] = x["type"]
-    obj["documentId"] = x["documentId"]
-    obj["elementId"] = x["elementId"]
-    obj["quantity"] = 1
-
-    uid = x["elementId"]
-    if x.key?("partId")
-      uid = uid + x["partId"]
-      obj["partId"] = x["partId"]
-    end
-
-    # Bump quantity if already in tree
-    if res.key?(uid)
-      res[uid]["quantity"] += 1
-
-    # Otherwise add to tree
-    else
-      unless x.key?("partId")
-        workspace = onshape_mainworkspace(x["documentId"])
-        assydef2 = onshape_request('/api/assemblies/d/'+x["documentId"]+'/w/'+workspace+'/e/'+x["elementId"])
-        obj["children"] = onshape_getchildren(assydef2)
-      end
-      res[uid] = obj
-    end
-
-  end
-  return res
+# Remove Instance Number from Part Name
+def onshape_partname(item)
+  item["name"].sub(/ +<\d+>/, '')
 end
 
-def onshape_assemblytree(project)
-  document = project.onshape_top_document
-  element = project.onshape_top_element
-  workspace = onshape_mainworkspace(document)
+for project in Project.where('onshape_top_document IS NOT NULL')
+  DB.transaction do
 
-  assydef = onshape_request("/api/assemblies/d/"+document+"/w/"+workspace+"/e/"+element)
-  tree = {}
-  tree["type"] = "Assembly"
-  tree["documentId"] = document
-  tree["elementId"] = element
-  tree["workspaceId"] = workspace
-  tree["children"] = onshape_getchildren(assydef)
+    Part.where(:project_id => project[:id]).update(:onshape_qty => 0,
+      :onshape_document => nil,
+      :onshape_element => nil,
+      :onshape_workspace => nil,
+      :onshape_part => nil,
+      :onshape_microversion => nil)
 
-  print tree.to_json
-end
+    Part[:part_number => 0, :project_id => project[:id]].update_onshape_assy(project,
+        project[:onshape_top_document],
+        project[:onshape_top_element],
+        onshape_mainworkspace(project[:onshape_top_document]))
 
-for project in Project.all
-  unless project.onshape_top_document.to_s.strip.empty?
-    onshape_assemblytree(project)
   end
 end
