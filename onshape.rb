@@ -6,8 +6,7 @@ require "uri"
 require "net/https"
 require "json"
 
-def onshape_request(path, query='', json=true)
-  method = 'get'
+def onshape_request(path, query='', json=true, method='get', body=nil)
   base = "https://cad.onshape.com"
   access = CheesyCommon::Config.onshape_key
   secret = CheesyCommon::Config.onshape_secret
@@ -26,7 +25,12 @@ def onshape_request(path, query='', json=true)
   http.use_ssl = true
   http.verify_mode = OpenSSL::SSL::VERIFY_NONE
 
-  req = Net::HTTP::Get.new(uri.request_uri)
+  if method == 'get'
+    req = Net::HTTP::Get.new(uri.request_uri)
+  elsif method == 'post'
+    req = Net::HTTP::Post.new(uri.request_uri)
+    req.body = body.to_json
+  end
   req.add_field('Date', date)
   req.add_field('Accept', contenttype)
   req.add_field('Content-Type', contenttype)
@@ -41,6 +45,10 @@ def onshape_request(path, query='', json=true)
   else
     response.body
   end
+end
+
+def onshape_post(path, body)
+  onshape_request(path, '', true, 'post', body)
 end
 
 def onshape_mainworkspace(document)

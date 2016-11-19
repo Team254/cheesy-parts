@@ -29,8 +29,7 @@ class Part < Sequel::Model
   # Mapping of priority integer stored in database to what is displayed to the user.
   PRIORITY_MAP = { 0 => "High", 1 => "Normal", 2 => "Low" }
 
-  # Assigns a part number based on the parent and type and returns a new Part object.
-  def self.generate_number_and_create(project, type, parent_part)
+  def generate_number(project, type, parent_part)
     parent_part_id = parent_part.nil? ? 0 : parent_part.id
     parent_part_number = parent_part.nil? ? 0 : parent_part.part_number
     if type == "part"
@@ -41,8 +40,23 @@ class Part < Sequel::Model
       part_number = Part.filter(:project_id => project.id, :type => "assembly").max(:part_number)  || -100
       part_number += 100
     end
+    part_number
+  end
+
+  # Assigns a part number based on the parent and type and returns a new Part object.
+  def self.generate_number_and_create(project, type, parent_part)
+    part_number = self.generate_number(project, type, parent_part)
     new(:part_number => part_number, :project_id => project.id, :type => type,
         :parent_part_id => parent_part.nil? ? 0 : parent_part.id)
+  end
+
+  def convert_from_onshape(params)
+    self[:type] = "part"
+    self[:part_number] = self.generate_number(self.project, self[:type], self.parent_part)
+    self[:name] = params[:name]
+    self[:status] = "designing"
+    self.save
+    self.onshape_rename(self.full_part_number)
   end
 
   def full_part_number
@@ -150,5 +164,24 @@ class Part < Sequel::Model
       end
     end
   end
+
+  def onshape_update_tags()
+    res = onshape_post("/api/partstudios/d/"+self[:onshape_document]+"/w/"+self[:onshape_workspace]+"/e/"+self[:onshape_element]+"/idtranslations",{:sourceDocumentMicroversion => self[:onshape_microversion], :ids => [self[:onshape_part]]}) rescue nil
+    unless res.nil?
+      self[:onshape_part] = res["ids"][0]["target"][0]
+      self[:onshape_microversion] = res["targetDocumentMicroversion"]
+      self.save
+    end
+  end
+
+  # Rename a Part in Onshape
+  def onshape_rename(name)
+    self.onshape_update_tags()
+    res = onshape_post("/api/parts/d/"+self[:onshape_document]+"/w/"+self[:onshape_workspace]+"/e/"+self[:onshape_element]+"/partid/"+self[:onshape_part]+"/metadata", {:name => name}) rescue nil
+    return res.nil? ? nil : name
+  end
+
+
+
 
 end

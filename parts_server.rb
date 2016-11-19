@@ -255,6 +255,16 @@ module CheesyParts
       erb :part_edit
     end
 
+    post "/parts/:id/onshape_convert" do
+      require_permission(@user.can_edit?)
+
+      part = Part[params[:id]]
+      halt(400, "Invalid part.") if part.nil?
+      part.convert_from_onshape(params)
+
+      redirect "/parts/#{part.id}"
+    end
+
     post "/parts/:id/edit" do
       require_permission(@user.can_edit?)
 

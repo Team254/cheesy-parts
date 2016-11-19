@@ -59,6 +59,16 @@
           <img src="/parts/<%= @part.id %>/img">
         </a>
       </div>
+      <% if @part.part_number.nil? && @part.onshape_part %>
+        <div class="span4">
+          <h4>Create Part Number &amp; Rename in Onshape</h4>
+          <form action="/parts/<%= @part.id %>/onshape_convert" method="POST">
+            <label>Part Name</label>
+            <input type="text" name="name" />
+            <label><input type="submit" class="btn btn-primary btn-medium" value="Save Part" /></label>
+          </form>
+        </div>
+      <% end %>
     <% end %>
   </div>
   <% if @user.can_edit? && @part.part_number %>
