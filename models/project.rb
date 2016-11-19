@@ -44,7 +44,7 @@ class Project < Sequel::Model
     # Get Top Level Assembly
     tla = Part[:part_number => 0, :project_id => self.id]
     if tla.nil?
-      tla = Part.create(:project_id => self.id, :part_number => 0, :name => self.name, :parent_part_id => 0)
+      tla = Part.create(:project_id => self.id, :part_number => 0, :name => self.name, :parent_part_id => 0, :type => "assembly", :status => "designing")
     end
 
     # Update Database from Onshape

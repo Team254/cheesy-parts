@@ -6,7 +6,11 @@
       <th><a href="?sort=quantity">Qty</a></th>
     <% end %>
     <th><a href="?sort=name">Name</a></th>
-    <th><a href="?sort=parent_part_id">Parent</th>
+    <th><a href="?sort=parent_part_id">Parent</a></th>
+    <% if CheesyCommon::Config.onshape %>
+      <th><a href="?sort=source_material">Material</a></th>
+      <th><a href="?sort=onshape_mass">Mass</a></th>
+    <% end %>
     <th><a href="?sort=status">Status</th>
     <% if @user.can_edit? %>
       <th>Action</th>
@@ -28,6 +32,10 @@
           <a href="/parts/<%= part.parent_part.id %>"><%= part.parent_part.name if part.parent_part%></a>
         <% end %>
       </td>
+      <% if CheesyCommon::Config.onshape %>
+        <td><%= part.source_material %></td>
+        <td><%= "%8.3f" % part.onshape_mass rescue nil %></td>
+      <% end %>
       <td>
         <% unless part.part_number.nil? %>
           <span class="label label-status-<%= part.status %>"><%= Part::STATUS_MAP[part.status] %></span>

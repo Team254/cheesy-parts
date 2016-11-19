@@ -126,9 +126,9 @@ module CheesyParts
     end
 
     get "/projects/:id" do
-      if ["part_number", "type", "name", "parent_part_id", "status", "quantity"].include?(params[:sort])
+      if ["part_number", "type", "name", "parent_part_id", "status", "quantity", "source_material", "onshape_mass"].include?(params[:sort])
         @part_sort = params[:sort].to_sym
-        @part_sort = Sequel.desc(:quantity) if @part_sort == :quantity
+        @part_sort = Sequel.desc(@part_sort) if ["quantity", "onshape_mass"].include?(params[:sort])
       else
         @part_sort = :type
       end
@@ -233,9 +233,9 @@ module CheesyParts
     get "/parts/:id" do
       @part = Part[params[:id]]
       halt(400, "Invalid part.") if @part.nil?
-      if ["part_number", "type", "name", "parent_part_id", "status", "quantity"].include?(params[:sort])
+      if ["part_number", "type", "name", "parent_part_id", "status", "quantity", "source_material", "onshape_mass"].include?(params[:sort])
         @part_sort = params[:sort].to_sym
-        @part_sort = Sequel.desc(:quantity) if @part_sort == :quantity
+        @part_sort = Sequel.desc(@part_sort) if ["quantity", "onshape_mass"].include?(params[:sort])
       else
         @part_sort = :id
       end

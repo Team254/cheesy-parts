@@ -63,38 +63,41 @@ class Part < Sequel::Model
     self[:onshape_document]  = document
     self[:onshape_element]   = element
     self[:onshape_workspace] = workspace
-    self.save
+    self[:onshape_mass] = 0
 
-    # If a CP Part, Crawl Assembly
-    if cp_part == true
-      assy_def = onshape_request("/api/assemblies/d/"+document+"/w/"+workspace+"/e/"+element)
-      for item in assy_def["rootAssembly"]["instances"]
+    # Crawl Assembly
+    assy_def = onshape_request("/api/assemblies/d/"+document+"/w/"+workspace+"/e/"+element)
+    for item in assy_def["rootAssembly"]["instances"]
 
-        # Lookup CP Parts
-        partname = onshape_partname(item)
-        part_number = partname_to_number(partname)
-        part = Part[:part_number => part_number, :project_id => project[:id]]
+      # Lookup CP Parts
+      partname = onshape_partname(item)
+      part_number = partname_to_number(partname)
+      part = Part[:part_number => part_number, :project_id => project[:id]]
 
-        print partname
-        puts part_number
-
-        # If Not a CP Part
+      # If Not a CP Part
+      if part.nil?
+        part = Part[:onshape_element => item["elementId"], :onshape_part => item["partId"], :parent_part_id => self.id]
         if part.nil?
-          part = Part[:onshape_element => item["elementId"], :onshape_part => item["partId"], :parent_part_id => self.id]
-          if part.nil?
-            part = Part.create(:project_id => project[:id], :name => partname, :parent_part_id => self.id, :type => "unassigned")
-          end
-          part.update_onshape_part(item, false)
-
-        # If a CP Part
-        else
-          part.update_onshape_part(item, true)
+          part = Part.create(:project_id => project[:id], :name => partname, :parent_part_id => self.id, :type => "unassigned")
         end
+        part.update_onshape_part(item, false)
+
+      # If a CP Part
+      else
+        part.update_onshape_part(item)
       end
     end
+
+    # Update Mass and Flatten Non-CP Parts
+    for part in self.child_parts
+      self[:onshape_mass] += part[:onshape_mass] * part[:quantity] rescue nil
+      part.destroy unless cp_part == true
+    end
+
+    self.save
   end
 
-  def update_onshape_part(part_def, cp_part)
+  def update_onshape_part(part_def, cp_part=true)
     self[:quantity] = self[:quantity].to_i + 1
 
     if self[:quantity] == 1
@@ -106,6 +109,13 @@ class Part < Sequel::Model
         self[:onshape_workspace] = onshape_mainworkspace(part_def["documentId"])
         self[:onshape_part] = part_def["partId"]
         self[:onshape_microversion] = part_def["documentMicroversion"]
+
+        # Update Material
+        res = onshape_request("/api/parts/d/"+self[:onshape_document]+"/w/"+self[:onshape_workspace]+"/e/"+self[:onshape_element]+"/partid/"+self[:onshape_part]+"/metadata")
+        self[:source_material] = res["material"]["id"] rescue nil
+
+        # Update Mass
+        self.update_onshape_mass() if self[:source_material]
       
       # Update Assy
       else
@@ -114,6 +124,11 @@ class Part < Sequel::Model
 
     end
     self.save
+  end
+
+  def update_onshape_mass()
+    res = onshape_request("/api/parts/d/"+self[:onshape_document]+"/w/"+self[:onshape_workspace]+"/e/"+self[:onshape_element]+"/partid/"+self[:onshape_part]+"/massproperties")
+    self[:onshape_mass] = kg_to_lb(res["bodies"][self[:onshape_part]]["mass"][0].to_f) rescue nil
   end
 
   def onshape_image

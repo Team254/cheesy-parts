@@ -54,3 +54,7 @@ end
 def onshape_partname(item)
   item["name"].sub(/ +<\d+>/, '')
 end
+
+def kg_to_lb(input)
+  input * 2.20462
+end
