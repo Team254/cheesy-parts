@@ -135,6 +135,12 @@ module CheesyParts
       erb :project
     end
 
+    get "/projects/:id/onshape_update" do
+      project = Project[params[:id]]
+      project.onshape_update_tree()
+      redirect "/projects/#{params[:id]}"
+    end
+
     get "/projects/:id/edit" do
       require_permission(@user.can_administer?)
 
@@ -148,6 +154,8 @@ module CheesyParts
       if params[:part_number_prefix]
         @project.part_number_prefix = params[:part_number_prefix]
       end
+
+      @project.onshape_update_settings(params) rescue halt(400, "Invalid Onshape Document or Element ID")
       @project.save
       redirect "/projects/#{params[:id]}"
     end

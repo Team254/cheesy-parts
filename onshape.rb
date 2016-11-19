@@ -1,5 +1,3 @@
-require "bundler/setup"
-
 require "date"
 require "securerandom"
 require "openssl"
@@ -7,11 +5,6 @@ require "Base64"
 require "uri"
 require "net/https"
 require "json"
-
-require "sequel"
-require "./db"
-require "./models/part"
-require "./models/project"
 
 def onshape_request(path, query='')
   method = 'get'
@@ -42,6 +35,7 @@ def onshape_request(path, query='')
   req.add_field('Authorization', authkey)
 
   response = http.request(req)
+  raise "Onshape API Error" unless response.code.to_i == 200
   JSON.parse(response.body)
 end
 
@@ -56,26 +50,3 @@ end
 def onshape_partname(item)
   item["name"].sub(/ +<\d+>/, '')
 end
-
-# for project in Project.where('onshape_top_document IS NOT NULL')
-#   DB.transaction do
-
-#     # Delete Non-CP Parts
-#     Part.where(:project_id => project[:id], :part_number => nil).delete
-
-#     # Clear Onshape Metadata
-#     Part.where(:project_id => project[:id]).update(:onshape_qty => 0,
-#       :onshape_document => nil,
-#       :onshape_element => nil,
-#       :onshape_workspace => nil,
-#       :onshape_part => nil,
-#       :onshape_microversion => nil)
-
-#     # Update Database from Onshape
-#     Part[:part_number => 0, :project_id => project[:id]].update_onshape_assy(project,
-#         project[:onshape_top_document],
-#         project[:onshape_top_element],
-#         onshape_mainworkspace(project[:onshape_top_document]))
-
-#   end
-# end

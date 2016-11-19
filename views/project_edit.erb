@@ -4,9 +4,17 @@
   <h2>Edit Project</h2>
   <form action="" method="POST">
     <label>Name:</label>
-    <input type="text" name="name" value="<%= @project.name %>" />
+    	<input type="text" name="name" value="<%= @project.name %>" />
     <label>Part number prefix:</label>
       <input type="text" name="part_number_prefix" value="<%= @project.part_number_prefix %>" />
+    <% if CheesyCommon::Config.onshape %>
+      <label>Enable Onshape Integration for Project:</label>
+        <p><input type="checkbox" value="1" name="onshape_enable" <%= @project.onshape_top_document.nil? ? "" : "checked" %> /></p>
+      <label>Onshape Top Level Assembly Document ID:</label>
+        <input type="text" name="onshape_top_document" value="<%= @project.onshape_top_document %>" />
+      <label>Onshape Top Level Assembly Element ID:</label>
+        <input type="text" name="onshape_top_element" value="<%= @project.onshape_top_element %>" />
+    <% end %>
     <label><input type="submit" class="btn btn-primary btn-medium" value="Save" /></label>
   </form>
 </div>
