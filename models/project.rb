@@ -29,29 +29,30 @@ class Project < Sequel::Model
 
     DB.transaction do
 
-    # Delete Non-CP Parts
-    Part.where(:project_id => self.id, :part_number => nil).delete
+      # Delete Non-CP Parts
+      Part.where(:project_id => self.id, :part_number => nil).delete
 
-    # Clear Onshape Metadata
-    Part.where(:project_id => self.id).update(
-      :quantity => 0,
-      :onshape_document => nil,
-      :onshape_element => nil,
-      :onshape_workspace => nil,
-      :onshape_part => nil,
-      :onshape_microversion => nil)
+      # Clear Onshape Metadata
+      Part.where(:project_id => self.id).update(
+        :quantity => 0,
+        :onshape_document => nil,
+        :onshape_element => nil,
+        :onshape_workspace => nil,
+        :onshape_part => nil,
+        :onshape_microversion => nil,
+        :onshape_mass => nil)
 
-    # Get Top Level Assembly
-    tla = Part[:part_number => 0, :project_id => self.id]
-    if tla.nil?
-      tla = Part.create(:project_id => self.id, :part_number => 0, :name => self.name, :parent_part_id => 0, :type => "assembly", :status => "designing")
-    end
+      # Get Top Level Assembly
+      tla = Part[:part_number => 0, :project_id => self.id]
+      if tla.nil?
+        tla = Part.create(:project_id => self.id, :part_number => 0, :name => self.name, :parent_part_id => 0, :type => "assembly", :status => "designing")
+      end
 
-    # Update Database from Onshape
-    tla.update_onshape_assy(self,
-      self[:onshape_top_document],
-      self[:onshape_top_element],
-      onshape_mainworkspace(self[:onshape_top_document]))
+      # Update Database from Onshape
+      tla.update_onshape_assy(self,
+        self[:onshape_top_document],
+        self[:onshape_top_element],
+        onshape_mainworkspace(self[:onshape_top_document]))
     end
   end
 
