@@ -11,7 +11,7 @@
   "dev": {
     "db_password": "correcthorsebatterystaple",
     "gmail_password": "correcthorsebatterystaple",
-    "members_url": "http://members.team254.dev:8081"
+    "members_url": "http://members.team254.localhost:81/"
   },
   "prod": {
     "db_password": "Encrypted:0iYLP6HuJ7qY1/BtUYAQ+Q==\n",
