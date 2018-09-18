@@ -15,7 +15,7 @@
   </div>
   <div class="well">
   <% Project.each do |project| %>
-    <li><h4><a href="/projects/<%= project.id %>"><%= project.name %></a></h4></li>
+    <li><h4 class="project-li"><a href="/projects/<%= project.id %>"><%= project.name %></a></h4></li>
   <% end %>
   </div>
 </div>

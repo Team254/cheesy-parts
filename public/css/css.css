@@ -86,3 +86,7 @@ label {
 .table th a {
   color: black;
 }
+
+.project-li {
+  display: inline-block;
+}
