@@ -19,7 +19,25 @@
           <a href="/parts/<%= part.parent_part.id %>"><%= part.parent_part.name if part.parent_part%></a>
         <% end %>
       </td>
-      <td><span class="label label-status-<%= part.status %>"><%= Part::STATUS_MAP[part.status] %></span></td>
+      <td>
+      <% if @user.can_edit? %>
+        <span class="label label-status-<%= part.status %> label-<%= part.id %>" onclick="$('.label-<%= part.id %>').hide();$('.change-status-<%= part.id %>-div').show()"><%= Part::STATUS_MAP[part.status] %></span>
+        <div class="change-status-<%= part.id %>-div" style="display: none">
+          <select name="status" class="select-status-<%= part.id %> selectpicker">
+            <% Part::STATUS_MAP.each_pair do |key, value| %>
+              <option data-content="<span class='label label-status-<%= key %>'><%= value %></span>" value="<%= key %>"<% if part.status == key %> selected<% end %>>
+                <%= value %>
+              </option>
+            <% end %>
+          </select>
+          <a onclick="editPart(<%= part.id %>, '<%= part.name %>')" class="btn btn-success btn-small" style="margin-bottom: 12px;">
+            <i class="icon-white icon-check"></i>
+          </a>
+        </div>
+        <% else %>
+          <span class="label label-status-<%= part.status %>"><%= Part::STATUS_MAP[part.status] %></span>
+        <% end %>
+      </td>
       <% if @user.can_edit? %>
         <td>
           <a href="/parts/<%= part.id %>/edit" class="btn btn-primary btn-small">
@@ -33,3 +51,37 @@
     </tr>
   <% end %>
 </table>
+
+<script>
+  var status_map = <%= Part::STATUS_MAP.to_json %>;
+
+  function editPart(id, name) {
+    var status_key = $(".select-status-" + id).val();
+    var url = `${location.origin}/parts/${id}/edit`;
+    $.ajax({
+      url: url,
+      type: 'POST',
+      data: {
+        "id": id,
+        "name": name,
+        "status": status_key,
+        "redirect": false
+      },
+      success: function (result, status, xhr) {
+        var classNames = $('.label-' + id).attr("class").toString().split(' ');
+        for (var i = 0; i < classNames.length; i++) {
+          if (classNames[i].startsWith('label-status')) {
+            $('.label-' + id).removeClass(classNames[i]);
+            $('.label-' + id).addClass('label-status-' + status_key);
+          }
+        };
+        $('.label-' + id).html(status_map[status_key]);
+        $('.change-status-' + id + '-div').hide();
+        $('.label-' + id).show();
+      },
+      error: function (xhr, status, error) {
+        console.error(error);
+      }
+    });
+  }
+</script>
