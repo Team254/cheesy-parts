@@ -23,14 +23,14 @@
       <% if @user.can_edit? %>
         <span class="label label-status-<%= part.status %> label-<%= part.id %>" onclick="$('.label-<%= part.id %>').hide();$('.change-status-<%= part.id %>-div').show()"><%= Part::STATUS_MAP[part.status] %></span>
         <div class="change-status-<%= part.id %>-div" style="display: none">
-          <select name="status" class="select-status-<%= part.id %> selectpicker">
+          <select name="status" class="select-status-<%= part.id %> selectpicker" style="margin-bottom: 0;">
             <% Part::STATUS_MAP.each_pair do |key, value| %>
               <option data-content="<span class='label label-status-<%= key %>'><%= value %></span>" value="<%= key %>"<% if part.status == key %> selected<% end %>>
                 <%= value %>
               </option>
             <% end %>
           </select>
-          <a onclick="editPart(<%= part.id %>, '<%= part.name %>')" class="btn btn-success btn-small" style="margin-bottom: 12px;">
+          <a onclick="editPart(<%= part.id %>, '<%= part.name %>')" class="btn btn-success btn-small">
             <i class="icon-white icon-check"></i>
           </a>
         </div>
