@@ -33,8 +33,8 @@ GEM
     pathological (0.3.0)
     pony (1.11)
       mail (>= 2.0)
-    rack (1.6.4)
-    rack-protection (1.5.3)
+    rack (1.6.12)
+    rack-protection (1.5.5)
       rack
     rake (10.5.0)
     sequel (4.31.0)
