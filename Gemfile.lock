@@ -34,7 +34,7 @@ GEM
     pony (1.11)
       mail (>= 2.0)
     rack (1.6.12)
-    rack-protection (1.5.3)
+    rack-protection (1.5.5)
       rack
     rake (10.5.0)
     sequel (4.31.0)
