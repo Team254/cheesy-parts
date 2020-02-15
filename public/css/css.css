@@ -16,7 +16,8 @@ label {
 .label-status-drawing {
   background-color: #bb0;
 }
-.label-status-ready {
+.label-status-ready, .label-status-cnc, .label-status-laser, .label-status-lathe, .label-status-mill,
+  .label-status-printer, .label-status-router {
   background-color: #0bb;
 }
 .label-status-outsourced {
