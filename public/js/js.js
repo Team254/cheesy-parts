@@ -58,7 +58,18 @@ function editOrderItem(projectId, orderItemId) {
   });
 }
 
+// Highlights the contents of the current element to facilitate copying.
+function selectText() {
+  let range = document.createRange();
+  range.selectNodeContents(this);
+  let selection = window.getSelection();
+  selection.removeAllRanges();
+  selection.addRange(range);
+}
+
 $(function() {
   vendorAutoComplete("#vendor");
   $(".datepicker").datepicker();
+
+  $(".selectable").dblclick(selectText);
 });

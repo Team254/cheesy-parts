@@ -11,15 +11,15 @@
   </tr>
   <% parts.each do |part| %>
     <tr>
-      <td><a href="/parts/<%= part.id %>"><%= part.full_part_number %></a></td>
-      <td><%= part.type.capitalize %></td>
-      <td><a href="/parts/<%= part.id %>"><%= part.name %></a></td>
-      <td>
+      <td class="selectable"><a href="/parts/<%= part.id %>"><%= part.full_part_number %></a></td>
+      <td class="selectable"><%= part.type.capitalize %></td>
+      <td class="selectable"><a href="/parts/<%= part.id %>"><%= part.name %></a></td>
+      <td class="selectable">
         <% if part.parent_part %>
           <a href="/parts/<%= part.parent_part.id %>"><%= part.parent_part.name if part.parent_part%></a>
         <% end %>
       </td>
-      <td>
+      <td class="selectable">
       <% if @user.can_edit? %>
         <span class="label label-status-<%= part.status %> label-<%= part.id %>" onclick="$('.label-<%= part.id %>').hide();$('.change-status-<%= part.id %>-div').show()"><%= Part::STATUS_MAP[part.status] %></span>
         <div class="change-status-<%= part.id %>-div" style="display: none">
