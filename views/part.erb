@@ -35,41 +35,45 @@
       <td class="selectable"><%= @part.full_part_number %></td>
     </tr>
     <tr>
-      <td><b>Status</b></td>
-      <td class="selectable">
-        <span class="label label-status-<%= @part.status %>"><%= Part::STATUS_MAP[@part.status] %></span>
-      </td>
+      <% unless (CheesyCommon::Config.hide_unused_fields rescue false) %>
+        <td><b>Status</b></td>
+        <td class="selectable">
+          <span class="label label-status-<%= @part.status %>"><%= Part::STATUS_MAP[@part.status] %></span>
+        </td>
+      <% end %>
     </tr>
     <tr>
       <td><b>Notes</b></td>
       <td class="selectable"><%= (@part.notes || "").gsub("\n", "<br />") %></td>
     </tr>
-    <% if @part.type == "part" %>
+    <% unless (CheesyCommon::Config.hide_unused_fields rescue false) %>
+      <% if @part.type == "part" %>
+        <tr>
+          <td><b>Source material</b></td>
+          <td class="selectable"><%= @part.source_material %></td>
+        </tr>
+        <tr>
+          <td><b>Have material?</b></td>
+          <td class="selectable"><%= (@part.have_material == 1) ? "Yes" : "No" %></td>
+        </tr>
+        <tr>
+          <td><b>Material cut length</b></td>
+          <td class="selectable"><%= @part.cut_length %></td>
+        </tr>
+      <% end %>
       <tr>
-        <td><b>Source material</b></td>
-        <td class="selectable"><%= @part.source_material %></td>
+        <td><b>Quantity required</b></td>
+        <td class="selectable"><%= @part.quantity %></td>
       </tr>
       <tr>
-        <td><b>Have material?</b></td>
-        <td class="selectable"><%= (@part.have_material == 1) ? "Yes" : "No" %></td>
+        <td><b>Drawing created?</b></td>
+        <td class="selectable"><%= (@part.drawing_created == 1) ? "Yes" : "No" %></td>
       </tr>
       <tr>
-        <td><b>Material cut length</b></td>
-        <td class="selectable"><%= @part.cut_length %></td>
+        <td><b>Priority</b></td>
+        <td class="selectable"><%= Part::PRIORITY_MAP[@part.priority] %></td>
       </tr>
     <% end %>
-    <tr>
-      <td><b>Quantity required</b></td>
-      <td class="selectable"><%= @part.quantity %></td>
-    </tr>
-    <tr>
-      <td><b>Drawing created?</b></td>
-      <td class="selectable"><%= (@part.drawing_created == 1) ? "Yes" : "No" %></td>
-    </tr>
-    <tr>
-      <td><b>Priority</b></td>
-      <td class="selectable"><%= Part::PRIORITY_MAP[@part.priority] %></td>
-    </tr>
   </table>
   <% if @user.can_edit? %>
     <div class="pull-right" style="margin-top: -40px;">

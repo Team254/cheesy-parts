@@ -7,36 +7,40 @@
     <label><span class="label label-info">Part Number</span> <%= @part.full_part_number %></label>
     <label>Part Name</label>
     <input type="text" name="name" value="<%= @part.name %>" />
-    <label>Status</label>
-    <select name="status">
-      <% Part::STATUS_MAP.each_pair do |key, value| %>
-        <option value="<%= key %>"<% if @part.status == key %> selected<% end %>>
-          <%= value %>
-        </option>
-      <% end %>
-    </select>
+    <% unless (CheesyCommon::Config.hide_unused_fields rescue false) %>
+      <label>Status</label>
+      <select name="status">
+        <% Part::STATUS_MAP.each_pair do |key, value| %>
+          <option value="<%= key %>"<% if @part.status == key %> selected<% end %>>
+            <%= value %>
+          </option>
+        <% end %>
+      </select>
+    <% end %>
     <label>Notes</label>
      <textarea name="notes" rows="4"><%= @part.notes %></textarea>
-    <label>Source Material</label>
-    <input type="text" name="source_material" value="<%= @part.source_material %>" />
-    <label>Have Material?</b>
-      <input type="checkbox" name="have_material"<% if @part.have_material == 1 %>checked<% end %>/>
-    </label>
-    <label>Material Cut Length</label>
-    <input type="text" name="cut_length" value="<%= @part.cut_length %>" />
-    <label>Quantity Required</label>
-    <input type="text" name="quantity" value="<%= @part.quantity %>" />
-    <label>Drawing Created?</b>
-      <input type="checkbox" name="drawing_created"<% if @part.drawing_created == 1 %>checked<% end %>/>
-    </label>
-    <label>Priority</label>
-    <select name="priority">
-      <% Part::PRIORITY_MAP.each_pair do |key, value| %>
-        <option value="<%= key %>"<% if @part.priority == key %> selected<% end %>>
-          <%= value %>
-        </option>
-      <% end %>
-    </select>
+    <% unless (CheesyCommon::Config.hide_unused_fields rescue false) %>
+      <label>Source Material</label>
+      <input type="text" name="source_material" value="<%= @part.source_material %>" />
+      <label>Have Material?</b>
+        <input type="checkbox" name="have_material"<% if @part.have_material == 1 %>checked<% end %>/>
+      </label>
+      <label>Material Cut Length</label>
+      <input type="text" name="cut_length" value="<%= @part.cut_length %>" />
+      <label>Quantity Required</label>
+      <input type="text" name="quantity" value="<%= @part.quantity %>" />
+      <label>Drawing Created?</b>
+        <input type="checkbox" name="drawing_created"<% if @part.drawing_created == 1 %>checked<% end %>/>
+      </label>
+      <label>Priority</label>
+      <select name="priority">
+        <% Part::PRIORITY_MAP.each_pair do |key, value| %>
+          <option value="<%= key %>"<% if @part.priority == key %> selected<% end %>>
+            <%= value %>
+          </option>
+        <% end %>
+      </select>
+    <% end %>
     <label><input type="submit" class="btn btn-primary btn-medium" value="Save Part" /></label>
   </form>
 </div>

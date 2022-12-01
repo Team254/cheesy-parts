@@ -6,7 +6,8 @@
     "port": 9000,
     "base_address": "https://parts.team254.com",
     "gmail_user": "cheesyparts@gmail.com",
-    "enable_wordpress_auth": true
+    "enable_wordpress_auth": true,
+    "hide_unused_fields": true
     },
   "dev": {
     "db_password": "correcthorsebatterystaple",

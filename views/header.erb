@@ -34,12 +34,14 @@
               <li>
                 <a href="/projects"> <i class="icon-th-large icon-black"></i> Projects</a>
               </li>
-              <li>
-                <a href="/dashboards"> <i class="icon-list-alt icon-black"></i> Dashboards</a>
-              </li>
-              <li>
-                <a href="/orders"> <i class="icon-shopping-cart icon-black"></i> Orders</a>
-              </li>
+              <% unless (CheesyCommon::Config.hide_unused_fields rescue false) %>
+                <li>
+                  <a href="/dashboards"> <i class="icon-list-alt icon-black"></i> Dashboards</a>
+                </li>
+                <li>
+                  <a href="/orders"> <i class="icon-shopping-cart icon-black"></i> Orders</a>
+                </li>
+              <% end %>
               <% if @user.can_administer? %>
                 <li>
                   <a href="/users"> <i class="icon-th-list icon-black"></i> Users</a>
