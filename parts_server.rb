@@ -100,7 +100,7 @@ module CheesyParts
     end
 
     get "/new_project" do
-      require_permission(@user.can_administer?)
+      require_permission(@user.can_edit?)
       erb :new_project
     end
 
@@ -109,7 +109,7 @@ module CheesyParts
     end
 
     post "/projects" do
-      require_permission(@user.can_administer?)
+      require_permission(@user.can_edit?)
 
       # Check parameter existence and format.
       halt(400, "Missing project name.") if params[:name].nil?
@@ -134,13 +134,13 @@ module CheesyParts
     end
 
     get "/projects/:id/edit" do
-      require_permission(@user.can_administer?)
+      require_permission(@user.can_edit?)
 
       erb :project_edit
     end
 
     post "/projects/:id/edit" do
-      require_permission(@user.can_administer?)
+      require_permission(@user.can_edit?)
 
       @project.name = params[:name] if params[:name]
       if params[:part_number_prefix]
@@ -151,13 +151,13 @@ module CheesyParts
     end
 
     get "/projects/:id/delete" do
-      require_permission(@user.can_administer?)
+      require_permission(@user.can_edit?)
 
       erb :project_delete
     end
 
     post "/projects/:id/delete" do
-      require_permission(@user.can_administer?)
+      require_permission(@user.can_edit?)
 
       @project.delete
       redirect "/projects"

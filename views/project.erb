@@ -18,7 +18,7 @@
     <div class="span3">
         <span class="label label-info">Project Prefix</span> <%= @project.part_number_prefix %><br /><br />
     </div>
-    <% if @user.can_administer? %>
+    <% if @user.can_edit? %>
       <div class="pull-right">
         <a href="/projects/<%= @project.id %>/edit" class="btn btn-primary btn-small">
           <i class="icon-white icon-pencil"></i> Edit this project
