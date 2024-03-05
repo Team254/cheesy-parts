@@ -35,6 +35,10 @@
       <td class="selectable"><%= @part.full_part_number %></td>
     </tr>
     <tr>
+      <td><b>Name</b></td>
+      <td class="selectable"><%= @part.name %></td>
+    </tr>
+    <tr>
       <% unless (CheesyCommon::Config.hide_unused_fields rescue false) %>
         <td><b>Status</b></td>
         <td class="selectable">
