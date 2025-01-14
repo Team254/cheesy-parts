@@ -2,7 +2,7 @@
   <tr>
     <th><a href="?sort=id">Part Number</a></th>
     <th><a href="?sort=type">Type</a></th>
-    <th><a href="?sort=name">Name</a></th>
+    <th><a href="?sort=name">Description</a></th>
     <th><a href="?sort=parent_part_id">Parent</a></th>
     <% unless (CheesyCommon::Config.hide_unused_fields rescue false) %>
       <th><a href="?sort=status">Status</th>
@@ -10,7 +10,6 @@
     <% if @user.can_edit? %>
       <th>Action</th>
     <% end %>
-    <th>Solidworks Filename</th>
   </tr>
   <% parts.each do |part| %>
     <tr>
@@ -53,7 +52,6 @@
           </a>
         </td>
       <% end %>
-      <td class="selectable"><%= part.full_part_number %> <%= part.name %></td>
     </tr>
   <% end %>
 </table>
