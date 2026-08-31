@@ -8,6 +8,6 @@ SCRIPT_NAME=parts_server
 
 echo "Deploying $APP from Git master branch..."
 echo
-ssh $USER@$HOST "cd /opt/sites/$APP && git checkout -f && git pull && bundle install && bundle exec rake db:migrate && bundle exec ruby ${SCRIPT_NAME}_control.rb restart"
+ssh $USER@$HOST "cd /opt/sites/$APP && git checkout -f && git pull && bundle install && bundle exec rake db:migrate && sudo -n /usr/bin/systemctl restart $APP.service"
 echo
 echo "Deployed $APP."
