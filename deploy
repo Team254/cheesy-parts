@@ -4,10 +4,10 @@ set -e
 USER=team254
 HOST=ec2.team254.com
 APP=cheesy-parts
-SCRIPT_NAME=parts_server
+BRANCH=master
 
-echo "Deploying $APP from Git master branch..."
+echo "Deploying $APP from Git $BRANCH branch..."
 echo
-ssh $USER@$HOST "cd /opt/sites/$APP && git checkout -f && git pull && bundle install && bundle exec rake db:migrate && sudo -n /usr/bin/systemctl restart $APP.service"
+ssh "$USER@$HOST" "cd /opt/sites/$APP && git fetch origin && git checkout -f $BRANCH && git reset --hard origin/$BRANCH && sudo -n /usr/bin/systemctl start $APP-prepare.service && sudo -n /usr/bin/systemctl restart $APP.service"
 echo
 echo "Deployed $APP."
