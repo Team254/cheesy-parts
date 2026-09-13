@@ -7,6 +7,7 @@ require "active_support/time"
 require "cgi"
 require "dedent"
 require "eventmachine"
+require "securerandom"
 require "json"
 require "pathological"
 require "pony"
@@ -16,7 +17,11 @@ require "models"
 
 module CheesyParts
   class Server < Sinatra::Base
-    use Rack::Session::Cookie, :key => "rack.session", :expire_after => 3600
+    rack_session_secret = ENV.fetch("CHEESY_PARTS_RACK_SESSION_SECRET") do
+      raise KeyError, "Rack session secret is required in production." if ENV["RACK_ENV"] == "production"
+      SecureRandom.hex(128)
+    end
+    use Rack::Session::Cookie, :key => "rack.session", :expire_after => 3600, :secrets => [rack_session_secret]
 
     # Enforce authentication for all routes except login and user registration.
     before do
