@@ -68,6 +68,7 @@ module CheesyParts
         if member.nil?
           redirect "#{CheesyCommon::Config.members_url}?site=parts&path=#{request.path}"
         else
+          halt(403, "Insufficient permissions.") unless member.has_permission?("PARTS_ACCESS")
           user = User[:wordpress_user_id => member.id]
           unless user
             user = User.create(:wordpress_user_id => member.id, :first_name => member.name[1],
